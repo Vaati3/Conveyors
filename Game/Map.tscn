@@ -1,6 +1,9 @@
-[gd_scene format=3 uid="uid://b6c816mguu0mp"]
+[gd_scene load_steps=2 format=3 uid="uid://b6c816mguu0mp"]
+
+[ext_resource type="Script" path="res://Game/Map.cs" id="1_g05ti"]
 
 [node name="Map" type="Node2D"]
+script = ExtResource("1_g05ti")
 
 [node name="TileMap" type="TileMapLayer" parent="."]
 visible = false
