@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public partial class Map : Node2D
 {
-	const int tilesize = 128;
+	public static int tilesize = 128;
 	Dictionary<Vector2I, Belt> belts;
 	Belt synchroBelt = null;
 	Belt previousBelt = null;
@@ -14,7 +14,6 @@ public partial class Map : Node2D
 		if (!belts.ContainsKey(pos))
 		{
 			Belt belt = new Belt(pos, Belt.GetBeltDirection(pos, dir, previousBelt), synchroBelt);
-			belt.Position = pos * tilesize;
 			belts.Add(pos, belt);
 			AddChild(belt);
 			previousBelt = belt;
@@ -26,6 +25,22 @@ public partial class Map : Node2D
 	public override void _Ready()
 	{
 		belts = new Dictionary<Vector2I, Belt>();
+
+		Source source = new Source(new Vector2I(2, 2), ItemType.Circle);
+		source.SendItem += SendItem;
+		AddChild(source);
+	}
+
+	public bool SendItem(Item item, Vector2I pos)
+	{
+		if (belts.ContainsKey(pos))
+		{
+			AddChild(item);
+			if (!belts[pos].ReceiveItem(item))
+				return false;
+			return true;
+		}
+		return false;
 	}
 
     public override void _Input(InputEvent @event)

@@ -16,11 +16,15 @@ public partial class Belt : Node2D
     public Vector2I pos {get; private set;}
 	public Direction direction {private set; get;}
 	public AnimatedSprite2D sprite {get; private set;}
-    private Queue<Item> items;
+    private List<Item> items;
+	private int maxItems = 4;
+	private float speed = 50;
 
 	public Belt(Vector2I pos, Direction direction, Belt previousBelt)
 	{
+		items = new List<Item>();
         this.pos = pos;
+		Position = pos * Map.tilesize;
         this.direction = direction;
         sprite = new AnimatedSprite2D(){
             SpriteFrames = GD.Load<SpriteFrames>("res://Game/Belts/BeltAnim.tres"),
@@ -35,12 +39,19 @@ public partial class Belt : Node2D
 
     public override void _Process(double delta)
     {
-        // MoveItems(); 
+		foreach(Item item in items)
+		{
+			item.Position += item.direction * speed * (float)delta;
+		}
     }
 
-    // protected abstract void MoveItems();
-
-    // public abstract void GiveItem(Item item);
+    public bool ReceiveItem(Item item)
+	{
+		if (items.Count >= maxItems)
+			return false;
+		items.Add(item);
+		return true;
+	}
 
     public void ChangeDirection(Direction direction)
     {

@@ -9,3 +9,5 @@ script = ExtResource("1_g05ti")
 offset_right = 1151.0
 offset_bottom = 647.0
 color = Color(0.82606, 0.82606, 0.82606, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
