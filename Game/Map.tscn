@@ -12,3 +12,9 @@ offset_top = -64.0
 offset_right = 1301.0
 offset_bottom = 704.0
 texture = ExtResource("2_yisel")
+
+[node name="Belts" type="Node" parent="."]
+
+[node name="Items" type="Node" parent="."]
+
+[node name="Buildings" type="Node" parent="."]

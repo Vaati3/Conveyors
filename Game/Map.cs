@@ -9,6 +9,10 @@ public partial class Map : Node2D
 	Belt synchroBelt = null;
 	Belt previousBelt = null;
 
+	Node beltLayer;
+	Node itemLayer;
+	Node buildingLayer;
+
 	private void CreateBelt(Vector2I pos, Vector2I dir)
 	{	
 		if (!nodes.ContainsKey(pos))
@@ -16,7 +20,7 @@ public partial class Map : Node2D
 			Belt belt = new Belt(pos, Belt.GetBeltDirection(pos, dir, previousBelt), synchroBelt);
 			// belt.SendItem += SendItem;
 			nodes.Add(pos, belt);
-			AddChild(belt);
+			beltLayer.AddChild(belt);
 			previousBelt = belt;
 			if (synchroBelt == null)
 				synchroBelt = belt;
@@ -27,12 +31,18 @@ public partial class Map : Node2D
 	{
 		nodes = new Dictionary<Vector2I, Node2D>();
 
-		//replace with random placement. create new class?
-		Source source = new Source(new Vector2I(2, 2), ItemType.Circle);
-		source.GetNodeAt += GetNodeAt;
+		beltLayer = GetNode<Node>("Belts");
+		itemLayer = GetNode<Node>("Items");
+		buildingLayer = GetNode<Node>("Buildings");
 
-		nodes.Add(new Vector2I(2, 2), source);
-		AddChild(source);
+		//replace with random placement. create new class?
+		Source source = new Source(new Vector2I(2, 1), ItemType.Circle, ItemCreated);
+		source.GetNodeAt += GetNodeAt;
+		nodes.Add(new Vector2I(2, 1), source);
+		buildingLayer.AddChild(source);
+		Shop shop = new Shop(new Vector2I(5, 4), ItemType.Circle);
+		nodes.Add(new Vector2I(5, 4), shop);
+		buildingLayer.AddChild(shop);
 	}
 
 	public Node2D GetNodeAt(Vector2I pos)
@@ -42,6 +52,11 @@ public partial class Map : Node2D
 			return nodes[pos];
 		}
 		return null;
+	}
+
+	public void ItemCreated(Item item)
+	{
+		itemLayer.AddChild(item);
 	}
 
     public override void _Input(InputEvent @event)

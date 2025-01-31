@@ -1,15 +1,14 @@
 using Godot;
-using System;
-using System.Collections.Generic;
 
 public partial class Source : Building
 {
     ItemType type;
     Timer timer;
     static float itemTime = 2.5f; 
-    public Source(Vector2I pos, ItemType type) : base(pos, type.ToString() + "Source", false)
+    public Source(Vector2I pos, ItemType type, ItemCreatedEventHandler itemCreated) : base(pos, type.ToString() + "Source", false)
     {
         this.type = type;
+        ItemCreated += itemCreated;
 
         timer = new Timer(){
             Autostart = true,
@@ -28,9 +27,12 @@ public partial class Source : Building
         Item item = new Item(type);
         item.Position = (pos + output) * Map.tilesize;
         item.GetNodeAt = GetNodeAt;
-        GetParent().AddChild(item);
+        ItemCreated(item);
         
         if (justOne)
             timer.Stop();
     }
+
+    public delegate void ItemCreatedEventHandler(Item item);
+    ItemCreatedEventHandler ItemCreated;
 }
