@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public enum Direction {
+public enum BeltType {
     BottomTop, TopBottom,
     RightLeft, LeftRight,
     BottomLeft, LeftBottom,
@@ -14,152 +14,154 @@ public enum Direction {
 public partial class Belt : Node2D
 {
     public Vector2I pos {get; private set;}
-	public Direction direction {private set; get;}
+	public BeltType type {private set; get;}
 	public AnimatedSprite2D sprite {get; private set;}
+	private Area2D area;
     private List<Item> items;
 	private int maxItems = 2;
 	private float speed = 50;
 
-	public Belt(Vector2I pos, Direction direction, Belt previousBelt)
+	public Belt(Vector2I pos, BeltType type, Belt previousBelt)
 	{
 		items = new List<Item>();
         this.pos = pos;
 		Position = pos * Map.tilesize;
-        this.direction = direction;
+        this.type = type;
         sprite = new AnimatedSprite2D(){
             SpriteFrames = GD.Load<SpriteFrames>("res://Game/Belts/BeltAnim.tres"),
             Scale = new Vector2(0.2f, 0.2f)
         };
         AddChild(sprite);
-        sprite.Play(direction.ToString());
-        sprite.Animation = direction.ToString();
+        sprite.Play(type.ToString());
+        sprite.Animation = type.ToString();
         if (previousBelt != null)
             sprite.SetFrameAndProgress(previousBelt.sprite.Frame, previousBelt.sprite.FrameProgress);
+
+		area = new Area2D();
+		AddChild(area);
+		area.AddChild(new CollisionShape2D(){
+			Shape = new RectangleShape2D() {
+				Size = new Vector2(1, 1)
+			}
+		});
+		
+		area.AreaEntered += AreaEntered;
 	}
 
-    public override void _Process(double delta)
-    {
-		for(int i = items.Count-1; i >= 0; i--)
+	public void AreaEntered(Area2D other)
+	{
+		if (other.Owner is Item item)
 		{
-			Vector2 newPosition = items[i].Position + (items[i].direction * speed * (float)delta);
-			Vector2I newPos = new Vector2I((int)Math.Floor(newPosition.X / Map.tilesize), (int)Math.Floor(newPosition.Y / Map.tilesize));
-			
-			if (newPos != pos)
-			{
-				if (SendItem(items[i], newPos))
-				{
-					items[i].Position = newPosition;
-					items.Remove(items[i]);
-					continue;
-				}
-				else
-					continue;
-			}
-			items[i].Position = newPosition;
+			item.direction = GetItemDirection();
 		}
+	}
+
+	private Vector2 GetItemDirection()
+    {
+        switch(type)
+		{
+			case BeltType.LeftBottom: case BeltType.RightBottom: case BeltType.TopBottom:
+				return Vector2.Down;
+			case BeltType.BottomLeft: case BeltType.RightLeft: case BeltType.TopLeft:
+				return Vector2.Left;
+			case BeltType.BottomRight: case BeltType.LeftRight: case BeltType.TopRight:
+				return Vector2.Right;
+			case BeltType.BottomTop: case BeltType.LeftTop: case BeltType.RightTop:
+				return Vector2.Up;
+		}
+		return Vector2.Zero;
     }
 
-    public bool ReceiveItem(Item item)
-	{
-		if (items.Count >= maxItems)
-			return false;
-		items.Add(item);
-		return true;
-	}
-
-	public delegate bool SendItemEventHandler(Item item, Vector2I pos);
-	public SendItemEventHandler SendItem;
-
-    public void ChangeDirection(Direction direction)
+    public void ChangeDirection(BeltType direction)
     {
-        this.direction = direction;
+        this.type = direction;
         int frame = sprite.Frame;
         float frameProgress = sprite.FrameProgress;
         sprite.Animation = direction.ToString();
         sprite.SetFrameAndProgress(frame, frameProgress);
     }
 
-    public static Direction GetBeltDirection(Vector2I pos, Vector2I dir, Belt previousBelt)
+    public static BeltType GetBeltDirection(Vector2I pos, Vector2I dir, Belt previousBelt)
 	{
 		if (previousBelt == null)
 		{
 			if (dir.X != 0)
         	{
             	if (dir.X > 0)
-                	return Direction.LeftRight;
-                return Direction.RightLeft;
+                	return BeltType.LeftRight;
+                return BeltType.RightLeft;
         	}
             if (dir.Y > 0)
-                return Direction.BottomTop; 
-            return Direction.TopBottom;
+                return BeltType.BottomTop; 
+            return BeltType.TopBottom;
 		}
 		
-		switch (previousBelt.direction)
+		switch (previousBelt.type)
 		{
-			case Direction.TopBottom:
+			case BeltType.TopBottom:
 				if (previousBelt.pos.X != pos.X)
 				{
 					if (previousBelt.pos.X > pos.X)
 					{
-						previousBelt.ChangeDirection(Direction.TopLeft);
-						return Direction.RightLeft;
+						previousBelt.ChangeDirection(BeltType.TopLeft);
+						return BeltType.RightLeft;
 					}
-					previousBelt.ChangeDirection(Direction.TopRight);
-					return Direction.LeftRight;
+					previousBelt.ChangeDirection(BeltType.TopRight);
+					return BeltType.LeftRight;
 				}
 				if (previousBelt.pos.Y > pos.Y)
 				{
-					previousBelt.ChangeDirection(Direction.BottomTop);
-					return Direction.BottomTop;
+					previousBelt.ChangeDirection(BeltType.BottomTop);
+					return BeltType.BottomTop;
 				}
-				return Direction.TopBottom;
-			case Direction.BottomTop:
+				return BeltType.TopBottom;
+			case BeltType.BottomTop:
 				if (previousBelt.pos.X != pos.X)
 				{
 					if (previousBelt.pos.X > pos.X)
 					{
-						previousBelt.ChangeDirection(Direction.BottomLeft);
-						return Direction.RightLeft;
+						previousBelt.ChangeDirection(BeltType.BottomLeft);
+						return BeltType.RightLeft;
 					}
-					previousBelt.ChangeDirection(Direction.BottomRight);
-					return Direction.LeftRight;
+					previousBelt.ChangeDirection(BeltType.BottomRight);
+					return BeltType.LeftRight;
 				}
 				if (previousBelt.pos.Y > pos.Y)
-					return Direction.BottomTop;
-				previousBelt.ChangeDirection(Direction.TopBottom);
-				return Direction.TopBottom;
-			case Direction.LeftRight:
+					return BeltType.BottomTop;
+				previousBelt.ChangeDirection(BeltType.TopBottom);
+				return BeltType.TopBottom;
+			case BeltType.LeftRight:
 				if (previousBelt.pos.Y != pos.Y)
 				{
 					if (previousBelt.pos.Y > pos.Y)
 					{
-						previousBelt.ChangeDirection(Direction.LeftTop);
-						return Direction.BottomTop;
+						previousBelt.ChangeDirection(BeltType.LeftTop);
+						return BeltType.BottomTop;
 					}
-					previousBelt.ChangeDirection(Direction.LeftBottom);
-					return Direction.TopBottom;
+					previousBelt.ChangeDirection(BeltType.LeftBottom);
+					return BeltType.TopBottom;
 				}
 				if (previousBelt.pos.X > pos.X)
 				{
-					previousBelt.ChangeDirection(Direction.RightLeft);
-					return Direction.RightLeft;
+					previousBelt.ChangeDirection(BeltType.RightLeft);
+					return BeltType.RightLeft;
 				}
-				return Direction.LeftRight;
-			case Direction.RightLeft:
+				return BeltType.LeftRight;
+			case BeltType.RightLeft:
 				if (previousBelt.pos.Y != pos.Y)
 				{
 					if (previousBelt.pos.Y > pos.Y)
 					{
-						previousBelt.ChangeDirection(Direction.RightTop);
-						return Direction.BottomTop;
+						previousBelt.ChangeDirection(BeltType.RightTop);
+						return BeltType.BottomTop;
 					}
-					previousBelt.ChangeDirection(Direction.RightBottom);
-					return Direction.TopBottom;
+					previousBelt.ChangeDirection(BeltType.RightBottom);
+					return BeltType.TopBottom;
 				}
 				if (previousBelt.pos.X > pos.X)
-					return Direction.RightLeft;
-				previousBelt.ChangeDirection(Direction.LeftRight);
-				return Direction.LeftRight;
+					return BeltType.RightLeft;
+				previousBelt.ChangeDirection(BeltType.LeftRight);
+				return BeltType.LeftRight;
 		}
 		return 0;
 	}

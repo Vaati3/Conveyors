@@ -11,14 +11,17 @@ public enum ItemType {
 
 public partial class Item : Node2D
 {
+    
     public ItemType type {get; private set;}
     public Vector2 direction;
+    public float speed = 50;
 	private Sprite2D sprite;
+    private Area2D area;
 
 	public Item(ItemType type)
 	{
         this.type = type;
-        direction = Vector2.Right;
+        direction = Vector2.Zero;
 
         sprite = new Sprite2D(){
             Scale = new Vector2(0.2f, 0.2f)
@@ -26,5 +29,20 @@ public partial class Item : Node2D
         
         sprite.Texture = GD.Load<Texture2D>("res://Game/Items/" + type.ToString() + ".png");
         AddChild(sprite);
+
+        area = new Area2D();
+		AddChild(area);
+		area.AddChild(new CollisionShape2D(){
+			Shape = new RectangleShape2D() {
+				Size = new Vector2(1, 1)
+			}
+		});
+
+        area.Owner = this;
 	}
+
+    public override void _PhysicsProcess(double delta)
+    {
+        Position = Position + (direction * speed * (float)delta);
+    }
 }

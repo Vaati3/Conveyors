@@ -20,13 +20,16 @@ public partial class Source : Building
         AddChild(timer);
     }
 
+    bool justOne = false;//debug
     private void CreateItem()
-    {
+    {   
+        if (!(GetNodeAt(pos+output) is Belt))//check if belt is full
+            return;
         Item item = new Item(type);
         item.Position = (pos + output) * Map.tilesize;
-        if (!SendItem(item, pos + output))
-            item.QueueFree();
-        else
-            GetParent().AddChild(item);
+        GetParent().AddChild(item);
+        
+        if (justOne)
+            timer.Stop();
     }
 }

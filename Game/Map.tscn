@@ -7,6 +7,12 @@
 script = ExtResource("1_g05ti")
 
 [node name="TextureRect" type="TextureRect" parent="."]
-offset_right = 1157.0
-offset_bottom = 653.0
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 1301.0
+offset_bottom = 704.0
 texture = ExtResource("2_yisel")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]

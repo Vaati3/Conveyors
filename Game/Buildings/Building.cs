@@ -40,6 +40,6 @@ public abstract partial class Building : Node2D
 		return true;
 	}
 
-	public delegate bool SendItemEventHandler(Item item, Vector2I pos);
-	public SendItemEventHandler SendItem;
+	public delegate Node2D GetNodeAtEventHandler(Vector2I pos);
+	public GetNodeAtEventHandler GetNodeAt;
 }
