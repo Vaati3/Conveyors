@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c8kxoyfb2548n"
-path="res://.godot/imported/SourceTriangle.png-0c48f771b148a023271f9facb940870a.ctex"
+uid="uid://bopp0jgric5v8"
+path="res://.godot/imported/CircleShop.png-a4cee161d1448055097ff1a19ccecc5d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Game/Buildings/Textures/SourceTriangle.png"
-dest_files=["res://.godot/imported/SourceTriangle.png-0c48f771b148a023271f9facb940870a.ctex"]
+source_file="res://Game/Buildings/Textures/CircleShop.png"
+dest_files=["res://.godot/imported/CircleShop.png-a4cee161d1448055097ff1a19ccecc5d.ctex"]
 
 [params]
 

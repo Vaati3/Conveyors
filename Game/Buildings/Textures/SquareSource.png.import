@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d4byd374x5mee"
-path="res://.godot/imported/SourceHexagon.png-96300715067df8ed905789601dc751c1.ctex"
+uid="uid://c8i3dv0fpeev8"
+path="res://.godot/imported/SquareSource.png-7452d4d0a85fccb5c27fa822b3dc5ebe.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Game/Buildings/Textures/SourceHexagon.png"
-dest_files=["res://.godot/imported/SourceHexagon.png-96300715067df8ed905789601dc751c1.ctex"]
+source_file="res://Game/Buildings/Textures/SquareSource.png"
+dest_files=["res://.godot/imported/SquareSource.png-7452d4d0a85fccb5c27fa822b3dc5ebe.ctex"]
 
 [params]
 

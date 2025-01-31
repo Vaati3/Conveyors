@@ -12,7 +12,3 @@ offset_top = -64.0
 offset_right = 1301.0
 offset_bottom = 704.0
 texture = ExtResource("2_yisel")
-
-[node name="Area2D" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]

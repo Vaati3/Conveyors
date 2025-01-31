@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c8i3dv0fpeev8"
-path="res://.godot/imported/SourceSquare.png-5149308c1e0bce6dfaa2dd380e554b45.ctex"
+uid="uid://bqiv3oxwpeman"
+path="res://.godot/imported/PentagonShop.png-c0a680ab29eecbff3e81baea36d90166.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Game/Buildings/Textures/SourceSquare.png"
-dest_files=["res://.godot/imported/SourceSquare.png-5149308c1e0bce6dfaa2dd380e554b45.ctex"]
+source_file="res://Game/Buildings/Textures/PentagonShop.png"
+dest_files=["res://.godot/imported/PentagonShop.png-c0a680ab29eecbff3e81baea36d90166.ctex"]
 
 [params]
 

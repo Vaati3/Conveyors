@@ -17,13 +17,11 @@ public partial class Belt : Node2D
 	public BeltType type {private set; get;}
 	public AnimatedSprite2D sprite {get; private set;}
 	private Area2D area;
-    private List<Item> items;
 	private int maxItems = 2;
 	private float speed = 50;
 
 	public Belt(Vector2I pos, BeltType type, Belt previousBelt)
 	{
-		items = new List<Item>();
         this.pos = pos;
 		Position = pos * Map.tilesize;
         this.type = type;

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cntw7ba3b2cit"
-path="res://.godot/imported/SourcePentagon.png-8598e15274246976e8b8489094c3ebea.ctex"
+path="res://.godot/imported/PentagonSource.png-8c5298a7b5ef25c51882ef1b62249ebe.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Game/Buildings/Textures/SourcePentagon.png"
-dest_files=["res://.godot/imported/SourcePentagon.png-8598e15274246976e8b8489094c3ebea.ctex"]
+source_file="res://Game/Buildings/Textures/PentagonSource.png"
+dest_files=["res://.godot/imported/PentagonSource.png-8c5298a7b5ef25c51882ef1b62249ebe.ctex"]
 
 [params]
 

@@ -11,7 +11,6 @@ public enum ItemType {
 
 public partial class Item : Node2D
 {
-    
     public ItemType type {get; private set;}
     public Vector2 direction;
     public float speed = 50;
@@ -44,5 +43,11 @@ public partial class Item : Node2D
     public override void _PhysicsProcess(double delta)
     {
         Position = Position + (direction * speed * (float)delta);
+
+        Vector2I pos = new Vector2I((int)Position.X + 51, (int)Position.Y + 51);//change if item change size!
+        if (GetNodeAt(pos / Map.tilesize) == null)
+            QueueFree();
     }
+
+    public Building.GetNodeAtEventHandler GetNodeAt;
 }

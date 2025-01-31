@@ -11,13 +11,11 @@ public abstract partial class Building : Node2D
 	protected Vector2I output {private set; get;}
 
 	protected Sprite2D sprite;
-	protected List<Item> items;
 
 	public Building(Vector2I pos, string textureName, bool hasInput = true, bool hasOutput = true)
 	{
 		this.pos = pos;
 		Position = pos * Map.tilesize;
-		items = new List<Item>();
 		this.hasInput = hasInput;
 		this.hasOutput = hasOutput;
 
@@ -29,15 +27,6 @@ public abstract partial class Building : Node2D
         }; 
         sprite.Texture = GD.Load<Texture2D>("res://Game/Buildings/Textures/" + textureName + ".png");
         AddChild(sprite);
-	}
-
-	public bool ReceiveItem(Item item)
-	{
-		if (!hasInput)
-			return false;
-
-		items.Add(item);
-		return true;
 	}
 
 	public delegate Node2D GetNodeAtEventHandler(Vector2I pos);

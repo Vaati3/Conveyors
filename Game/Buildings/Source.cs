@@ -6,8 +6,8 @@ public partial class Source : Building
 {
     ItemType type;
     Timer timer;
-    const float itemTime = 2.5f; 
-    public Source(Vector2I pos, ItemType type) : base(pos, "Source" + type.ToString(), false)
+    static float itemTime = 2.5f; 
+    public Source(Vector2I pos, ItemType type) : base(pos, type.ToString() + "Source", false)
     {
         this.type = type;
 
@@ -27,6 +27,7 @@ public partial class Source : Building
             return;
         Item item = new Item(type);
         item.Position = (pos + output) * Map.tilesize;
+        item.GetNodeAt = GetNodeAt;
         GetParent().AddChild(item);
         
         if (justOne)
