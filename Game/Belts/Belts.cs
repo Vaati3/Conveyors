@@ -17,7 +17,7 @@ public partial class Belt : Node2D
 	public Direction direction {private set; get;}
 	public AnimatedSprite2D sprite {get; private set;}
     private List<Item> items;
-	private int maxItems = 4;
+	private int maxItems = 2;
 	private float speed = 50;
 
 	public Belt(Vector2I pos, Direction direction, Belt previousBelt)
@@ -39,9 +39,23 @@ public partial class Belt : Node2D
 
     public override void _Process(double delta)
     {
-		foreach(Item item in items)
+		for(int i = items.Count-1; i >= 0; i--)
 		{
-			item.Position += item.direction * speed * (float)delta;
+			Vector2 newPosition = items[i].Position + (items[i].direction * speed * (float)delta);
+			Vector2I newPos = new Vector2I((int)Math.Floor(newPosition.X / Map.tilesize), (int)Math.Floor(newPosition.Y / Map.tilesize));
+			
+			if (newPos != pos)
+			{
+				if (SendItem(items[i], newPos))
+				{
+					items[i].Position = newPosition;
+					items.Remove(items[i]);
+					continue;
+				}
+				else
+					continue;
+			}
+			items[i].Position = newPosition;
 		}
     }
 
@@ -52,6 +66,9 @@ public partial class Belt : Node2D
 		items.Add(item);
 		return true;
 	}
+
+	public delegate bool SendItemEventHandler(Item item, Vector2I pos);
+	public SendItemEventHandler SendItem;
 
     public void ChangeDirection(Direction direction)
     {

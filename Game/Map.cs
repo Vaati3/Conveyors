@@ -6,6 +6,7 @@ public partial class Map : Node2D
 {
 	public static int tilesize = 128;
 	Dictionary<Vector2I, Belt> belts;
+	Dictionary<Vector2I, Building> buildings;
 	Belt synchroBelt = null;
 	Belt previousBelt = null;
 
@@ -14,6 +15,7 @@ public partial class Map : Node2D
 		if (!belts.ContainsKey(pos))
 		{
 			Belt belt = new Belt(pos, Belt.GetBeltDirection(pos, dir, previousBelt), synchroBelt);
+			belt.SendItem += SendItem;
 			belts.Add(pos, belt);
 			AddChild(belt);
 			previousBelt = belt;
@@ -25,9 +27,13 @@ public partial class Map : Node2D
 	public override void _Ready()
 	{
 		belts = new Dictionary<Vector2I, Belt>();
+		buildings = new Dictionary<Vector2I, Building>();
 
+		//replace with random placement. create new class?
 		Source source = new Source(new Vector2I(2, 2), ItemType.Circle);
 		source.SendItem += SendItem;
+
+		buildings.Add(new Vector2I(2, 2), source);
 		AddChild(source);
 	}
 
@@ -35,7 +41,6 @@ public partial class Map : Node2D
 	{
 		if (belts.ContainsKey(pos))
 		{
-			AddChild(item);
 			if (!belts[pos].ReceiveItem(item))
 				return false;
 			return true;
@@ -49,7 +54,7 @@ public partial class Map : Node2D
 		{
 			if (Input.IsActionPressed("Click"))
 			{
-				Vector2I pos = new Vector2I((int)motion.Position.X / tilesize, (int)motion.Position.Y / tilesize);
+				Vector2I pos = new Vector2I((int)Math.Floor(motion.Position.X / tilesize), (int)Math.Floor(motion.Position.Y / tilesize));
 				Vector2I dir = Vector2I.Zero; 
 				if (MathF.Abs(motion.Velocity.X) > MathF.Abs(motion.Velocity.Y))
 					dir.X = motion.Velocity.X > 0 ? 1 : -1;

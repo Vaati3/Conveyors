@@ -6,7 +6,7 @@ public partial class Source : Building
 {
     ItemType type;
     Timer timer;
-    const float itemTime = 5; 
+    const float itemTime = 2.5f; 
     public Source(Vector2I pos, ItemType type) : base(pos, "Source" + type.ToString(), false)
     {
         this.type = type;
@@ -26,5 +26,7 @@ public partial class Source : Building
         item.Position = (pos + output) * Map.tilesize;
         if (!SendItem(item, pos + output))
             item.QueueFree();
+        else
+            GetParent().AddChild(item);
     }
 }
