@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public partial class Map : Node2D
 {
 	public static int tilesize = 128;
+	public GameUi ui {get; private set;}
 	Dictionary<Vector2I, Node2D> nodes;
 	Belt synchroBelt = null;
 	Belt previousBelt = null;
@@ -29,6 +30,7 @@ public partial class Map : Node2D
 
 	public override void _Ready()
 	{
+		ui = GetNode<GameUi>("GameUi");
 		nodes = new Dictionary<Vector2I, Node2D>();
 
 		beltLayer = GetNode<Node>("Belts");
@@ -61,9 +63,22 @@ public partial class Map : Node2D
 
     public override void _Input(InputEvent @event)
     {
+		if (@event is InputEventMouseButton button)
+		{
+			if (button.ButtonIndex == MouseButton.Left)
+			{
+				Vector2I pos = new Vector2I((int)Math.Floor(button.Position.X / tilesize), (int)Math.Floor(button.Position.Y / tilesize));
+
+				if (GetNodeAt(pos) is Belt belt)
+				{
+					belt.QueueFree();
+					nodes.Remove(pos);
+				}
+			}
+		}
         if (@event is InputEventMouseMotion motion)
 		{
-			if (Input.IsActionPressed("Click"))
+			if (ui.mode == PlaceMode.Belt && Input.IsActionPressed("Click"))
 			{
 				Vector2I pos = new Vector2I((int)Math.Floor(motion.Position.X / tilesize), (int)Math.Floor(motion.Position.Y / tilesize));
 				Vector2I dir = Vector2I.Zero; 
