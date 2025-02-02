@@ -6,20 +6,18 @@ public partial class Map : Node2D
 {
 	public static int tilesize = 128;
 	public GameUi ui {get; private set;}
+	public Spawner spawner {get; private set;}
 	Dictionary<Vector2I, Node2D> nodes;
-	Belt synchroBelt = null;
-	Belt previousBelt = null;
 
 	Node beltLayer;
-	Node itemLayer;
-	Node buildingLayer;
+	Belt synchroBelt = null;
+	Belt previousBelt = null;
 
 	ColorRect background;
 	Camera2D camera;
 	const float zoomOutSpeed = 0.0005f;
-	Timer limitTimer;
-
-	private void CreateBelt(Vector2I pos, Vector2I dir)
+	
+	private void PlaceBelt(Vector2I pos, Vector2I dir)
 	{	
 		if (!IsInLimits(pos))
 			return;
@@ -40,39 +38,22 @@ public partial class Map : Node2D
 		ui = GetNode<GameUi>("GameUi");
 		nodes = new Dictionary<Vector2I, Node2D>();
 
-		beltLayer = GetNode<Node>("Belts");
-		itemLayer = GetNode<Node>("Items");
-		buildingLayer = GetNode<Node>("Buildings");
 		camera = GetNode<Camera2D>("Camera");
 		background = GetNode<ColorRect>("Background");
-
-		//replace with random placement. create new class?
-		Source source = new Source(new Vector2I(0, 0), ItemType.Circle, ItemCreated);
-		source.GetNodeAt += GetNodeAt;
-		nodes.Add(new Vector2I(0, 0), source);
-		buildingLayer.AddChild(source);
-		// Shop shop = new Shop(new Vector2I(5, 4), ItemType.Circle);
-		// nodes.Add(new Vector2I(5, 4), shop);
-		// buildingLayer.AddChild(shop);
+		beltLayer = GetNode<Node>("Belts");
+		
+		spawner = new Spawner(nodes, this);
+		AddChild(spawner);
 	}
 
-	public Node2D GetNodeAt(Vector2I pos)
+	public Vector2I GetLimits()
 	{
-		if (nodes.ContainsKey(pos))
-		{
-			return nodes[pos];
-		}
-		return null;
-	}
-
-	public void ItemCreated(Item item)
-	{
-		itemLayer.AddChild(item);
+		return new Vector2I((int)MathF.Floor(background.Size.X / 2 / tilesize), (int)MathF.Floor(background.Size.Y / 2 / tilesize));
 	}
 
 	private bool IsInLimits(Vector2I pos)
 	{
-		Vector2 limits = background.Size / 2 / tilesize;
+		Vector2I limits = GetLimits();
 		
 		if (Math.Abs(pos.X) > limits.X || Math.Abs(pos.Y) > limits.Y)
 			return false;
@@ -101,7 +82,7 @@ public partial class Map : Node2D
 				else
 					dir.Y = motion.Velocity.Y > 0 ? 1 : -1;
 				
-				CreateBelt(pos, dir);
+				PlaceBelt(pos, dir);
 			} else {
 				previousBelt = null;
 			}
@@ -110,8 +91,7 @@ public partial class Map : Node2D
 			if (button.ButtonIndex == MouseButton.Left)
 			{
 				Vector2I pos = new Vector2I((int)Math.Floor(mousePos.X / tilesize), (int)Math.Floor(mousePos.Y / tilesize));
-				GD.Print("Position :" + GetGlobalMousePosition() + " pos calculated :" + pos);
-				if (GetNodeAt(pos) is Belt belt)
+				if (spawner.GetNodeAt(pos) is Belt belt)
 				{
 					belt.QueueFree();
 					nodes.Remove(pos);
