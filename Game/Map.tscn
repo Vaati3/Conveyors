@@ -1,18 +1,24 @@
-[gd_scene load_steps=4 format=3 uid="uid://b6c816mguu0mp"]
+[gd_scene load_steps=3 format=3 uid="uid://b6c816mguu0mp"]
 
 [ext_resource type="Script" path="res://Game/Map.cs" id="1_g05ti"]
-[ext_resource type="Texture2D" uid="uid://7xmj8w8m8rbd" path="res://testbackground.png" id="2_yisel"]
 [ext_resource type="PackedScene" uid="uid://bi0wjqbff4inl" path="res://Menus/GameUI.tscn" id="3_5add5"]
 
 [node name="Map" type="Node2D"]
 script = ExtResource("1_g05ti")
 
-[node name="TextureRect" type="TextureRect" parent="."]
-offset_left = -64.0
-offset_top = -64.0
-offset_right = 1301.0
-offset_bottom = 704.0
-texture = ExtResource("2_yisel")
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -678.0
+offset_top = -381.0
+offset_right = 678.0
+offset_bottom = 380.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.960784, 0.94902, 0.921569, 1)
 
 [node name="Belts" type="Node" parent="."]
 
@@ -21,3 +27,6 @@ texture = ExtResource("2_yisel")
 [node name="Buildings" type="Node" parent="."]
 
 [node name="GameUi" parent="." instance=ExtResource("3_5add5")]
+
+[node name="Camera" type="Camera2D" parent="."]
+zoom = Vector2(0.85, 0.85)

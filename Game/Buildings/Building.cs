@@ -17,6 +17,9 @@ public abstract partial class Building : Node2D
 	{
 		this.pos = pos;
 		Position = pos * Map.tilesize;
+
+		GD.Print(pos + " " + Position);
+
 		this.hasInput = hasInput;
 		this.hasOutput = hasOutput;
 
