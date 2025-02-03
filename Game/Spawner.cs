@@ -34,14 +34,18 @@ public partial class Spawner : Node
 
     private void CreateSourceAndShop()
     {
+        int n = rng.RandiRange(1, 6);
+        n = n == 2 ? 1 : n;
+        ItemType type = (ItemType)n;
+    
         Vector2I pos = GetRandomPos();
-        Source source = new Source(pos, ItemType.Circle, ItemCreated);
+        Source source = new Source(pos, type, ItemCreated);
 		source.GetNodeAt += GetNodeAt;
 		nodes.Add(pos, source);
 		buildingLayer.AddChild(source);
 
         pos = GetRandomPos();
-        Shop shop = new Shop(pos, ItemType.Circle);
+        Shop shop = new Shop(pos, type);
 		nodes.Add(pos, shop);
 		buildingLayer.AddChild(shop);
 

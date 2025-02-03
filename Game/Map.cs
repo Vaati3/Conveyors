@@ -60,6 +60,11 @@ public partial class Map : Node2D
 		return true;
 	}
 
+	private Vector2I GetTilePos(Vector2 position)
+	{
+		return new Vector2I((int)Math.Floor((position.X + tilesize / 2) / tilesize), (int)Math.Floor((position.Y + tilesize / 2) / tilesize));
+	}
+
 	public override void _Process(double delta)
 	{
 		float value = camera.Zoom.X - zoomOutSpeed * (float)delta;
@@ -75,7 +80,7 @@ public partial class Map : Node2D
 		{
 			if (Input.IsActionPressed("Click"))
 			{
-				Vector2I pos = new Vector2I((int)Math.Floor(mousePos.X / tilesize), (int)Math.Floor(mousePos.Y / tilesize));
+				Vector2I pos = GetTilePos(mousePos);
 				Vector2I dir = Vector2I.Zero; 
 				if (MathF.Abs(motion.Velocity.X) > MathF.Abs(motion.Velocity.Y))
 					dir.X = motion.Velocity.X > 0 ? 1 : -1;
@@ -90,7 +95,7 @@ public partial class Map : Node2D
 		{
 			if (button.ButtonIndex == MouseButton.Left)
 			{
-				Vector2I pos = new Vector2I((int)Math.Floor(mousePos.X / tilesize), (int)Math.Floor(mousePos.Y / tilesize));
+				Vector2I pos =  GetTilePos(mousePos);
 				if (spawner.GetNodeAt(pos) is Belt belt)
 				{
 					belt.QueueFree();

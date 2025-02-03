@@ -43,9 +43,9 @@ public partial class Item : Node2D
     public override void _PhysicsProcess(double delta)
     {
         Position = Position + (direction * speed * (float)delta);
-
-        Vector2I pos = new Vector2I((int)Position.X + 51, (int)Position.Y + 51);//change if item change size!
-        if (GetNodeAt(pos / Map.tilesize) == null)
+        // Vector2I pos = new Vector2I((int)Position.X, (int)Position.Y);//change if item change size!
+        Vector2I pos = new Vector2I((int)Math.Floor((Position.X + Map.tilesize / 2) / Map.tilesize), (int)Math.Floor((Position.Y + Map.tilesize / 2) / Map.tilesize));
+        if (GetNodeAt(pos) == null)
             QueueFree();
     }
 

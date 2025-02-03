@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7xmj8w8m8rbd"
-path="res://.godot/imported/testbackground.png-3eda12aa7f7262ac81bd043d70f39cf9.ctex"
+uid="uid://40gtw0wul20g"
+path="res://.godot/imported/TriangleShop.png-c5c97be63c24ce2647a7b4050bdcd5a5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testbackground.png"
-dest_files=["res://.godot/imported/testbackground.png-3eda12aa7f7262ac81bd043d70f39cf9.ctex"]
+source_file="res://Game/Buildings/Textures/TriangleShop.png"
+dest_files=["res://.godot/imported/TriangleShop.png-c5c97be63c24ce2647a7b4050bdcd5a5.ctex"]
 
 [params]
 
