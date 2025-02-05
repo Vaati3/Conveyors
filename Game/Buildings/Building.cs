@@ -41,6 +41,8 @@ public abstract partial class Building : Node2D
         area.Owner = this;
 	}
 
+	public abstract void Pause(bool isPaused);
+
 	public delegate Node2D GetNodeAtEventHandler(Vector2I pos);
 	public GetNodeAtEventHandler GetNodeAt;
 }

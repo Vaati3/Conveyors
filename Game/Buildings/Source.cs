@@ -1,10 +1,12 @@
+using System.Collections.Generic;
 using Godot;
 
 public partial class Source : Building
 {
     ItemType type;
     Timer timer;
-    static float itemTime = 2.5f; 
+    static float itemTime = 2.5f;
+
     public Source(Vector2I pos, ItemType type, ItemCreatedEventHandler itemCreated) : base(pos, type.ToString() + "Source", false)
     {
         this.type = type;
@@ -31,6 +33,11 @@ public partial class Source : Building
         
         if (justOne)
             timer.Stop();
+    }
+
+    public override void Pause(bool isPaused)
+    {
+        timer.Paused = isPaused;
     }
 
     public delegate void ItemCreatedEventHandler(Item item);

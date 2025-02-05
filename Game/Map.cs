@@ -17,6 +17,7 @@ public partial class Map : Node2D
 	Camera2D camera;
 	const float zoomOutSpeed = 0.0005f;
 	
+
 	private void PlaceBelt(Vector2I pos, Vector2I dir)
 	{	
 		if (!IsInLimits(pos))
@@ -24,7 +25,9 @@ public partial class Map : Node2D
 		if (!nodes.ContainsKey(pos))
 		{
 			Belt belt = new Belt(pos, Belt.GetBeltDirection(pos, dir, previousBelt), synchroBelt);
-			// belt.SendItem += SendItem;
+			ui.Pause += belt.Pause;
+			if (ui.isPaused)
+				belt.Pause(true);
 			nodes.Add(pos, belt);
 			beltLayer.AddChild(belt);
 			previousBelt = belt;

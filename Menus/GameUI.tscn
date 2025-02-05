@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bi0wjqbff4inl"]
+[gd_scene load_steps=18 format=3 uid="uid://bi0wjqbff4inl"]
 
 [ext_resource type="Texture2D" uid="uid://4tnmw7mbun4t" path="res://Menus/Textures/arrow.png" id="1_4ngkf"]
 [ext_resource type="Script" path="res://Menus/GameUi.cs" id="1_8qi4p"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://b1n2safo1pqav" path="res://Menus/Textures/bin.png" id="4_g7773"]
 [ext_resource type="FontFile" uid="uid://csgpd6kbdx8qy" path="res://Menus/Themes/Audiowide-Regular.ttf" id="6_i3rbk"]
 [ext_resource type="Theme" uid="uid://c5amex4kn3q35" path="res://Menus/Themes/Button.tres" id="7_ox0l1"]
+[ext_resource type="Texture2D" uid="uid://dxpg7knqf1s1e" path="res://Menus/Textures/Pause.png" id="8_ifqhr"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gstht"]
 texture = ExtResource("1_sspid")
@@ -25,14 +26,23 @@ bg_color = Color(0.813258, 0.813258, 0.813257, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b515y"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s7soy"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_34c14"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ckbsx"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
 [node name="GameUi" type="CanvasLayer"]
 script = ExtResource("1_8qi4p")
 
 [node name="MenuButton" type="Button" parent="."]
 offset_left = 25.0
-offset_top = 21.0
+offset_top = 25.0
 offset_right = 73.0
-offset_bottom = 69.0
+offset_bottom = 73.0
 theme_override_styles/hover = SubResource("StyleBoxTexture_gstht")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_hhom3")
 theme_override_styles/normal = SubResource("StyleBoxTexture_1l0mx")
@@ -124,8 +134,23 @@ theme = ExtResource("7_ox0l1")
 text = "No
 "
 
+[node name="PauseButton" type="Button" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -73.0
+offset_top = 25.0
+offset_right = -33.0
+offset_bottom = 73.0
+grow_horizontal = 0
+theme_override_styles/hover = SubResource("StyleBoxFlat_s7soy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_34c14")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ckbsx")
+icon = ExtResource("8_ifqhr")
+
 [connection signal="pressed" from="MenuButton" to="." method="_on_menu_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/BeltButton" to="." method="_on_belt_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/RemoveButton" to="." method="_on_remove_button_pressed"]
 [connection signal="pressed" from="Confirm/Yes" to="." method="_on_yes_pressed"]
 [connection signal="pressed" from="Confirm/No" to="." method="_on_no_pressed"]
+[connection signal="pressed" from="PauseButton" to="." method="_on_pause_button_pressed"]

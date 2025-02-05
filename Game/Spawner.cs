@@ -13,16 +13,24 @@ public partial class Spawner : Node
     private GetLimits getLimits;
 
     RandomNumberGenerator rng;
+    List<Item> items;
     Timer timer;
+
+    GameUi ui;
+
 
     public Spawner(Dictionary<Vector2I, Node2D> nodes, Map map)
     {
         this.nodes = nodes;
         getLimits += map.GetLimits;
+        ui = map.ui;
+        ui.Pause += Pause;
+
 		itemLayer = map.GetNode<Node>("Items");
 		buildingLayer = map.GetNode<Node>("Buildings");
+
         rng = new RandomNumberGenerator();
-        
+        items = new List<Item>();
         timer = new Timer() {
             Autostart = true,
             OneShot = true,
@@ -41,11 +49,13 @@ public partial class Spawner : Node
         Vector2I pos = GetRandomPos();
         Source source = new Source(pos, type, ItemCreated);
 		source.GetNodeAt += GetNodeAt;
+        ui.Pause += source.Pause;
 		nodes.Add(pos, source);
 		buildingLayer.AddChild(source);
 
         pos = GetRandomPos();
         Shop shop = new Shop(pos, type);
+        ui.Pause += shop.Pause;
 		nodes.Add(pos, shop);
 		buildingLayer.AddChild(shop);
 
@@ -69,11 +79,19 @@ public partial class Spawner : Node
         return pos;
     }
 
-
     public void ItemCreated(Item item)
 	{
 		itemLayer.AddChild(item);
+        items.Add(item);
 	}
+
+    public void Pause(bool isPaused)
+    {
+        foreach (Item item in items)
+        {
+            item.isPaused = isPaused;
+        }
+    }
 
     public Node2D GetNodeAt(Vector2I pos)
 	{

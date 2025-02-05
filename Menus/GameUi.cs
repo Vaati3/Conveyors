@@ -13,10 +13,18 @@ public partial class GameUi : CanvasLayer
 	public delegate void QuitToMenuEventHandler();
 	public QuitToMenuEventHandler QuitToMenu;
 
+	public bool isPaused{get; private set;} = false;
+	
+
+	Button pauseButton;
+	Texture2D pauseIcon;
 	Panel confirmPanel;
 	public override void _Ready()
 	{
 		confirmPanel = GetNode<Panel>("Confirm");
+		pauseButton = GetNode<Button>("PauseButton");
+
+		pauseIcon = GD.Load<Texture2D>("res://Menus/Textures/Play.png");
 	}
 
 	public void _on_belt_button_pressed()
@@ -33,6 +41,19 @@ public partial class GameUi : CanvasLayer
 	{
 		confirmPanel.Visible = true;
 	}
+
+	public void _on_pause_button_pressed()
+	{
+		isPaused = !isPaused;
+		Texture2D buffer = pauseButton.Icon;
+		pauseButton.Icon = pauseIcon;
+		pauseIcon = buffer;
+
+		Pause(isPaused);
+	}
+
+	public delegate void PauseEventHandler(bool state);
+	public PauseEventHandler Pause;
 
 	public void _on_yes_pressed()
 	{

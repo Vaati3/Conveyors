@@ -25,6 +25,7 @@ public partial class Belt : Node2D
         this.pos = pos;
 		Position = pos * Map.tilesize;
         this.type = type;
+
         sprite = new AnimatedSprite2D(){
             SpriteFrames = GD.Load<SpriteFrames>("res://Game/Belts/BeltAnim.tres"),
             Scale = new Vector2(0.2f, 0.2f)
@@ -51,6 +52,16 @@ public partial class Belt : Node2D
 		if (other.Owner is Item item)
 		{
 			item.direction = GetItemDirection();
+		}
+	}
+
+	public void Pause(bool isPaused)
+	{
+		if (isPaused)
+		{
+			sprite.Pause();
+		} else {
+			sprite.Play();
 		}
 	}
 

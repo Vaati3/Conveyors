@@ -37,6 +37,11 @@ public partial class Shop : Building
         // GameLost();
     }
 
+    public override void Pause(bool isPaused)
+    {
+        timer.Paused = isPaused;
+    }
+
     public delegate void GameLostEventHandler();
     public GameLostEventHandler GameLost;
 }
