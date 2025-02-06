@@ -3,12 +3,15 @@ using System;
 using System.Collections.Generic;
 
 public enum BeltType {
-    BottomTop, TopBottom,
-    RightLeft, LeftRight,
-    BottomLeft, LeftBottom,
-    BottomRight, RightBottom,
-    TopLeft, LeftTop,
-    TopRight, RightTop
+	Dot, Bottom, Top, Right, Left,
+    BottomTop, TopToBottom, BottomToTop,
+    RightLeft, LeftToRight, RightToLeft,
+    BottomLeft, LeftToBottom, BottomToLeft,
+    BottomRight, RightToBottom, BottomToRight,
+    TopLeft, TopToLeft, LeftToTop,
+    TopRight, TopToRight, RightToTop,
+	TBottom, TUp, TLeft, TRight,
+	Cross
 }
 
 public partial class Belt : Node2D
@@ -20,21 +23,28 @@ public partial class Belt : Node2D
 	private int maxItems = 2;
 	private float speed = 50;
 
-	public Belt(Vector2I pos, BeltType type, Belt previousBelt)
+	readonly static BeltType[,] typeMatrix = new BeltType[5,4]{
+		{BeltType.Top, BeltType.Bottom, BeltType.Left, BeltType.Right},
+		{BeltType.BottomTop, BeltType.BottomTop, BeltType.BottomLeft, BeltType.BottomRight},
+		{BeltType.BottomTop, BeltType.BottomTop, BeltType.TopLeft, BeltType.TopRight},
+		{BeltType.TopRight, BeltType.BottomRight, BeltType.RightLeft, BeltType.RightLeft},
+		{BeltType.TopLeft, BeltType.BottomLeft, BeltType.RightLeft, BeltType.RightLeft},
+	};
+
+	public Belt(Vector2I pos, Belt synchro, Belt previousBelt)
 	{
         this.pos = pos;
 		Position = pos * Map.tilesize;
-        this.type = type;
+        SetBeltType(previousBelt);
 
         sprite = new AnimatedSprite2D(){
-            SpriteFrames = GD.Load<SpriteFrames>("res://Game/Belts/BeltAnim.tres"),
-            Scale = new Vector2(0.2f, 0.2f)
+            SpriteFrames = GD.Load<SpriteFrames>("res://Game/Belts/BeltAnim.tres")
         };
         AddChild(sprite);
         sprite.Play(type.ToString());
         sprite.Animation = type.ToString();
-        if (previousBelt != null)
-            sprite.SetFrameAndProgress(previousBelt.sprite.Frame, previousBelt.sprite.FrameProgress);
+        if (synchro != null)//remove when syncho become a sprite
+            sprite.SetFrameAndProgress(synchro.sprite.Frame, synchro.sprite.FrameProgress);
 
 		area = new Area2D();
 		AddChild(area);
@@ -69,109 +79,52 @@ public partial class Belt : Node2D
     {
         switch(type)
 		{
-			case BeltType.LeftBottom: case BeltType.RightBottom: case BeltType.TopBottom:
+			case BeltType.LeftToBottom: case BeltType.RightToBottom: case BeltType.TopToBottom:
 				return Vector2.Down;
-			case BeltType.BottomLeft: case BeltType.RightLeft: case BeltType.TopLeft:
+			case BeltType.BottomToLeft: case BeltType.RightToLeft: case BeltType.TopToLeft:
 				return Vector2.Left;
-			case BeltType.BottomRight: case BeltType.LeftRight: case BeltType.TopRight:
+			case BeltType.BottomToRight: case BeltType.LeftToRight: case BeltType.TopToRight:
 				return Vector2.Right;
-			case BeltType.BottomTop: case BeltType.LeftTop: case BeltType.RightTop:
+			case BeltType.BottomToTop: case BeltType.LeftToTop: case BeltType.RightToTop:
 				return Vector2.Up;
 		}
 		return Vector2.Zero;
     }
 
-    public void ChangeDirection(BeltType direction)
+    public void ChangeType(BeltType type)
     {
-        this.type = direction;
+        this.type = type;
         int frame = sprite.Frame;
         float frameProgress = sprite.FrameProgress;
-        sprite.Animation = direction.ToString();
+        sprite.Animation = type.ToString();
         sprite.SetFrameAndProgress(frame, frameProgress);
     }
 
-    public static BeltType GetBeltDirection(Vector2I pos, Vector2I dir, Belt previousBelt)
+	private void Update(BeltType other)
+	{
+		ChangeType(typeMatrix[(int)type, (int)other-1]);
+	}
+
+    public void SetBeltType(Belt previousBelt)
 	{
 		if (previousBelt == null)
 		{
-			if (dir.X != 0)
-        	{
-            	if (dir.X > 0)
-                	return BeltType.LeftRight;
-                return BeltType.RightLeft;
-        	}
-            if (dir.Y > 0)
-                return BeltType.BottomTop; 
-            return BeltType.TopBottom;
+			type = BeltType.Dot;
+			return;
 		}
-		
-		switch (previousBelt.type)
+
+		if (previousBelt.pos.X != pos.X)
 		{
-			case BeltType.TopBottom:
-				if (previousBelt.pos.X != pos.X)
-				{
-					if (previousBelt.pos.X > pos.X)
-					{
-						previousBelt.ChangeDirection(BeltType.TopLeft);
-						return BeltType.RightLeft;
-					}
-					previousBelt.ChangeDirection(BeltType.TopRight);
-					return BeltType.LeftRight;
-				}
-				if (previousBelt.pos.Y > pos.Y)
-				{
-					previousBelt.ChangeDirection(BeltType.BottomTop);
-					return BeltType.BottomTop;
-				}
-				return BeltType.TopBottom;
-			case BeltType.BottomTop:
-				if (previousBelt.pos.X != pos.X)
-				{
-					if (previousBelt.pos.X > pos.X)
-					{
-						previousBelt.ChangeDirection(BeltType.BottomLeft);
-						return BeltType.RightLeft;
-					}
-					previousBelt.ChangeDirection(BeltType.BottomRight);
-					return BeltType.LeftRight;
-				}
-				if (previousBelt.pos.Y > pos.Y)
-					return BeltType.BottomTop;
-				previousBelt.ChangeDirection(BeltType.TopBottom);
-				return BeltType.TopBottom;
-			case BeltType.LeftRight:
-				if (previousBelt.pos.Y != pos.Y)
-				{
-					if (previousBelt.pos.Y > pos.Y)
-					{
-						previousBelt.ChangeDirection(BeltType.LeftTop);
-						return BeltType.BottomTop;
-					}
-					previousBelt.ChangeDirection(BeltType.LeftBottom);
-					return BeltType.TopBottom;
-				}
-				if (previousBelt.pos.X > pos.X)
-				{
-					previousBelt.ChangeDirection(BeltType.RightLeft);
-					return BeltType.RightLeft;
-				}
-				return BeltType.LeftRight;
-			case BeltType.RightLeft:
-				if (previousBelt.pos.Y != pos.Y)
-				{
-					if (previousBelt.pos.Y > pos.Y)
-					{
-						previousBelt.ChangeDirection(BeltType.RightTop);
-						return BeltType.BottomTop;
-					}
-					previousBelt.ChangeDirection(BeltType.RightBottom);
-					return BeltType.TopBottom;
-				}
-				if (previousBelt.pos.X > pos.X)
-					return BeltType.RightLeft;
-				previousBelt.ChangeDirection(BeltType.LeftRight);
-				return BeltType.LeftRight;
+			if (previousBelt.pos.X > pos.X)
+				type = BeltType.Right;
+			else 
+				type = BeltType.Left;
 		}
-		return 0;
+		else if (previousBelt.pos.Y > pos.Y)
+			type = BeltType.Bottom;
+		else 
+			type = type = BeltType.Top;
+		
+		previousBelt.Update(type);
 	}
 }

@@ -4,20 +4,17 @@ using System.Collections.Generic;
 
 public partial class Spawner : Node
 {
+    RandomNumberGenerator rng;
+    List<Item> items;
     Dictionary<Vector2I, Node2D> nodes;
+    Timer timer;
 
+    GameUi ui;
 	Node itemLayer;
 	Node buildingLayer;
 
     private delegate Vector2I GetLimits();
     private GetLimits getLimits;
-
-    RandomNumberGenerator rng;
-    List<Item> items;
-    Timer timer;
-
-    GameUi ui;
-
 
     public Spawner(Dictionary<Vector2I, Node2D> nodes, Map map)
     {
@@ -32,7 +29,7 @@ public partial class Spawner : Node
         rng = new RandomNumberGenerator();
         items = new List<Item>();
         timer = new Timer() {
-            Autostart = true,
+            Autostart = false,//true debug
             OneShot = true,
             WaitTime = 2
         };

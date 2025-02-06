@@ -10,7 +10,7 @@ public partial class Map : Node2D
 	Dictionary<Vector2I, Node2D> nodes;
 
 	Node beltLayer;
-	Belt synchroBelt = null;
+	Belt synchroBelt = null;// replace with animated sprite initialised in ready
 	Belt previousBelt = null;
 
 	ColorRect background;
@@ -18,13 +18,13 @@ public partial class Map : Node2D
 	const float zoomOutSpeed = 0.0005f;
 	
 
-	private void PlaceBelt(Vector2I pos, Vector2I dir)
+	private void PlaceBelt(Vector2I pos)
 	{	
 		if (!IsInLimits(pos))
 			return;
 		if (!nodes.ContainsKey(pos))
 		{
-			Belt belt = new Belt(pos, Belt.GetBeltDirection(pos, dir, previousBelt), synchroBelt);
+			Belt belt = new Belt(pos, synchroBelt, previousBelt);
 			ui.Pause += belt.Pause;
 			if (ui.isPaused)
 				belt.Pause(true);
@@ -79,30 +79,35 @@ public partial class Map : Node2D
     public override void _Input(InputEvent @event)
     {
 		Vector2 mousePos = GetGlobalMousePosition();
-        if (ui.mode == PlaceMode.Belt && @event is InputEventMouseMotion motion)
+        if ( @event is InputEventMouseMotion motion)
 		{
 			if (Input.IsActionPressed("Click"))
-			{
-				Vector2I pos = GetTilePos(mousePos);
-				Vector2I dir = Vector2I.Zero; 
-				if (MathF.Abs(motion.Velocity.X) > MathF.Abs(motion.Velocity.Y))
-					dir.X = motion.Velocity.X > 0 ? 1 : -1;
-				else
-					dir.Y = motion.Velocity.Y > 0 ? 1 : -1;
-				
-				PlaceBelt(pos, dir);
-			} else {
-				previousBelt = null;
-			}
-		} else if (ui.mode == PlaceMode.Remove && @event is InputEventMouseButton button)
+				PlaceBelt(GetTilePos(mousePos));
+		} 
+		else if (@event is InputEventMouseButton button)
 		{
 			if (button.ButtonIndex == MouseButton.Left)
 			{
 				Vector2I pos =  GetTilePos(mousePos);
-				if (spawner.GetNodeAt(pos) is Belt belt)
+				if (ui.mode == PlaceMode.Remove)
 				{
-					belt.QueueFree();
-					nodes.Remove(pos);
+					if (spawner.GetNodeAt(pos) is Belt belt)
+					{
+						belt.QueueFree();
+						nodes.Remove(pos);
+					}
+				}
+				if (ui.mode == PlaceMode.Belt)
+				{
+					if (button.Pressed)
+					{
+						if (spawner.GetNodeAt(pos) is Belt belt)
+							previousBelt = belt;
+						else
+						PlaceBelt(GetTilePos(mousePos));
+					}
+					else
+						previousBelt = null;
 				}
 			}
 		}

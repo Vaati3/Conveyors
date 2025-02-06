@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public abstract partial class Building : Node2D
 {
 	public Vector2I pos {private set; get;}
+	public Vector2I size {private set; get;} = Vector2I.One;
 	protected bool hasInput {private set; get;}
 	protected Vector2I input {private set; get;}
 	protected bool hasOutput {private set; get;}
