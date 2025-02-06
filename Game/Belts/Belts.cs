@@ -10,10 +10,10 @@ public enum BeltType {
     BottomRight, RightToBottom, BottomToRight,
     TopLeft, TopToLeft, LeftToTop,
     TopRight, TopToRight, RightToTop,
-	TBottom, TUp, TLeft, TRight,
+	TBottom, TTop, TLeft, TRight,
 	Cross
 }
-
+ 
 public partial class Belt : Node2D
 {
     public Vector2I pos {get; private set;}
@@ -21,14 +21,34 @@ public partial class Belt : Node2D
 	public AnimatedSprite2D sprite {get; private set;}
 	private Area2D area;
 	private int maxItems = 2;
-	private float speed = 50;
 
-	readonly static BeltType[,] typeMatrix = new BeltType[5,4]{
+	readonly static BeltType[,] typeMatrix = new BeltType[26,4]{
 		{BeltType.Top, BeltType.Bottom, BeltType.Left, BeltType.Right},
 		{BeltType.BottomTop, BeltType.BottomTop, BeltType.BottomLeft, BeltType.BottomRight},
 		{BeltType.BottomTop, BeltType.BottomTop, BeltType.TopLeft, BeltType.TopRight},
 		{BeltType.TopRight, BeltType.BottomRight, BeltType.RightLeft, BeltType.RightLeft},
 		{BeltType.TopLeft, BeltType.BottomLeft, BeltType.RightLeft, BeltType.RightLeft},
+		{BeltType.BottomTop, BeltType.BottomTop, BeltType.TLeft, BeltType.TLeft},
+		{BeltType.BottomTop, BeltType.BottomTop, BeltType.TLeft, BeltType.TLeft}, // add anim
+		{BeltType.BottomTop, BeltType.BottomTop, BeltType.TLeft, BeltType.TLeft}, // add anim
+		{BeltType.TBottom, BeltType.TTop, BeltType.RightLeft, BeltType.RightLeft},
+		{BeltType.TBottom, BeltType.TTop, BeltType.RightLeft, BeltType.RightLeft}, // add anim
+		{BeltType.TBottom, BeltType.TTop, BeltType.RightLeft, BeltType.RightLeft}, // add anim
+		{BeltType.TRight, BeltType.BottomLeft, BeltType.BottomLeft, BeltType.TTop},
+		{BeltType.TRight, BeltType.BottomLeft, BeltType.BottomLeft, BeltType.TTop}, // add anim
+		{BeltType.TRight, BeltType.BottomLeft, BeltType.BottomLeft, BeltType.TTop}, // add anim
+		{BeltType.TLeft, BeltType.BottomRight, BeltType.TTop, BeltType.BottomRight},
+		{BeltType.TLeft, BeltType.BottomRight, BeltType.TTop, BeltType.BottomRight}, // add anim
+		{BeltType.TLeft, BeltType.BottomRight, BeltType.TTop, BeltType.BottomRight}, // add anim
+		{BeltType.TopLeft, BeltType.TRight, BeltType.TopLeft, BeltType.TBottom},
+		{BeltType.TopLeft, BeltType.TRight, BeltType.TopLeft, BeltType.TBottom}, // add anim
+		{BeltType.TopLeft, BeltType.TRight, BeltType.TopLeft, BeltType.TBottom}, // add anim
+		{BeltType.TopRight, BeltType.TLeft, BeltType.TBottom, BeltType.TopRight},
+		{BeltType.TopRight, BeltType.TLeft, BeltType.TBottom, BeltType.TopRight}, // add anim
+		{BeltType.TopRight, BeltType.TLeft, BeltType.TBottom, BeltType.TopRight}, // add anim
+		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross},
+		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross}, // add anim
+		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross} // add anim
 	};
 
 	public Belt(Vector2I pos, Belt synchro, Belt previousBelt)
@@ -102,7 +122,23 @@ public partial class Belt : Node2D
 
 	private void Update(BeltType other)
 	{
+		//GD.Print("prev " + type + " " + (int)type + " other " + other + " " + (int)(other-1));
 		ChangeType(typeMatrix[(int)type, (int)other-1]);
+	}
+
+	private void Update(Vector2I other)
+	{
+		if (other.X != pos.X)
+		{
+			if (other.X > pos.X)
+				ChangeType(typeMatrix[(int)type, 3]);
+			else 
+				ChangeType(typeMatrix[(int)type, 2]);
+		}
+		else if (other.Y > pos.Y)
+			ChangeType(typeMatrix[(int)type, 1]);
+		else 
+			ChangeType(typeMatrix[(int)type, 0]);
 	}
 
     public void SetBeltType(Belt previousBelt)
@@ -126,5 +162,6 @@ public partial class Belt : Node2D
 			type = type = BeltType.Top;
 		
 		previousBelt.Update(type);
+		// previousBelt.Update(pos);
 	}
 }

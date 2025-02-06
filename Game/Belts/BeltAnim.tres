@@ -514,7 +514,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_fl3lg")
 }],
 "loop": true,
-"name": &"TUp",
+"name": &"TTop",
 "speed": 5.0
 }, {
 "frames": [{
