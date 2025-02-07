@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://b6c816mguu0mp"]
+[gd_scene load_steps=4 format=3 uid="uid://b6c816mguu0mp"]
 
 [ext_resource type="Script" path="res://Game/Map.cs" id="1_g05ti"]
 [ext_resource type="PackedScene" uid="uid://bi0wjqbff4inl" path="res://Menus/GameUI.tscn" id="3_5add5"]
+[ext_resource type="SpriteFrames" uid="uid://cehsyywjbt2y6" path="res://Game/Belts/BeltAnim.tres" id="3_vlqob"]
 
 [node name="Map" type="Node2D"]
 script = ExtResource("1_g05ti")
@@ -30,3 +31,8 @@ color = Color(0.960784, 0.94902, 0.921569, 1)
 
 [node name="Camera" type="Camera2D" parent="."]
 zoom = Vector2(0.85, 0.85)
+
+[node name="Synchro" type="AnimatedSprite2D" parent="."]
+position = Vector2(597, 305)
+sprite_frames = ExtResource("3_vlqob")
+animation = &"RightLeftToBottom"

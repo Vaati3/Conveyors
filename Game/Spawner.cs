@@ -29,7 +29,7 @@ public partial class Spawner : Node
         rng = new RandomNumberGenerator();
         items = new List<Item>();
         timer = new Timer() {
-            Autostart = false,//true debug
+            Autostart = true,
             OneShot = true,
             WaitTime = 2
         };
@@ -44,13 +44,13 @@ public partial class Spawner : Node
         ItemType type = (ItemType)n;
     
         Vector2I pos = GetRandomPos();
-        Source source = new Source(pos, type, ItemCreated);
-		source.GetNodeAt += GetNodeAt;
-        ui.Pause += source.Pause;
-		nodes.Add(pos, source);
-		buildingLayer.AddChild(source);
+        // Source source = new Source(pos, type, ItemCreated);
+		// source.GetNodeAt += GetNodeAt;
+        // ui.Pause += source.Pause;
+		// nodes.Add(pos, source);
+		// buildingLayer.AddChild(source);
 
-        pos = GetRandomPos();
+        //pos = GetRandomPos();
         Shop shop = new Shop(pos, type);
         ui.Pause += shop.Pause;
 		nodes.Add(pos, shop);

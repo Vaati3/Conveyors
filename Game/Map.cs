@@ -10,7 +10,7 @@ public partial class Map : Node2D
 	Dictionary<Vector2I, Node2D> nodes;
 
 	Node beltLayer;
-	Belt synchroBelt = null;// replace with animated sprite initialised in ready
+	AnimatedSprite2D synchro;
 	Belt previousBelt = null;
 
 	ColorRect background;
@@ -24,15 +24,13 @@ public partial class Map : Node2D
 			return;
 		if (!nodes.ContainsKey(pos))
 		{
-			Belt belt = new Belt(pos, synchroBelt, previousBelt);
+			Belt belt = new Belt(pos, synchro, previousBelt);
 			ui.Pause += belt.Pause;
 			if (ui.isPaused)
 				belt.Pause(true);
 			nodes.Add(pos, belt);
 			beltLayer.AddChild(belt);
 			previousBelt = belt;
-			if (synchroBelt == null)
-				synchroBelt = belt;
 		}
 	}
 
@@ -44,6 +42,8 @@ public partial class Map : Node2D
 		camera = GetNode<Camera2D>("Camera");
 		background = GetNode<ColorRect>("Background");
 		beltLayer = GetNode<Node>("Belts");
+		synchro = GetNode<AnimatedSprite2D>("Synchro");
+		synchro.Play();
 		
 		spawner = new Spawner(nodes, this);
 		AddChild(spawner);

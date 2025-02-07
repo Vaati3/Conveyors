@@ -11,6 +11,7 @@ public partial class Source : Building
     {
         this.type = type;
         ItemCreated += itemCreated;
+        size = new Vector2I(3, 2);
 
         timer = new Timer(){
             Autostart = true,

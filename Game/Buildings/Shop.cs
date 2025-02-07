@@ -4,7 +4,7 @@ public partial class Shop : Building
 {
     Timer timer;
     ItemType type;
-    public Shop(Vector2I pos, ItemType type) : base(pos, type.ToString() + "Shop", false)
+    public Shop(Vector2I pos, ItemType type) : base(pos, type.ToString() + "Shop", true, false)
     {
         this.type = type;
         timer = new Timer(){

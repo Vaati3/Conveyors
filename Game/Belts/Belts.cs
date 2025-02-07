@@ -2,86 +2,37 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public enum BeltType {
-	Dot, Bottom, Top, Right, Left,
-	ToBottom, ToTop, ToRight, ToLeft,
-    BottomTop, TopToBottom, BottomToTop,
-    RightLeft, LeftToRight, RightToLeft,
-    BottomLeft, LeftToBottom, BottomToLeft,
-    BottomRight, RightToBottom, BottomToRight,
-    TopLeft, TopToLeft, LeftToTop,
-    TopRight, TopToRight, RightToTop,
-	TBottom, TBottomToTop, TBottomToRight, TBottomToLeft,
-	TTop, TTopToBottom, TTopToRight, TTopToLeft,
-	TRight, TRightToBottom, TRightToTop, TRightToLeft,
-	TLeft, TLeftToBottom, TLeftToTop, TLeftToRight,
-	Cross, CrossToBottom, CrossToTop, CrossToRight, CrossToLeft,
+public enum BeltInput{
+	None = -1, Bottom, Top, Right, Left 
 }
  
 public partial class Belt : Node2D
 {
     public Vector2I pos {get; private set;}
-	public BeltType type {private set; get;}
 	public AnimatedSprite2D sprite {get; private set;}
+	private AnimatedSprite2D synchro;
 	private Area2D area;
 	private int maxItems = 2;
+	List<Belt> previousBelts;
 
-	readonly static BeltType[,] typeMatrix = new BeltType[39, 4]{
-		{BeltType.Top, BeltType.Bottom, BeltType.Left, BeltType.Right},
-		{BeltType.BottomTop, BeltType.BottomTop, BeltType.BottomLeft, BeltType.BottomRight},
-		{BeltType.BottomTop, BeltType.BottomTop, BeltType.TopLeft, BeltType.TopRight},
-		{BeltType.TopRight, BeltType.BottomRight, BeltType.RightLeft, BeltType.RightLeft},
-		{BeltType.TopLeft, BeltType.BottomLeft, BeltType.RightLeft, BeltType.RightLeft},
-		{BeltType.ToTop, BeltType.ToBottom, BeltType.ToLeft, BeltType.ToRight},
-		{BeltType.ToTop, BeltType.ToBottom, BeltType.ToLeft, BeltType.ToRight},
-		{BeltType.ToTop, BeltType.ToBottom, BeltType.ToLeft, BeltType.ToRight},
-		{BeltType.ToTop, BeltType.ToBottom, BeltType.ToLeft, BeltType.ToRight},
-		{BeltType.BottomTop, BeltType.BottomTop, BeltType.TLeft, BeltType.TLeft},
-		{BeltType.BottomTop, BeltType.BottomTop, BeltType.TLeft, BeltType.TLeft}, // add anim
-		{BeltType.BottomTop, BeltType.BottomTop, BeltType.TLeft, BeltType.TLeft}, // add anim
-		{BeltType.TBottom, BeltType.TTop, BeltType.RightLeft, BeltType.RightLeft},
-		{BeltType.TBottom, BeltType.TTop, BeltType.RightLeft, BeltType.RightLeft}, // add anim
-		{BeltType.TBottom, BeltType.TTop, BeltType.RightLeft, BeltType.RightLeft}, // add anim
-		{BeltType.TRight, BeltType.BottomLeft, BeltType.BottomLeft, BeltType.TTop},
-		{BeltType.TRight, BeltType.BottomLeft, BeltType.BottomLeft, BeltType.TTop}, // add anim
-		{BeltType.TRight, BeltType.BottomLeft, BeltType.BottomLeft, BeltType.TTop}, // add anim
-		{BeltType.TLeft, BeltType.BottomRight, BeltType.TTop, BeltType.BottomRight},
-		{BeltType.TLeft, BeltType.BottomRight, BeltType.TTop, BeltType.BottomRight}, // add anim
-		{BeltType.TLeft, BeltType.BottomRight, BeltType.TTop, BeltType.BottomRight}, // add anim
-		{BeltType.TopLeft, BeltType.TRight, BeltType.TopLeft, BeltType.TBottom},
-		{BeltType.TopLeft, BeltType.TRight, BeltType.TopLeft, BeltType.TBottom}, // add anim
-		{BeltType.TopLeft, BeltType.TRight, BeltType.TopLeft, BeltType.TBottom}, // add anim
-		{BeltType.TopRight, BeltType.TLeft, BeltType.TBottom, BeltType.TopRight},
-		{BeltType.TopRight, BeltType.TLeft, BeltType.TBottom, BeltType.TopRight}, // add anim
-		{BeltType.TopRight, BeltType.TLeft, BeltType.TBottom, BeltType.TopRight}, // add anim
-		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross},
-		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross}, // add anim
-		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross}, // add anim
-		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross}, // add anim
-		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross},
-		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross}, // add anim
-		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross}, // add anim
-		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross}, // add anim
-		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross},
-		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross}, // add anim
-		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross}, // add anim
-		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross}  // add anim
-	};
+	bool[] inputs;
+	BeltInput output = BeltInput.None;
 
-	public Belt(Vector2I pos, Belt synchro, Belt previousBelt)
+	public Belt(Vector2I pos, AnimatedSprite2D synchro, Belt previousBelt)
 	{
         this.pos = pos;
 		Position = pos * Map.tilesize;
-        SetBeltType(previousBelt);
+		previousBelts = new List<Belt>();
+		previousBelts.Add(previousBelt);
 
+		this.synchro = synchro;
         sprite = new AnimatedSprite2D(){
             SpriteFrames = GD.Load<SpriteFrames>("res://Game/Belts/BeltAnim.tres")
         };
         AddChild(sprite);
-        sprite.Play(type.ToString());
-        sprite.Animation = type.ToString();
-        if (synchro != null)//remove when syncho become a sprite
-            sprite.SetFrameAndProgress(synchro.sprite.Frame, synchro.sprite.FrameProgress);
+		inputs = new bool[4]{false, false, false, false};
+        SetBeltType(previousBelt);
+		sprite.Play();
 
 		area = new Area2D();
 		AddChild(area);
@@ -90,8 +41,17 @@ public partial class Belt : Node2D
 				Size = new Vector2(1, 1)
 			}
 		});
-		
+		area.Owner = this;
 		area.AreaEntered += AreaEntered;
+	}
+
+	private void SetBeltType(Belt previousBelt)
+	{
+		if (previousBelt == null)
+			return;
+
+		Update(previousBelt.pos);
+		previousBelt.Update(pos);
 	}
 
 	public void AreaEntered(Area2D other)
@@ -114,71 +74,116 @@ public partial class Belt : Node2D
 
 	private Vector2 GetItemDirection()
     {
-        switch(type)
-		{
-			case BeltType.LeftToBottom: case BeltType.RightToBottom: case BeltType.TopToBottom:
-				return Vector2.Down;
-			case BeltType.BottomToLeft: case BeltType.RightToLeft: case BeltType.TopToLeft:
-				return Vector2.Left;
-			case BeltType.BottomToRight: case BeltType.LeftToRight: case BeltType.TopToRight:
-				return Vector2.Right;
-			case BeltType.BottomToTop: case BeltType.LeftToTop: case BeltType.RightToTop:
-				return Vector2.Up;
-		}
+        // switch(type)
+		// {
+		// 	case BeltType.LeftToBottom: case BeltType.RightToBottom: case BeltType.TopToBottom:
+		// 		return Vector2.Down;
+		// 	case BeltType.BottomToLeft: case BeltType.RightToLeft: case BeltType.TopToLeft:
+		// 		return Vector2.Left;
+		// 	case BeltType.BottomToRight: case BeltType.LeftToRight: case BeltType.TopToRight:
+		// 		return Vector2.Right;
+		// 	case BeltType.BottomToTop: case BeltType.LeftToTop: case BeltType.RightToTop:
+		// 		return Vector2.Up;
+		// }
 		return Vector2.Zero;
     }
 
-    public void ChangeType(BeltType type)
-    {
-        this.type = type;
-        int frame = sprite.Frame;
-        float frameProgress = sprite.FrameProgress;
-        sprite.Animation = type.ToString();
-        sprite.SetFrameAndProgress(frame, frameProgress);
-    }
-
-	private void Update(BeltType other)
+	private void UpdateAnimation()
 	{
-		//GD.Print("prev " + type + " " + (int)type + " other " + other + " " + (int)(other-1));
-		ChangeType(typeMatrix[(int)type, (int)other-1]);
+		if (!inputs[0] && !inputs[1] && !inputs[2] && !inputs[3] && output == BeltInput.None)
+		{
+			sprite.Animation = "Dot";
+			return;
+		}
+		
+		string anim = "";
+
+		if (inputs[(int)BeltInput.Bottom])
+			anim += "Bottom";
+		if (inputs[(int)BeltInput.Top])
+			anim += "Top";
+		if (inputs[(int)BeltInput.Right])
+			anim += "Right";
+		if (inputs[(int)BeltInput.Left])
+			anim += "Left";
+
+		if (output != BeltInput.None)
+			anim += "To" + output.ToString();
+
+		sprite.Animation = anim;
+		sprite.SetFrameAndProgress(synchro.Frame, synchro.FrameProgress);
 	}
+
+    // public void ChangeType()
+    // {
+    //     // this.type = type;
+    //     // int frame = sprite.Frame;
+    //     // float frameProgress = sprite.FrameProgress;
+        
+    //     // sprite.SetFrameAndProgress(frame, frameProgress);
+    // }
+
 
 	private void Update(Vector2I other)
 	{
 		if (other.X != pos.X)
 		{
 			if (other.X > pos.X)
-				ChangeType(typeMatrix[(int)type, 3]);
+				inputs[(int)BeltInput.Right] = true;
 			else 
-				ChangeType(typeMatrix[(int)type, 2]);
+				inputs[(int)BeltInput.Left] = true;
 		}
 		else if (other.Y > pos.Y)
-			ChangeType(typeMatrix[(int)type, 1]);
+			inputs[(int)BeltInput.Bottom] = true;
 		else 
-			ChangeType(typeMatrix[(int)type, 0]);
+			inputs[(int)BeltInput.Top] = true;
+
+		UpdateAnimation();
+	}
+	
+	private void UpdateLine(Belt nextBelt)
+	{
+		if (nextBelt.pos.X != pos.X)
+		{
+			if (nextBelt.pos.X > pos.X)
+				output = BeltInput.Right;
+			else
+				output = BeltInput.Left;
+		} 
+		else if (nextBelt.pos.Y > pos.Y) 
+			output = BeltInput.Bottom;
+		else
+			output = BeltInput.Top;
+		inputs[(int)output] = false;
+		UpdateAnimation();
+
+		for(int i = 0; i < previousBelts.Count; i++)
+		{
+			previousBelts[i]?.UpdateLine(this);
+		}
 	}
 
-    public void SetBeltType(Belt previousBelt)
+	public void Connect(Building building)
 	{
-		if (previousBelt == null)
-		{
-			type = BeltType.Dot;
-			return;
-		}
+		Vector2I inputPos = building.pos+building.input;
 
-		if (previousBelt.pos.X != pos.X)
+		if (inputPos.X != pos.X)
 		{
-			if (previousBelt.pos.X > pos.X)
-				type = BeltType.Right;
-			else 
-				type = BeltType.Left;
-		}
-		else if (previousBelt.pos.Y > pos.Y)
-			type = BeltType.Bottom;
-		else 
-			type = type = BeltType.Top;
+			if (inputPos.X > pos.X)
+				output = BeltInput.Right;
+			else
+				output = BeltInput.Left;
+		} 
+		else if (inputPos.Y > pos.Y) 
+			output = BeltInput.Bottom;
+		else
+			output = BeltInput.Top;
+		inputs[(int)output] = false;
 		
-		previousBelt.Update(type);
-		// previousBelt.Update(pos);
+		UpdateAnimation();
+		for(int i = 0; i < previousBelts.Count; i++)
+		{
+			previousBelts[i].UpdateLine(this);
+		}
 	}
 }
