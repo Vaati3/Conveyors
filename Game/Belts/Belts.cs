@@ -4,14 +4,18 @@ using System.Collections.Generic;
 
 public enum BeltType {
 	Dot, Bottom, Top, Right, Left,
+	ToBottom, ToTop, ToRight, ToLeft,
     BottomTop, TopToBottom, BottomToTop,
     RightLeft, LeftToRight, RightToLeft,
     BottomLeft, LeftToBottom, BottomToLeft,
     BottomRight, RightToBottom, BottomToRight,
     TopLeft, TopToLeft, LeftToTop,
     TopRight, TopToRight, RightToTop,
-	TBottom, TTop, TLeft, TRight,
-	Cross
+	TBottom, TBottomToTop, TBottomToRight, TBottomToLeft,
+	TTop, TTopToBottom, TTopToRight, TTopToLeft,
+	TRight, TRightToBottom, TRightToTop, TRightToLeft,
+	TLeft, TLeftToBottom, TLeftToTop, TLeftToRight,
+	Cross, CrossToBottom, CrossToTop, CrossToRight, CrossToLeft,
 }
  
 public partial class Belt : Node2D
@@ -22,12 +26,16 @@ public partial class Belt : Node2D
 	private Area2D area;
 	private int maxItems = 2;
 
-	readonly static BeltType[,] typeMatrix = new BeltType[26,4]{
+	readonly static BeltType[,] typeMatrix = new BeltType[39, 4]{
 		{BeltType.Top, BeltType.Bottom, BeltType.Left, BeltType.Right},
 		{BeltType.BottomTop, BeltType.BottomTop, BeltType.BottomLeft, BeltType.BottomRight},
 		{BeltType.BottomTop, BeltType.BottomTop, BeltType.TopLeft, BeltType.TopRight},
 		{BeltType.TopRight, BeltType.BottomRight, BeltType.RightLeft, BeltType.RightLeft},
 		{BeltType.TopLeft, BeltType.BottomLeft, BeltType.RightLeft, BeltType.RightLeft},
+		{BeltType.ToTop, BeltType.ToBottom, BeltType.ToLeft, BeltType.ToRight},
+		{BeltType.ToTop, BeltType.ToBottom, BeltType.ToLeft, BeltType.ToRight},
+		{BeltType.ToTop, BeltType.ToBottom, BeltType.ToLeft, BeltType.ToRight},
+		{BeltType.ToTop, BeltType.ToBottom, BeltType.ToLeft, BeltType.ToRight},
 		{BeltType.BottomTop, BeltType.BottomTop, BeltType.TLeft, BeltType.TLeft},
 		{BeltType.BottomTop, BeltType.BottomTop, BeltType.TLeft, BeltType.TLeft}, // add anim
 		{BeltType.BottomTop, BeltType.BottomTop, BeltType.TLeft, BeltType.TLeft}, // add anim
@@ -48,7 +56,16 @@ public partial class Belt : Node2D
 		{BeltType.TopRight, BeltType.TLeft, BeltType.TBottom, BeltType.TopRight}, // add anim
 		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross},
 		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross}, // add anim
-		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross} // add anim
+		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross}, // add anim
+		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross}, // add anim
+		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross},
+		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross}, // add anim
+		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross}, // add anim
+		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross}, // add anim
+		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross},
+		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross}, // add anim
+		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross}, // add anim
+		{BeltType.Cross, BeltType.Cross, BeltType.Cross, BeltType.Cross}  // add anim
 	};
 
 	public Belt(Vector2I pos, Belt synchro, Belt previousBelt)
