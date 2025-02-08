@@ -43,7 +43,7 @@ public partial class Spawner : Node
         n = n == 2 ? 1 : n;
         ItemType type = (ItemType)n;
     
-        Vector2I pos = GetRandomPos();
+        Vector2I pos = Vector2I.Zero;//GetRandomPos();
         // Source source = new Source(pos, type, ItemCreated);
 		// source.GetNodeAt += GetNodeAt;
         // ui.Pause += source.Pause;

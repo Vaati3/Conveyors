@@ -80,11 +80,16 @@ public partial class Map : Node2D
     {
 		Vector2 mousePos = GetGlobalMousePosition();
 		Vector2I pos =  GetTilePos(mousePos);
-        if ( @event is InputEventMouseMotion motion)
+        if ( @event is InputEventMouseMotion)
 		{
 			if (Input.IsActionPressed("Click") && ui.mode == PlaceMode.Belt)
 			{
-				PlaceBelt(GetTilePos(mousePos));
+				if (spawner.GetNodeAt(pos) is Belt belt && belt.pos != previousBelt.pos)
+				{
+					belt.Connect(previousBelt);
+					previousBelt = belt;
+				} else
+					PlaceBelt(GetTilePos(mousePos));
 			}
 		} 
 		else if (@event is InputEventMouseButton button)

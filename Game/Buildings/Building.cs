@@ -66,4 +66,9 @@ public abstract partial class Building : Node2D
 
 	public delegate Node2D GetNodeAtEventHandler(Vector2I pos);
 	public GetNodeAtEventHandler GetNodeAt;
+
+
+    public override void _Input(InputEvent @event)
+    {
+    }
 }

@@ -104,17 +104,17 @@ public partial class Belt : Node2D
 		UpdateAnimation();
 	}
 
-	private BeltInput GetOutput(Vector2I other, bool backward = false)
+	private BeltInput GetOutput(Vector2I other)
 	{
 		if (other.X != pos.X)
 		{
 			if (other.X > pos.X)
-				return backward ? BeltInput.Left : BeltInput.Right;
-			return backward ? BeltInput.Right : BeltInput.Left;
+				return BeltInput.Right;
+			return BeltInput.Left;
 		} 
 		if (other.Y > pos.Y) 
-			return backward ? BeltInput.Top : BeltInput.Bottom;
-		return backward ? BeltInput.Bottom : BeltInput.Top;
+			return BeltInput.Bottom;
+		return BeltInput.Top;
 	}
 	
 	private void UpdateLine(Belt nextBelt)
@@ -135,7 +135,7 @@ public partial class Belt : Node2D
 	{
 		Vector2I inputPos = building.pos+building.input;
 
-		output = GetOutput(pos, true);
+		output = GetOutput(inputPos);
 		
 		UpdateAnimation();
 		for(int i = 0; i <= (int)BeltInput.Left; i++)
@@ -144,6 +144,39 @@ public partial class Belt : Node2D
 				continue;
 			otherBelts[i].UpdateLine(this);
 		}
+	}
+
+	public void Connect(Belt belt)
+	{
+		if (output != BeltInput.None && belt.output != BeltInput.None)
+			return;
+
+		if (belt.output != BeltInput.None)
+		{
+			output = GetOutput(belt.pos);
+			UpdateAnimation();
+			belt.otherBelts[(int)belt.GetOutput(pos)] = this;
+			belt.Update(this);
+
+			for(int i = 0; i <= (int)BeltInput.Left; i++)
+			{
+				if (otherBelts[i] == null)
+					continue;
+				otherBelts[i].UpdateLine(this);
+			}
+			return;
+		}
+
+		if (output != BeltInput.None)
+		{
+			belt.Connect(this);
+			return;
+		}
+
+		otherBelts[(int)GetOutput(belt.pos)] = belt;
+		belt.otherBelts[(int)belt.GetOutput(pos)] = this;
+		Update(belt);
+		belt.Update(this);
 	}
 
 	public void Pause(bool isPaused)
