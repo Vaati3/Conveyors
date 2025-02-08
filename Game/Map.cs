@@ -79,16 +79,18 @@ public partial class Map : Node2D
     public override void _Input(InputEvent @event)
     {
 		Vector2 mousePos = GetGlobalMousePosition();
+		Vector2I pos =  GetTilePos(mousePos);
         if ( @event is InputEventMouseMotion motion)
 		{
-			if (Input.IsActionPressed("Click"))
+			if (Input.IsActionPressed("Click") && ui.mode == PlaceMode.Belt)
+			{
 				PlaceBelt(GetTilePos(mousePos));
+			}
 		} 
 		else if (@event is InputEventMouseButton button)
 		{
 			if (button.ButtonIndex == MouseButton.Left)
 			{
-				Vector2I pos =  GetTilePos(mousePos);
 				if (ui.mode == PlaceMode.Remove)
 				{
 					if (spawner.GetNodeAt(pos) is Belt belt)
@@ -104,7 +106,7 @@ public partial class Map : Node2D
 						if (spawner.GetNodeAt(pos) is Belt belt)
 							previousBelt = belt;
 						else
-						PlaceBelt(GetTilePos(mousePos));
+							PlaceBelt(GetTilePos(mousePos));
 					}
 					else
 						previousBelt = null;
