@@ -21,18 +21,18 @@ public partial class Source : Building
         AddChild(timer);
     }
 
-    bool justOne = false;//debug
     private void CreateItem()
     {   
         if (!(GetNodeAt(pos+output) is Belt))//check if belt is full
             return;
         Item item = new Item(type);
+        if (!ItemCreated(item, pos + output))
+        {
+            item.QueueFree();
+            return;
+        }
         item.Position = (pos + output) * Map.tilesize;
         item.GetNodeAt = GetNodeAt;
-        ItemCreated(item);
-        
-        if (justOne)
-            timer.Stop();
     }
 
     public override void Pause(bool isPaused)
@@ -40,6 +40,6 @@ public partial class Source : Building
         timer.Paused = isPaused;
     }
 
-    public delegate void ItemCreatedEventHandler(Item item);
+    public delegate bool ItemCreatedEventHandler(Item item, Vector2I pos);
     ItemCreatedEventHandler ItemCreated;
 }

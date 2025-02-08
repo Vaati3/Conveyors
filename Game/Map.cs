@@ -100,7 +100,7 @@ public partial class Map : Node2D
 				{
 					if (spawner.GetNodeAt(pos) is Belt belt)
 					{
-						belt.QueueFree();
+						belt.Remove();
 						nodes.Remove(pos);
 					}
 				}

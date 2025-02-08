@@ -179,6 +179,44 @@ public partial class Belt : Node2D
 		belt.Update(this);
 	}
 
+	public void Remove()
+	{
+		for(int i = 0; i <= (int)BeltInput.Left; i++)
+		{
+			if (otherBelts[i] == null)
+				continue;
+			otherBelts[i].Remove(this);
+		}
+		QueueFree();
+	}
+
+	public void Remove(Belt belt)
+	{
+		int i = (int)GetOutput(belt.pos);
+		inputs[i] = false;
+		otherBelts[i] = null;
+		if (output != BeltInput.None && output == GetOutput(belt.pos)) 
+		{
+			OutputLost(true);
+			return;
+		}
+		
+		UpdateAnimation();
+	}
+
+	private void OutputLost(bool first = false)
+	{
+		for(int i = 0; i <= (int)BeltInput.Left; i++)
+		{
+			if (otherBelts[i] == null || i == (int)output)
+				continue;
+			otherBelts[i].OutputLost();
+		}
+		inputs[(int)output] = !first;
+		output = BeltInput.None;
+		UpdateAnimation();
+	}
+
 	public void Pause(bool isPaused)
 	{
 		if (isPaused)
@@ -199,17 +237,17 @@ public partial class Belt : Node2D
 
 	private Vector2 GetItemDirection()
     {
-        // switch(type)
-		// {
-		// 	case BeltType.LeftToBottom: case BeltType.RightToBottom: case BeltType.TopToBottom:
-		// 		return Vector2.Down;
-		// 	case BeltType.BottomToLeft: case BeltType.RightToLeft: case BeltType.TopToLeft:
-		// 		return Vector2.Left;
-		// 	case BeltType.BottomToRight: case BeltType.LeftToRight: case BeltType.TopToRight:
-		// 		return Vector2.Right;
-		// 	case BeltType.BottomToTop: case BeltType.LeftToTop: case BeltType.RightToTop:
-		// 		return Vector2.Up;
-		// }
+        switch(output)
+		{
+			case BeltInput.Bottom:
+				return Vector2.Down;
+			case BeltInput.Left:
+				return Vector2.Left;
+			case BeltInput.Right:
+				return Vector2.Right;
+			case BeltInput.Top:
+				return Vector2.Up;
+		}
 		return Vector2.Zero;
     }
 }

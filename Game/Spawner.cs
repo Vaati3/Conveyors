@@ -77,10 +77,17 @@ public partial class Spawner : Node
         return pos;
     }
 
-    public void ItemCreated(Item item)
+    public bool ItemCreated(Item item, Vector2I pos)
 	{
+        if (GetNodeAt(pos) is Belt belt)
+        {
+            if (belt.output == BeltInput.None)
+                return false;
+        } else
+            return false;
 		itemLayer.AddChild(item);
         items.Add(item);
+        return true;
 	}
 
     public void Pause(bool isPaused)
