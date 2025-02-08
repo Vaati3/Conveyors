@@ -5,8 +5,7 @@ using System.Collections.Generic;
 public abstract partial class Building : Node2D
 {
 	public Vector2I pos {private set; get;}
-	public Vector2I size {protected set; get;} = Vector2I.One;
-	protected bool hasInput {private set; get;}
+	protected bool hasInput {private set; get;} = false;
 	protected Area2D inputArea {private set; get;} = null;
 	public Vector2I input{protected set; get;}
 	protected bool hasOutput {private set; get;}
@@ -15,12 +14,10 @@ public abstract partial class Building : Node2D
 	protected Sprite2D sprite;
 	protected Area2D area;
 
-	public Building(Vector2I pos, string textureName, bool hasInput = true, bool hasOutput = true)
+	public Building(Vector2I pos, string textureName, bool hasOutput = true)
 	{
 		this.pos = pos;
-		Vector2 newPosition = pos * Map.tilesize;
-		newPosition.Y -= Map.tilesize/2;
-		Position = newPosition;
+		Position = pos * Map.tilesize;
 
 		this.hasInput = hasInput;
 		this.hasOutput = hasOutput;
@@ -29,19 +26,6 @@ public abstract partial class Building : Node2D
         sprite.Texture = GD.Load<Texture2D>("res://Game/Buildings/Textures/" + textureName + ".png");
         AddChild(sprite);
 
-		if (hasInput)
-		{
-			inputArea = new Area2D();
-			inputArea.Position = new Vector2(-Map.tilesize, -Map.tilesize - 64);
-			AddChild(inputArea);
-			inputArea.AddChild(new CollisionShape2D(){
-				Shape = new RectangleShape2D() {
-					Size = new Vector2(10, 10)
-				}
-			});
-			inputArea.AreaEntered += InputAreaBeltDettect;
-			input = new Vector2I(-1, -1);
-		}
 		if (hasOutput)
 			output = Vector2I.Down;
 
@@ -52,6 +36,21 @@ public abstract partial class Building : Node2D
 				Size = new Vector2(1, 1)
 			}
 		});
+	}
+
+	protected void SetupInput(Vector2 position, Vector2I inputPos)
+	{
+		hasInput = true;
+		inputArea = new Area2D();
+		inputArea.Position = position;
+		AddChild(inputArea);
+		inputArea.AddChild(new CollisionShape2D(){
+			Shape = new RectangleShape2D() {
+				Size = new Vector2(5, 5)
+			}
+		});
+		inputArea.AreaEntered += InputAreaBeltDettect;
+		input = inputPos;
 	}
 
 	public void InputAreaBeltDettect(Area2D other)
@@ -70,5 +69,13 @@ public abstract partial class Building : Node2D
 
     public override void _Input(InputEvent @event)
     {
+		Vector2 mousePos = GetGlobalMousePosition();
+		Vector2 half = sprite.Texture.GetSize() / 2;
+
+		if (mousePos.X > Position.X-half.X && mousePos.X < Position.X+half.X 
+			&& mousePos.Y > Position.Y-half.Y && mousePos.Y < Position.Y+half.Y)
+		{
+			GetViewport().SetInputAsHandled();
+		}
     }
 }

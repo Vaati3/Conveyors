@@ -25,6 +25,7 @@ offset_right = 678.0
 offset_bottom = 380.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0.960784, 0.94902, 0.921569, 1)
 
 [node name="Belts" type="Node" parent="."]

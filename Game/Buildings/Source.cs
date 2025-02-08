@@ -7,11 +7,10 @@ public partial class Source : Building
     Timer timer;
     static float itemTime = 2.5f;
 
-    public Source(Vector2I pos, ItemType type, ItemCreatedEventHandler itemCreated) : base(pos, type.ToString() + "Source", false)
+    public Source(Vector2I pos, ItemType type, ItemCreatedEventHandler itemCreated) : base(pos, type.ToString() + "Source")
     {
         this.type = type;
         ItemCreated += itemCreated;
-        size = new Vector2I(3, 2);
 
         timer = new Timer(){
             Autostart = true,

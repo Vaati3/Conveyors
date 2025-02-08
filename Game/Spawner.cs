@@ -43,15 +43,16 @@ public partial class Spawner : Node
         n = n == 2 ? 1 : n;
         ItemType type = (ItemType)n;
     
-        Vector2I pos = Vector2I.Zero;//GetRandomPos();
-        // Source source = new Source(pos, type, ItemCreated);
-		// source.GetNodeAt += GetNodeAt;
-        // ui.Pause += source.Pause;
-		// nodes.Add(pos, source);
-		// buildingLayer.AddChild(source);
+        Vector2I pos = GetRandomPos();
+        Source source = new Source(pos, type, ItemCreated);
+		source.GetNodeAt += GetNodeAt;
+        ui.Pause += source.Pause;
+		nodes.Add(pos, source);
+		buildingLayer.AddChild(source);
 
-        //pos = GetRandomPos();
-        Shop shop = new Shop(pos, type);
+        pos = GetRandomPos();
+        int rot = 90 * rng.RandiRange(0, 3);
+        Shop shop = new Shop(pos, type, rot);
         ui.Pause += shop.Pause;
 		nodes.Add(pos, shop);
 		buildingLayer.AddChild(shop);

@@ -76,7 +76,7 @@ public partial class Map : Node2D
 		background.Position = -background.Size/2;
 	}
 
-    public override void _Input(InputEvent @event)
+    public override void _UnhandledInput(InputEvent @event)
     {
 		Vector2 mousePos = GetGlobalMousePosition();
 		Vector2I pos =  GetTilePos(mousePos);
