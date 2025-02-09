@@ -83,6 +83,7 @@ public partial class Spawner : Node
         {
             if (belt.output == BeltInput.None)
                 return false;
+            item.belt = belt;
         } else
             return false;
 		itemLayer.AddChild(item);
@@ -106,4 +107,5 @@ public partial class Spawner : Node
 		}
 		return null;
 	}
+
 }

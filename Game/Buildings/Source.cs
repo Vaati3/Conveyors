@@ -32,7 +32,6 @@ public partial class Source : Building
             return;
         }
         item.Position = (pos + output) * Map.tilesize;
-        item.GetNodeAt = GetNodeAt;
     }
 
     public override void Pause(bool isPaused)

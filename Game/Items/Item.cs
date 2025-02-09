@@ -13,7 +13,8 @@ public partial class Item : Node2D
 {
     public ItemType type {get; private set;}
     public Vector2 direction;
-    public float speed = 50;
+
+    public Belt belt;
 	private Sprite2D sprite;
     private Area2D area;
 
@@ -24,10 +25,7 @@ public partial class Item : Node2D
         this.type = type;
         direction = Vector2.Zero;
 
-        sprite = new Sprite2D(){
-            Scale = new Vector2(0.2f, 0.2f)
-        };
-        
+        sprite = new Sprite2D();
         sprite.Texture = GD.Load<Texture2D>("res://Game/Items/" + type.ToString() + ".png");
         AddChild(sprite);
 
@@ -38,20 +36,29 @@ public partial class Item : Node2D
 				Size = new Vector2(1, 1)
 			}
 		});
-
         area.Owner = this;
 	}
+
+    private Vector2 GetDirection()
+    {
+        switch(belt.output)
+		{
+			case BeltInput.Bottom:
+				return Vector2.Down;
+			case BeltInput.Left:
+				return Vector2.Left;
+			case BeltInput.Right:
+				return Vector2.Right;
+			case BeltInput.Top:
+				return Vector2.Up;
+		}
+		return Vector2.Zero;
+    }
 
     public override void _PhysicsProcess(double delta)
     {
         if (isPaused)
             return;
-        Position = Position + (direction * speed * (float)delta);
-        // Vector2I pos = new Vector2I((int)Position.X, (int)Position.Y);//change if item change size!
-        Vector2I pos = new Vector2I((int)Math.Floor((Position.X + Map.tilesize / 2) / Map.tilesize), (int)Math.Floor((Position.Y + Map.tilesize / 2) / Map.tilesize));
-        if (GetNodeAt(pos) == null)
-            QueueFree();
+        Position = Position + (GetDirection() * belt.speed * (float)delta);
     }
-
-    public Building.GetNodeAtEventHandler GetNodeAt;
 }

@@ -12,11 +12,14 @@ public partial class Belt : Node2D
 	public AnimatedSprite2D sprite {get; private set;}
 	private AnimatedSprite2D synchro;
 	private Area2D area;
+	private Area2D colisionArea;
+	List<Item> items;
 	private int maxItems = 2;
 	public Belt[] otherBelts;
 
 	public bool[] inputs {get; private set;}
 	public BeltInput output {get; private set;} = BeltInput.None;
+	public int speed {get; private set;} = 50;
 
 	public Belt(Vector2I pos, AnimatedSprite2D synchro, Belt previousBelt)
 	{
@@ -36,12 +39,22 @@ public partial class Belt : Node2D
 		AddChild(area);
 		area.AddChild(new CollisionShape2D(){
 			Shape = new RectangleShape2D() {
-				Size = new Vector2(1, 1)
+				Size = Vector2.One
 			}
 		});
 		area.Owner = this;
 		area.AreaEntered += AreaEntered;
 		
+		items = new List<Item>();
+		colisionArea = new Area2D();
+		AddChild(colisionArea);
+		colisionArea.AddChild(new CollisionShape2D(){
+			Shape = new RectangleShape2D() {
+				Size = Vector2.One * Map.tilesize
+			}
+		});
+		colisionArea.AreaEntered += ColisionAreaEntered;
+		colisionArea.AreaExited += ColisionAreaExited;
 		SetBeltType(previousBelt);
 	}
 
@@ -181,6 +194,8 @@ public partial class Belt : Node2D
 
 	public void Remove()
 	{
+		for(int i = items.Count-1; i >= 0; i--)
+			items[i].QueueFree();
 		for(int i = 0; i <= (int)BeltInput.Left; i++)
 		{
 			if (otherBelts[i] == null)
@@ -231,23 +246,22 @@ public partial class Belt : Node2D
 	{
 		if (other.Owner is Item item)
 		{
-			item.direction = GetItemDirection();
+			item.belt = this;
 		}
 	}
 
-	private Vector2 GetItemDirection()
-    {
-        switch(output)
+	public void ColisionAreaEntered(Area2D other)
+	{
+		if (other.Owner is Item item)
 		{
-			case BeltInput.Bottom:
-				return Vector2.Down;
-			case BeltInput.Left:
-				return Vector2.Left;
-			case BeltInput.Right:
-				return Vector2.Right;
-			case BeltInput.Top:
-				return Vector2.Up;
+			items.Add(item);
 		}
-		return Vector2.Zero;
-    }
+	}
+	public void ColisionAreaExited(Area2D other)
+	{
+		if (other.Owner is Item item)
+		{
+			items.Remove(item);
+		}
+	}
 }
