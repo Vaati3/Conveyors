@@ -35,6 +35,13 @@ public partial class Spawner : Node
         };
         timer.Timeout += CreateSourceAndShop;
         AddChild(timer);
+
+
+        //test add ui later
+        Vector2I pos = Vector2I.Zero;
+        Splitter splitter = new Splitter(pos, OutputCreated);
+        ui.Pause += splitter.Pause;
+		buildingLayer.AddChild(splitter);
     }
 
     private void CreateSourceAndShop()

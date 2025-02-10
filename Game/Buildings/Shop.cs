@@ -7,7 +7,6 @@ public partial class Shop : Building
     
     public Shop(Vector2I pos, OutputCreatedEventHandler outputCreated, ItemType type, int rot) : base(pos, type.ToString() + "Shop", outputCreated)
     {
-		// Position = Position - Vector2.Down * Map.tilesize/2;
         this.type = type;
         timer = new Timer(){
             Autostart = true,
@@ -63,6 +62,7 @@ public partial class Shop : Building
     public override void Pause(bool isPaused)
     {
         timer.Paused = isPaused;
+        this.isPaused = isPaused;
     }
 
     public delegate void GameLostEventHandler();

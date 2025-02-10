@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Godot;
 
 public partial class Source : Building
@@ -21,14 +20,13 @@ public partial class Source : Building
         };
         timer.Timeout += CreateItem;
         AddChild(timer);
-        // sprite.Visible =false;
 
         AddOutput(Vector2I.Zero);
     }
 
     private void CreateItem()
     {   
-        if (output[0].output == BeltInput.None)//check if belt is full
+        if (output[0].output == BeltInput.None)
             return;
         Item item = new Item(type);
         item.belt = output[0];
@@ -39,5 +37,6 @@ public partial class Source : Building
     public override void Pause(bool isPaused)
     {
         timer.Paused = isPaused;
+        this.isPaused = isPaused;
     }
 }
