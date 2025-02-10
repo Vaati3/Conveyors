@@ -11,6 +11,8 @@ public abstract partial class Building : Node2D
 	protected bool hasOutput {private set; get;}
 	protected Vector2I output {private set; get;} = Vector2I.Zero;
 
+	public Vector2I size {protected set; get;} = Vector2I.One;
+
 	protected Sprite2D sprite;
 	protected Area2D area;
 
@@ -65,17 +67,4 @@ public abstract partial class Building : Node2D
 
 	public delegate Node2D GetNodeAtEventHandler(Vector2I pos);
 	public GetNodeAtEventHandler GetNodeAt;
-
-
-    public override void _Input(InputEvent @event)
-    {
-		Vector2 mousePos = GetGlobalMousePosition();
-		Vector2 half = sprite.Texture.GetSize() / 2;
-
-		if (mousePos.X > Position.X-half.X && mousePos.X < Position.X+half.X 
-			&& mousePos.Y > Position.Y-half.Y && mousePos.Y < Position.Y+half.Y)
-		{
-			GetViewport().SetInputAsHandled();
-		}
-    }
 }

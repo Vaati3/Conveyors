@@ -63,7 +63,7 @@ public partial class Map : Node2D
 		return true;
 	}
 
-	private Vector2I GetTilePos(Vector2 position)
+	public static Vector2I GetTilePos(Vector2 position)
 	{
 		return new Vector2I((int)Math.Floor((position.X + tilesize / 2) / tilesize), (int)Math.Floor((position.Y + tilesize / 2) / tilesize));
 	}

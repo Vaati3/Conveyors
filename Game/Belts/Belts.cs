@@ -13,8 +13,7 @@ public partial class Belt : Node2D
 	private AnimatedSprite2D synchro;
 	private Area2D area;
 	private Area2D colisionArea;
-	List<Item> items;
-	private int maxItems = 2;
+	public List<Item> items {get; private set;}
 	public Belt[] otherBelts;
 
 	public bool[] inputs {get; private set;}
@@ -147,9 +146,7 @@ public partial class Belt : Node2D
 	public void Connect(Building building)
 	{
 		Vector2I inputPos = building.pos+building.input;
-
 		output = GetOutput(inputPos);
-		
 		UpdateAnimation();
 		for(int i = 0; i <= (int)BeltInput.Left; i++)
 		{
@@ -240,6 +237,10 @@ public partial class Belt : Node2D
 		} else {
 			sprite.Play();
 		}
+		foreach (Item item in items)
+        {
+            item.isPaused = isPaused;
+        }
 	}
 
 	public void AreaEntered(Area2D other)
