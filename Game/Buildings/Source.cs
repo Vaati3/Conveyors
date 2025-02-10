@@ -7,10 +7,12 @@ public partial class Source : Building
     Timer timer;
     static float itemTime = 2.5f;
 
-    public Source(Vector2I pos, ItemType type, ItemCreatedEventHandler itemCreated) : base(pos, type.ToString() + "Source")
+    Node itemLayer;
+
+    public Source(Vector2I pos, OutputCreatedEventHandler outputCreated, ItemType type, Node itemLayer) : base(pos, type.ToString() + "Source", outputCreated)
     {
         this.type = type;
-        ItemCreated += itemCreated;
+        this.itemLayer = itemLayer;
 
         timer = new Timer(){
             Autostart = true,
@@ -19,26 +21,23 @@ public partial class Source : Building
         };
         timer.Timeout += CreateItem;
         AddChild(timer);
+        // sprite.Visible =false;
+
+        AddOutput(Vector2I.Zero);
     }
 
     private void CreateItem()
     {   
-        if (!(GetNodeAt(pos+output) is Belt))//check if belt is full
+        if (output[0].output == BeltInput.None)//check if belt is full
             return;
         Item item = new Item(type);
-        if (!ItemCreated(item, pos + output))
-        {
-            item.QueueFree();
-            return;
-        }
-        item.Position = (pos + output) * Map.tilesize;
+        item.belt = output[0];
+        itemLayer.AddChild(item);
+        item.Position = pos * Map.tilesize;
     }
 
     public override void Pause(bool isPaused)
     {
         timer.Paused = isPaused;
     }
-
-    public delegate bool ItemCreatedEventHandler(Item item, Vector2I pos);
-    ItemCreatedEventHandler ItemCreated;
 }

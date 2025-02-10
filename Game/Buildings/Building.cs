@@ -5,31 +5,23 @@ using System.Collections.Generic;
 public abstract partial class Building : Node2D
 {
 	public Vector2I pos {private set; get;}
-	protected bool hasInput {private set; get;} = false;
-	protected Area2D inputArea {private set; get;} = null;
 	public Vector2I input{protected set; get;}
-	protected bool hasOutput {private set; get;}
-	protected Vector2I output {private set; get;} = Vector2I.Zero;
-
+	protected List<Belt> output {private set; get;}
 	public Vector2I size {protected set; get;} = Vector2I.One;
 
 	protected Sprite2D sprite;
 	protected Area2D area;
+	protected bool isPaused;
 
-	public Building(Vector2I pos, string textureName, bool hasOutput = true)
+	public Building(Vector2I pos, string textureName, OutputCreatedEventHandler outputCreated)
 	{
 		this.pos = pos;
 		Position = pos * Map.tilesize;
-
-		this.hasInput = hasInput;
-		this.hasOutput = hasOutput;
+		OutputCreated = outputCreated;
 
 		sprite = new Sprite2D(); 
         sprite.Texture = GD.Load<Texture2D>("res://Game/Buildings/Textures/" + textureName + ".png");
         AddChild(sprite);
-
-		if (hasOutput)
-			output = Vector2I.Down;
 
 		area = new Area2D();
 		sprite.AddChild(area);
@@ -38,12 +30,21 @@ public abstract partial class Building : Node2D
 				Size = sprite.Texture.GetSize() - Vector2.One * 64f,
 			}
 		});
+
+		output = new List<Belt>();
 	}
 
-	protected void SetupInput(Vector2 position, Vector2I inputPos)
+	protected void AddOutput(Vector2I outputPos)
 	{
-		hasInput = true;
-		inputArea = new Area2D();
+		Belt belt = new Belt(pos + outputPos, null, null);//missing synchro
+		output.Add(belt);
+		AddChild(belt);
+		OutputCreated(belt);
+	}
+
+	protected void AddInput(Vector2 position, Vector2I inputPos)
+	{
+		Area2D inputArea = new Area2D();
 		inputArea.Position = position;
 		AddChild(inputArea);
 		inputArea.AddChild(new CollisionShape2D(){
@@ -65,6 +66,6 @@ public abstract partial class Building : Node2D
 
 	public abstract void Pause(bool isPaused);
 
-	public delegate Node2D GetNodeAtEventHandler(Vector2I pos);
-	public GetNodeAtEventHandler GetNodeAt;
+	public delegate void OutputCreatedEventHandler(Belt belt);
+	public OutputCreatedEventHandler OutputCreated;
 }

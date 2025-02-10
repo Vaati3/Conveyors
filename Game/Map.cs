@@ -10,7 +10,7 @@ public partial class Map : Node2D
 	Dictionary<Vector2I, Node2D> nodes;
 
 	Node beltLayer;
-	AnimatedSprite2D synchro;
+	public AnimatedSprite2D synchro {get; private set;}
 	Belt previousBelt = null;
 
 	ColorRect background;

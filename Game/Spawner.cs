@@ -15,11 +15,14 @@ public partial class Spawner : Node
     private delegate Vector2I GetLimits();
     private GetLimits getLimits;
 
+    AnimatedSprite2D synchro;
+
     public Spawner(Dictionary<Vector2I, Node2D> nodes, Map map)
     {
         this.nodes = nodes;
         getLimits += map.GetLimits;
         ui = map.ui;
+        synchro = map.synchro;
 
 		itemLayer = map.GetNode<Node>("Items");
 		buildingLayer = map.GetNode<Node>("Buildings");
@@ -55,10 +58,8 @@ public partial class Spawner : Node
         Vector2I? pos = GetRandomPos(Vector2I.One);
         if (pos == null)
             return;
-        Source source = new Source(pos.Value, type, ItemCreated);
-		source.GetNodeAt += GetNodeAt;
+        Source source = new Source(pos.Value, OutputCreated, type, itemLayer);
         ui.Pause += source.Pause;
-		nodes.Add(pos.Value, source);
 		buildingLayer.AddChild(source);
     }
 
@@ -69,9 +70,8 @@ public partial class Spawner : Node
         Vector2I? pos = GetRandomPos(size);
         if (pos == null)
             return;
-        Shop shop = new Shop(pos.Value, type, rot);
+        Shop shop = new Shop(pos.Value, OutputCreated, type, rot);
         ui.Pause += shop.Pause;
-        shop.GetNodeAt += GetNodeAt;
         buildingLayer.AddChild(shop);
         AddBuilding(shop);
     }
@@ -106,7 +106,6 @@ public partial class Spawner : Node
         Vector2I start = new Vector2I(rng.RandiRange(-limits.X, limits.X), rng.RandiRange(-limits.Y, limits.Y));
         Vector2I pos;
 
-        //!CanPlace(pos, size)
         for (pos.X = start.X; pos.X < limits.X; pos.X++)
         {
             for (pos.Y = start.Y; pos.Y < limits.Y; pos.Y++)
@@ -131,19 +130,6 @@ public partial class Spawner : Node
         return null;
     }
 
-    public bool ItemCreated(Item item, Vector2I pos)
-	{
-        if (GetNodeAt(pos) is Belt belt)
-        {
-            if (belt.output == BeltInput.None)
-                return false;
-            item.belt = belt;
-        } else
-            return false;
-		itemLayer.AddChild(item);
-        return true;
-	}
-
     public Node2D GetNodeAt(Vector2I pos)
 	{
 		if (nodes.ContainsKey(pos))
@@ -153,4 +139,11 @@ public partial class Spawner : Node
 		return null;
 	}
 
+    public void OutputCreated(Belt belt)
+    {
+        nodes[belt.pos] = belt;
+
+        ui.Pause += belt.Pause;
+        belt.synchro = synchro;
+    }
 }

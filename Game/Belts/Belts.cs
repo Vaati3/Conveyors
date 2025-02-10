@@ -10,7 +10,7 @@ public partial class Belt : Node2D
 {
     public Vector2I pos {get; private set;}
 	public AnimatedSprite2D sprite {get; private set;}
-	private AnimatedSprite2D synchro;
+	public AnimatedSprite2D synchro;
 	private Area2D area;
 	private Area2D colisionArea;
 	public List<Item> items {get; private set;}
