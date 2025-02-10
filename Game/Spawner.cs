@@ -39,14 +39,8 @@ public partial class Spawner : Node
         int n = rng.RandiRange(1, 6);
         n = n == 2 ? 1 : n;
         ItemType type = (ItemType)n;
-    
-        Vector2I pos = GetRandomPos();
-        Source source = new Source(pos, type, ItemCreated);
-		source.GetNodeAt += GetNodeAt;
-        ui.Pause += source.Pause;
-		nodes.Add(pos, source);
-		buildingLayer.AddChild(source);
 		
+        CreateSource(type);
         CreateShop(type);
 
         if (timer.IsStopped())
@@ -56,12 +50,26 @@ public partial class Spawner : Node
         }
     }
 
+    private void CreateSource(ItemType type)
+    {
+        Vector2I? pos = GetRandomPos(Vector2I.One);
+        if (pos == null)
+            return;
+        Source source = new Source(pos.Value, type, ItemCreated);
+		source.GetNodeAt += GetNodeAt;
+        ui.Pause += source.Pause;
+		nodes.Add(pos.Value, source);
+		buildingLayer.AddChild(source);
+    }
+
     private void CreateShop(ItemType type)
     {
         int rot = 90 * rng.RandiRange(0, 3);
         Vector2I size = rot == 0 || rot == 180 ? new Vector2I(3,2) : new Vector2I(2,3);
-        Vector2I pos = GetRandomPos(size);
-        Shop shop = new Shop(pos, type, rot);
+        Vector2I? pos = GetRandomPos(size);
+        if (pos == null)
+            return;
+        Shop shop = new Shop(pos.Value, type, rot);
         ui.Pause += shop.Pause;
         shop.GetNodeAt += GetNodeAt;
         buildingLayer.AddChild(shop);
@@ -92,29 +100,35 @@ public partial class Spawner : Node
         return true;
     }
 
-    private Vector2I GetRandomPos()
+    private Vector2I? GetRandomPos(Vector2I size)
     {
-        Vector2I limits = getLimits() - Vector2I.One;
-        Vector2I pos = new Vector2I(rng.RandiRange(-limits.X, limits.X), rng.RandiRange(-limits.Y, limits.Y));
+        Vector2I limits = getLimits();
+        Vector2I start = new Vector2I(rng.RandiRange(-limits.X, limits.X), rng.RandiRange(-limits.Y, limits.Y));
+        Vector2I pos;
 
-        while (GetNodeAt(pos) != null)
+        //!CanPlace(pos, size)
+        for (pos.X = start.X; pos.X < limits.X; pos.X++)
         {
-            pos.X = rng.RandiRange(-limits.X, limits.X);
-            pos.Y = rng.RandiRange(-limits.Y, limits.Y);
+            for (pos.Y = start.Y; pos.Y < limits.Y; pos.Y++)
+            {
+                if (CanPlace(pos, size))
+                {
+                    return pos;
+                }
+            }
         }
-        return pos;
-    }
-    private Vector2I GetRandomPos(Vector2I size)
-    {
-        Vector2I limits = getLimits() - Vector2I.One;
-        Vector2I pos = new Vector2I(rng.RandiRange(-limits.X, limits.X), rng.RandiRange(-limits.Y, limits.Y));
-
-        while (!CanPlace(pos, size))
+        for (pos.X = -limits.X; pos.X < start.X; pos.X++)
         {
-            pos.X = rng.RandiRange(-limits.X, limits.X);
-            pos.Y = rng.RandiRange(-limits.Y, limits.Y);
+            for (pos.Y = -limits.Y; pos.Y < start.Y; pos.Y++)
+            {
+                if (CanPlace(pos, size))
+                {
+                    return pos;
+                }
+            }
         }
-        return pos;
+        
+        return null;
     }
 
     public bool ItemCreated(Item item, Vector2I pos)

@@ -32,10 +32,10 @@ public abstract partial class Building : Node2D
 			output = Vector2I.Down;
 
 		area = new Area2D();
-		AddChild(area);
+		sprite.AddChild(area);
 		area.AddChild(new CollisionShape2D(){
 			Shape = new RectangleShape2D() {
-				Size = new Vector2(1, 1)
+				Size = sprite.Texture.GetSize() - Vector2.One * 64f,
 			}
 		});
 	}

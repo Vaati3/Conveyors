@@ -19,7 +19,6 @@ public partial class Shop : Building
 
         area.AreaEntered += AreaEntered;
 
-        rot = 270;
         RotationDegrees = rot;
         if (rot == 0){
             size = new Vector2I(3, 2);
