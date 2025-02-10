@@ -18,10 +18,10 @@ texture = ExtResource("1_sspid")
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1l0mx"]
 texture = ExtResource("1_4ngkf")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0tjhk"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cf87c"]
 bg_color = Color(0.813258, 0.813258, 0.813257, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cf87c"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0tjhk"]
 bg_color = Color(0.813258, 0.813258, 0.813257, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b515y"]
@@ -47,7 +47,7 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_gstht")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_hhom3")
 theme_override_styles/normal = SubResource("StyleBoxTexture_1l0mx")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="Buttons" type="VBoxContainer" parent="."]
 offset_left = 1.0
 offset_top = 80.0
 offset_right = 96.0
@@ -55,19 +55,37 @@ offset_bottom = 649.0
 theme_override_constants/separation = 30
 alignment = 1
 
-[node name="BeltButton" type="Button" parent="VBoxContainer"]
+[node name="RemoveButton" type="Button" parent="Buttons"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_cf87c")
+icon = ExtResource("4_g7773")
+
+[node name="BeltButton" type="Button" parent="Buttons"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/normal = SubResource("StyleBoxFlat_0tjhk")
 icon = ExtResource("3_nnjs2")
 
-[node name="RemoveButton" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_styles/normal = SubResource("StyleBoxFlat_cf87c")
-icon = ExtResource("4_g7773")
+[node name="Count" type="Label" parent="Buttons/BeltButton"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_top = 6.0
+offset_right = 20.0
+offset_bottom = 27.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_i3rbk")
+text = "10"
+horizontal_alignment = 1
 
 [node name="Confirm" type="Panel" parent="."]
 visible = false
@@ -149,8 +167,8 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_ckbsx")
 icon = ExtResource("8_ifqhr")
 
 [connection signal="pressed" from="MenuButton" to="." method="_on_menu_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/BeltButton" to="." method="_on_belt_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/RemoveButton" to="." method="_on_remove_button_pressed"]
+[connection signal="pressed" from="Buttons/RemoveButton" to="." method="_on_remove_button_pressed"]
+[connection signal="pressed" from="Buttons/BeltButton" to="." method="_on_belt_button_pressed"]
 [connection signal="pressed" from="Confirm/Yes" to="." method="_on_yes_pressed"]
 [connection signal="pressed" from="Confirm/No" to="." method="_on_no_pressed"]
 [connection signal="pressed" from="PauseButton" to="." method="_on_pause_button_pressed"]

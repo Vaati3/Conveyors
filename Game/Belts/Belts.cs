@@ -60,8 +60,10 @@ public partial class Belt : Node2D
 	private void SetBeltType(Belt previousBelt)
 	{
 		if (previousBelt == null)
+		{
+			UpdateAnimation();
 			return;
-
+		}
 		if (previousBelt != null && previousBelt.output != BeltInput.None)
 		{
 			output = GetOutput(previousBelt.pos);

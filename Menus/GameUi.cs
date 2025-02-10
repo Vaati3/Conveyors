@@ -15,16 +15,29 @@ public partial class GameUi : CanvasLayer
 
 	public bool isPaused{get; private set;} = false;
 	
-
 	Button pauseButton;
 	Texture2D pauseIcon;
 	Panel confirmPanel;
+
+	Label beltCountLabel;
+	public int beltCount {get; private set;} = 20;
+
 	public override void _Ready()
 	{
 		confirmPanel = GetNode<Panel>("Confirm");
 		pauseButton = GetNode<Button>("PauseButton");
 
 		pauseIcon = GD.Load<Texture2D>("res://Menus/Textures/Play.png");
+
+		beltCountLabel = GetNode<Label>("Buttons/BeltButton/Count");
+		beltCountLabel.Text = beltCount.ToString();
+	}
+
+	public void ChangeBeltCount(int value)
+	{
+		beltCount += value;
+
+		beltCountLabel.Text = beltCount.ToString();
 	}
 
 	public void _on_belt_button_pressed()

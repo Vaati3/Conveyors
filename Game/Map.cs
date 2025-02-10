@@ -22,7 +22,7 @@ public partial class Map : Node2D
 	{	
 		if (!IsInLimits(pos))
 			return;
-		if (!nodes.ContainsKey(pos))
+		if (!nodes.ContainsKey(pos) && ui.beltCount > 0)
 		{
 			Belt belt = new Belt(pos, synchro, previousBelt);
 			ui.Pause += belt.Pause;
@@ -31,6 +31,7 @@ public partial class Map : Node2D
 			nodes.Add(pos, belt);
 			beltLayer.AddChild(belt);
 			previousBelt = belt;
+			ui.ChangeBeltCount(-1);
 		}
 	}
 
@@ -91,6 +92,15 @@ public partial class Map : Node2D
 				} else
 					PlaceBelt(GetTilePos(mousePos));
 			}
+			if (Input.IsActionPressed("Click") && ui.mode == PlaceMode.Remove)
+				{
+					if (spawner.GetNodeAt(pos) is Belt belt)
+					{
+						belt.Remove();
+						nodes.Remove(pos);
+						ui.ChangeBeltCount(1);
+					}
+				}
 		} 
 		else if (@event is InputEventMouseButton button)
 		{
@@ -102,6 +112,7 @@ public partial class Map : Node2D
 					{
 						belt.Remove();
 						nodes.Remove(pos);
+						ui.ChangeBeltCount(1);
 					}
 				}
 				if (ui.mode == PlaceMode.Belt)
