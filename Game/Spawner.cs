@@ -61,19 +61,19 @@ public partial class Spawner : Node
         Vector2I? pos = GetRandomPos(Vector2I.One);
         if (pos == null)
             return;
-        Source source = new Source(pos.Value, OutputCreated, type, itemLayer);
+        Source source = new Source(pos.Value, InternalBeltCreated, type, itemLayer);
         ui.Pause += source.Pause;
 		AddBuilding(source);
     }
 
     private void CreateShop(ItemType type)
     {
-        int rot = 90 * rng.RandiRange(0, 3);
+        int rot = 270;//90 * rng.RandiRange(0, 3);
         Vector2I size = rot == 0 || rot == 180 ? new Vector2I(3,2) : new Vector2I(2,3);
         Vector2I? pos = GetRandomPos(size);
         if (pos == null)
             return;
-        Shop shop = new Shop(pos.Value, OutputCreated, type, rot);
+        Shop shop = new Shop(pos.Value, InternalBeltCreated, type, rot);
         ui.Pause += shop.Pause;
         AddBuilding(shop);
     }
@@ -86,6 +86,11 @@ public partial class Spawner : Node
             for (int y = building.pos.Y; y < building.pos.Y + building.size.Y; y++)
             {
                 foreach(Belt belt in building.output)
+                {
+                    if (belt.pos.X == x && belt.pos.Y == y)
+                        nodes.Add(belt.pos, belt);
+                }
+                foreach(Belt belt in building.input)
                 {
                     if (belt.pos.X == x && belt.pos.Y == y)
                         nodes.Add(belt.pos, belt);
@@ -132,6 +137,7 @@ public partial class Spawner : Node
                 } else {
                     parts.Add(pos);
                 }
+                nodes[new Vector2I(x, y)] = null;
             }
         }
         foreach(Belt belt in belts)
@@ -193,7 +199,7 @@ public partial class Spawner : Node
 		return null;
 	}
 
-    public void OutputCreated(Belt belt)
+    public void InternalBeltCreated(Belt belt)
     {
         ui.Pause += belt.Pause;
         belt.synchro = synchro;

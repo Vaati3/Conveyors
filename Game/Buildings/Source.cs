@@ -9,7 +9,7 @@ public partial class Source : Building
 
     Node itemLayer;
 
-    public Source(Vector2I pos, OutputCreatedEventHandler outputCreated, ItemType type, Node itemLayer) : base(pos, type.ToString() + "Source", outputCreated)
+    public Source(Vector2I pos, InternalBeltCreatedEventHandler outputCreated, ItemType type, Node itemLayer) : base(pos, type.ToString() + "Source", outputCreated)
     {
         this.type = type;
         this.itemLayer = itemLayer;

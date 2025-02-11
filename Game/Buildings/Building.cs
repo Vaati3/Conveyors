@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public abstract partial class Building : Node2D
 {
 	public Vector2I pos {private set; get;}
-	public Vector2I input{protected set; get;}
+	public List<Belt> input {private set; get;}
 	public List<Belt> output {private set; get;}
 	public Vector2I size {protected set; get;} = Vector2I.One;
 
@@ -16,11 +16,11 @@ public abstract partial class Building : Node2D
 	public PlaceMode mode = PlaceMode.Remove;
 	public bool isRemovable {protected set; get;}= true;
 
-	public Building(Vector2I pos, string textureName, OutputCreatedEventHandler outputCreated)
+	public Building(Vector2I pos, string textureName, InternalBeltCreatedEventHandler outputCreated)
 	{
 		this.pos = pos;
 		Position = pos * Map.tilesize;
-		OutputCreated = outputCreated;
+		InternalBeltCreated = outputCreated;
 
 		sprite = new Sprite2D(); 
         sprite.Texture = GD.Load<Texture2D>("res://Game/Buildings/Textures/" + textureName + ".png");
@@ -35,6 +35,7 @@ public abstract partial class Building : Node2D
 		});
 
 		output = new List<Belt>();
+		input = new List<Belt>();
 	}
 
 	protected void AddOutput(Vector2I outputPos)
@@ -42,44 +43,23 @@ public abstract partial class Building : Node2D
 		Belt belt = new Belt(pos + outputPos, null, null);//missing synchro
 		belt.building = this;
 		output.Add(belt);
-		OutputCreated(belt);
+		InternalBeltCreated(belt);
 	}
 
-	protected void AddInput(Vector2 position, Vector2I inputPos)
+	protected void AddInput(Vector2I inputPos, BeltInput beltType)
 	{
-		Area2D inputArea = new Area2D();
-		inputArea.Position = position;
-		AddChild(inputArea);
-		inputArea.AddChild(new CollisionShape2D(){
-			Shape = new RectangleShape2D() {
-				Size = new Vector2(5, 5)
-			}
-		});
-		inputArea.AreaEntered += InputAreaBeltDettect;
-		inputArea.AreaExited += InputAreaBeltExit;
-		input = inputPos;
-	}
-
-	public void InputAreaBeltDettect(Area2D other)
-    {
-        if (other.Owner is Belt belt)
-        {
-            belt.Connect(this);
-        }
-    }
-
-	public void InputAreaBeltExit(Area2D other)
-	{
-		if (other.Owner is Belt belt)
-        {
-			belt.OutputLost(true);
-		}
+		Belt belt = new Belt(pos + inputPos, null, null);//missing synchro
+		belt.building = this;
+		belt.isBuildingInput = true;
+		input.Add(belt);
+		InternalBeltCreated(belt);
+		belt.Connect(beltType);
 	}
 
 	public abstract void Pause(bool isPaused);
 
 	public abstract void Rotate();
 
-	public delegate void OutputCreatedEventHandler(Belt belt);
-	public OutputCreatedEventHandler OutputCreated;
+	public delegate void InternalBeltCreatedEventHandler(Belt belt);
+	public InternalBeltCreatedEventHandler InternalBeltCreated;
 }

@@ -3,13 +3,13 @@ using Godot;
 public partial class Splitter : Building
 {
     int outputIndex = 0;
-    public Splitter(Vector2I pos, OutputCreatedEventHandler outputCreated) : base(pos, "Splitter", outputCreated)
+    public Splitter(Vector2I pos, InternalBeltCreatedEventHandler outputCreated) : base(pos, "Splitter", outputCreated)
     {
         mode = PlaceMode.Splitter;
         sprite.Position = new Vector2(Map.tilesize * 0.5f, Map.tilesize * 0.5f);
 
         size = new Vector2I(2, 2);
-        AddInput(new Vector2(-Map.tilesize, Map.tilesize), new Vector2I(0, 1));
+        AddInput(new Vector2I(0, 1), BeltInput.Bottom);
         AddOutput(new Vector2I(1, 0));
         AddOutput(new Vector2I(1, 1));
 

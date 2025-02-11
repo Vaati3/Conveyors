@@ -22,6 +22,8 @@ public partial class Belt : Node2D
 
 	public Building building = null;
 
+	public bool isBuildingInput = false;
+
 	public Belt(Vector2I pos, AnimatedSprite2D synchro, Belt previousBelt)
 	{
         this.pos = pos;
@@ -147,17 +149,10 @@ public partial class Belt : Node2D
 		}
 	}
 
-	public void Connect(Building building)
+	public void Connect(BeltInput output)
 	{
-		Vector2I inputPos = building.pos+building.input;
-		output = GetOutput(inputPos);
+		this.output = output;
 		UpdateAnimation();
-		for(int i = 0; i <= (int)BeltInput.Left; i++)
-		{
-			if (otherBelts[i] == null)
-				continue;
-			otherBelts[i].UpdateLine(this);
-		}
 	}
 
 	public void Connect(Belt belt)
@@ -263,9 +258,9 @@ public partial class Belt : Node2D
 				otherBelts[i].Remove(this);
 				otherBelts[i] = null;
 			}
-
 		}
-		output = BeltInput.None;//add condition when inputs become belts
+		if (!isBuildingInput)
+			output = BeltInput.None;//add condition when inputs become belts
 		UpdateAnimation();
 	}
 

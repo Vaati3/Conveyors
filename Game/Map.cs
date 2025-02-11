@@ -38,7 +38,7 @@ public partial class Map : Node2D
 	{
 		if (spawner.CanPlace(pos, Vector2I.One * 2))
 		{
-        	Splitter splitter = new Splitter(pos, spawner.OutputCreated);
+        	Splitter splitter = new Splitter(pos, spawner.InternalBeltCreated);
         	ui.Pause += splitter.Pause;
 			spawner.AddBuilding(splitter);
 			ui.ChangeBeltCount(PlaceMode.Splitter, -1);
