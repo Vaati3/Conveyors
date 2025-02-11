@@ -250,6 +250,25 @@ public partial class Belt : Node2D
         }
 	}
 
+	public void ChangePos(Vector2I pos)
+	{
+		this.pos = pos;
+		Position = pos * Map.tilesize;
+		
+		for(int i = 0; i <= (int)BeltInput.Left; i++)
+		{
+			if (otherBelts[i] != null)
+			{
+				inputs[i] = false;
+				otherBelts[i].Remove(this);
+				otherBelts[i] = null;
+			}
+
+		}
+		output = BeltInput.None;//add condition when inputs become belts
+		UpdateAnimation();
+	}
+
 	public void AreaEntered(Area2D other)
 	{
 		if (other.Owner is Item item)

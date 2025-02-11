@@ -13,6 +13,7 @@ public partial class Source : Building
     {
         this.type = type;
         this.itemLayer = itemLayer;
+        isRemovable = false;
 
         timer = new Timer(){
             Autostart = true,
@@ -23,7 +24,6 @@ public partial class Source : Building
         AddChild(timer);
 
         AddOutput(Vector2I.Zero);
-        size = Vector2I.Zero;
     }
 
     private void CreateItem()
@@ -41,7 +41,5 @@ public partial class Source : Building
         timer.Paused = isPaused;
         this.isPaused = isPaused;
     }
-    public override void Remove(Dictionary<Vector2I, Node2D> nodes)
-    {
-    }
+    public override void Rotate(){}
 }

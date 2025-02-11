@@ -8,7 +8,7 @@ public partial class Splitter : Building
         mode = PlaceMode.Splitter;
         sprite.Position = new Vector2(Map.tilesize * 0.5f, Map.tilesize * 0.5f);
 
-        size = new Vector2I(1, 2);
+        size = new Vector2I(2, 2);
         AddInput(new Vector2(-Map.tilesize, Map.tilesize), new Vector2I(0, 1));
         AddOutput(new Vector2I(1, 0));
         AddOutput(new Vector2I(1, 1));
@@ -41,5 +41,10 @@ public partial class Splitter : Building
     public override void Pause(bool isPaused)
     {
         this.isPaused = isPaused;
+    }
+
+    public override void Rotate()
+    {
+        sprite.RotationDegrees += 90;
     }
 }

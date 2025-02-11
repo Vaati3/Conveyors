@@ -16,6 +16,8 @@ public partial class Shop : Building
         };
         timer.Timeout += Timeout;
         AddChild(timer);
+        
+        isRemovable = false;
 
         area.AreaEntered += AreaEntered;
 
@@ -66,9 +68,7 @@ public partial class Shop : Building
         this.isPaused = isPaused;
     }
 
-    public override void Remove(Dictionary<Vector2I, Node2D> nodes)
-    {
-    }
+    public override void Rotate(){}
 
     public delegate void GameLostEventHandler();
     public GameLostEventHandler GameLost;

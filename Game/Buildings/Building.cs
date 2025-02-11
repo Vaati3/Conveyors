@@ -6,7 +6,7 @@ public abstract partial class Building : Node2D
 {
 	public Vector2I pos {private set; get;}
 	public Vector2I input{protected set; get;}
-	protected List<Belt> output {private set; get;}
+	public List<Belt> output {private set; get;}
 	public Vector2I size {protected set; get;} = Vector2I.One;
 
 	protected Sprite2D sprite;
@@ -14,6 +14,7 @@ public abstract partial class Building : Node2D
 	protected bool isPaused;
 
 	public PlaceMode mode = PlaceMode.Remove;
+	public bool isRemovable {protected set; get;}= true;
 
 	public Building(Vector2I pos, string textureName, OutputCreatedEventHandler outputCreated)
 	{
@@ -76,15 +77,8 @@ public abstract partial class Building : Node2D
 	}
 
 	public abstract void Pause(bool isPaused);
-	public virtual void Remove(Dictionary<Vector2I, Node2D> nodes)
-	{
-		foreach(Belt belt in output)
-		{
-			nodes.Remove(belt.pos);
-			belt.Remove();
-		}
-		QueueFree();
-	}
+
+	public abstract void Rotate();
 
 	public delegate void OutputCreatedEventHandler(Belt belt);
 	public OutputCreatedEventHandler OutputCreated;

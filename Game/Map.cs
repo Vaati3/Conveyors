@@ -93,6 +93,8 @@ public partial class Map : Node2D
 		{
 			if (belt.building != null)
 			{
+				if (!belt.building.isRemovable)
+					return;
 				ui.ChangeBeltCount(belt.building.mode, 1);
 				spawner.RemoveBuilding(belt.building);
 				return;
@@ -133,6 +135,25 @@ public partial class Map : Node2D
 		{
 			if (button.ButtonIndex == MouseButton.Left)
 			{
+				if (button.DoubleClick)
+				{
+					if (spawner.GetNodeAt(pos) is Belt belt)
+					{
+						if (belt.building != null && belt.building.isRemovable)
+						{
+							spawner.RotateBuilding(belt.building);
+						}
+						return;
+					}
+					if (spawner.GetNodeAt(pos) is Building building)
+					{
+						if (building.isRemovable)
+						{
+							spawner.RotateBuilding(building);
+						}
+						return;
+					}
+				}	
 				if (ui.mode == PlaceMode.Remove)
 				{
 					Remove(pos);

@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 public partial class Spawner : Node
 {
@@ -62,7 +63,7 @@ public partial class Spawner : Node
             return;
         Source source = new Source(pos.Value, OutputCreated, type, itemLayer);
         ui.Pause += source.Pause;
-		buildingLayer.AddChild(source);
+		AddBuilding(source);
     }
 
     private void CreateShop(ItemType type)
@@ -84,7 +85,13 @@ public partial class Spawner : Node
         {
             for (int y = building.pos.Y; y < building.pos.Y + building.size.Y; y++)
             {
-                nodes.Add(new Vector2I(x, y), building);
+                foreach(Belt belt in building.output)
+                {
+                    if (belt.pos.X == x && belt.pos.Y == y)
+                        nodes.Add(belt.pos, belt);
+                }
+                if (!nodes.ContainsKey(new Vector2I(x, y)))
+                    nodes.Add(new Vector2I(x, y), building);
             }
         }
     }
@@ -95,10 +102,43 @@ public partial class Spawner : Node
         {
             for (int y = building.pos.Y; y < building.pos.Y + building.size.Y; y++)
             {
+                if (nodes[new Vector2I(x, y)] is Belt belt)
+                    belt.Remove();
                 nodes.Remove(new Vector2I(x,y));
             }
         }
-        building.Remove(nodes);
+        building.QueueFree();
+    }
+
+    public void RotateBuilding(Building building)
+    {
+        Vector2 center = new Vector2(building.pos.X + (((float)building.size.X-1)/2), building.pos.Y + (((float)building.size.Y-1)/2));
+        
+        List<Belt> belts = new List<Belt>();
+        List<Vector2I> parts = new List<Vector2I>();
+        for (int x = building.pos.X; x < building.pos.X + building.size.X; x++)
+        {
+            for (int y = building.pos.Y; y < building.pos.Y + building.size.Y; y++)
+            {
+                Vector2I pos;
+                pos.X = (int)((x - center.X) * MathF.Cos(MathF.PI/2) - (y - center.Y) * MathF.Sin(MathF.PI/2) + center.X);
+                pos.Y = (int)((x - center.X) * MathF.Sin(MathF.PI/2) + (y - center.Y) * MathF.Cos(MathF.PI/2) + center.Y);
+
+                Node node = GetNodeAt(new Vector2I(x, y));
+                if (node is Belt belt)
+                {
+                    belt.ChangePos(pos);
+                    belts.Add(belt);
+                } else {
+                    parts.Add(pos);
+                }
+            }
+        }
+        foreach(Belt belt in belts)
+            nodes[belt.pos] = belt;
+        foreach(Vector2I pos in parts)
+            nodes[pos] = building;
+        building.Rotate();
     }
 
     public bool CanPlace(Vector2I pos, Vector2I size)
@@ -155,8 +195,6 @@ public partial class Spawner : Node
 
     public void OutputCreated(Belt belt)
     {
-        nodes[belt.pos] = belt;
-
         ui.Pause += belt.Pause;
         belt.synchro = synchro;
         beltLayer.AddChild(belt);
