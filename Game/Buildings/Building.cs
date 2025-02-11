@@ -13,6 +13,8 @@ public abstract partial class Building : Node2D
 	protected Area2D area;
 	protected bool isPaused;
 
+	public PlaceMode mode = PlaceMode.Remove;
+
 	public Building(Vector2I pos, string textureName, OutputCreatedEventHandler outputCreated)
 	{
 		this.pos = pos;
@@ -37,8 +39,8 @@ public abstract partial class Building : Node2D
 	protected void AddOutput(Vector2I outputPos)
 	{
 		Belt belt = new Belt(pos + outputPos, null, null);//missing synchro
+		belt.building = this;
 		output.Add(belt);
-		AddChild(belt);
 		OutputCreated(belt);
 	}
 
@@ -53,6 +55,7 @@ public abstract partial class Building : Node2D
 			}
 		});
 		inputArea.AreaEntered += InputAreaBeltDettect;
+		inputArea.AreaExited += InputAreaBeltExit;
 		input = inputPos;
 	}
 
@@ -64,7 +67,16 @@ public abstract partial class Building : Node2D
         }
     }
 
+	public void InputAreaBeltExit(Area2D other)
+	{
+		if (other.Owner is Belt belt)
+        {
+			belt.OutputLost(true);
+		}
+	}
+
 	public abstract void Pause(bool isPaused);
+	public abstract bool Remove();
 
 	public delegate void OutputCreatedEventHandler(Belt belt);
 	public OutputCreatedEventHandler OutputCreated;

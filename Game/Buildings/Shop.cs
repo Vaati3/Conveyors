@@ -65,6 +65,11 @@ public partial class Shop : Building
         this.isPaused = isPaused;
     }
 
+    public override bool Remove()
+    {
+        return false;
+    }
+
     public delegate void GameLostEventHandler();
     public GameLostEventHandler GameLost;
 }

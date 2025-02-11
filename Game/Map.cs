@@ -17,12 +17,11 @@ public partial class Map : Node2D
 	Camera2D camera;
 	const float zoomOutSpeed = 0.001f;
 	
-
 	private void PlaceBelt(Vector2I pos)
 	{	
 		if (!IsInLimits(pos))
 			return;
-		if (!nodes.ContainsKey(pos) && ui.beltCount > 0)
+		if (!nodes.ContainsKey(pos) && ui.counts[(int)PlaceMode.Belt] > 0)
 		{
 			Belt belt = new Belt(pos, synchro, previousBelt);
 			ui.Pause += belt.Pause;
@@ -31,7 +30,18 @@ public partial class Map : Node2D
 			nodes.Add(pos, belt);
 			beltLayer.AddChild(belt);
 			previousBelt = belt;
-			ui.ChangeBeltCount(-1);
+			ui.ChangeBeltCount(PlaceMode.Belt, -1);
+		}
+	}
+
+	private void PlaceSplitter(Vector2I pos)
+	{
+		if (spawner.CanPlace(pos, Vector2I.One * 2))
+		{
+        	Splitter splitter = new Splitter(pos, spawner.OutputCreated);
+        	ui.Pause += splitter.Pause;
+			spawner.AddBuilding(splitter);
+			ui.ChangeBeltCount(PlaceMode.Splitter, -1);
 		}
 	}
 
@@ -77,6 +87,28 @@ public partial class Map : Node2D
 		background.Position = -background.Size/2;
 	}
 
+	private void Remove(Vector2I pos)
+	{
+		if (spawner.GetNodeAt(pos) is Belt belt)
+		{
+			if (belt.building != null)
+			{
+				ui.ChangeBeltCount(belt.building.mode, 1);
+				belt.building.Remove();
+				return;
+			}
+			belt.Remove();
+			nodes.Remove(pos);
+			ui.ChangeBeltCount(PlaceMode.Belt, 1);
+			return;
+		}
+		if (spawner.GetNodeAt(pos) is Building building)
+		{
+			ui.ChangeBeltCount(building.mode, 1);
+			building.Remove();
+		}
+	}
+
     public override void _UnhandledInput(InputEvent @event)
     {
 		Vector2 mousePos = GetGlobalMousePosition();
@@ -93,14 +125,9 @@ public partial class Map : Node2D
 					PlaceBelt(GetTilePos(mousePos));
 			}
 			if (Input.IsActionPressed("Click") && ui.mode == PlaceMode.Remove)
-				{
-					if (spawner.GetNodeAt(pos) is Belt belt)
-					{
-						belt.Remove();
-						nodes.Remove(pos);
-						ui.ChangeBeltCount(1);
-					}
-				}
+			{
+				Remove(pos);	
+			}
 		} 
 		else if (@event is InputEventMouseButton button)
 		{
@@ -108,12 +135,7 @@ public partial class Map : Node2D
 			{
 				if (ui.mode == PlaceMode.Remove)
 				{
-					if (spawner.GetNodeAt(pos) is Belt belt)
-					{
-						belt.Remove();
-						nodes.Remove(pos);
-						ui.ChangeBeltCount(1);
-					}
+					Remove(pos);
 				}
 				if (ui.mode == PlaceMode.Belt)
 				{
@@ -126,6 +148,13 @@ public partial class Map : Node2D
 					}
 					else
 						previousBelt = null;
+				}
+				if (ui.mode == PlaceMode.Splitter)
+				{
+					if (button.Pressed)
+					{
+						PlaceSplitter(pos);
+					}
 				}
 			}
 		}

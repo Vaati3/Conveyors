@@ -9,6 +9,7 @@ public partial class Spawner : Node
     Timer timer;
 
     GameUi ui;
+    Node beltLayer;
 	Node itemLayer;
 	Node buildingLayer;
 
@@ -24,6 +25,7 @@ public partial class Spawner : Node
         ui = map.ui;
         synchro = map.synchro;
 
+        beltLayer = map.GetNode<Node>("Belts");
 		itemLayer = map.GetNode<Node>("Items");
 		buildingLayer = map.GetNode<Node>("Buildings");
 
@@ -35,13 +37,6 @@ public partial class Spawner : Node
         };
         timer.Timeout += CreateSourceAndShop;
         AddChild(timer);
-
-
-        //test add ui later
-        Vector2I pos = Vector2I.Zero;
-        Splitter splitter = new Splitter(pos, OutputCreated);
-        ui.Pause += splitter.Pause;
-		buildingLayer.AddChild(splitter);
     }
 
     private void CreateSourceAndShop()
@@ -79,12 +74,12 @@ public partial class Spawner : Node
             return;
         Shop shop = new Shop(pos.Value, OutputCreated, type, rot);
         ui.Pause += shop.Pause;
-        buildingLayer.AddChild(shop);
         AddBuilding(shop);
     }
 
-    private void AddBuilding(Building building)
+    public void AddBuilding(Building building)
     {
+        buildingLayer.AddChild(building);
         for (int x = building.pos.X; x < building.pos.X + building.size.X; x++)
         {
             for (int y = building.pos.Y; y < building.pos.Y + building.size.Y; y++)
@@ -94,7 +89,7 @@ public partial class Spawner : Node
         }
     }
 
-    private bool CanPlace(Vector2I pos, Vector2I size)
+    public bool CanPlace(Vector2I pos, Vector2I size)
     {
         for (int x = pos.X; x < pos.X + size.X; x++)
         {
@@ -152,5 +147,6 @@ public partial class Spawner : Node
 
         ui.Pause += belt.Pause;
         belt.synchro = synchro;
+        beltLayer.AddChild(belt);
     }
 }

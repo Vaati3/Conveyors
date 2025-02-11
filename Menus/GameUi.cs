@@ -1,9 +1,11 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public enum PlaceMode {
-	Remove,
-	Belt
+	Remove = -1,
+	Belt,
+	Splitter
 }
 
 public partial class GameUi : CanvasLayer
@@ -19,8 +21,8 @@ public partial class GameUi : CanvasLayer
 	Texture2D pauseIcon;
 	Panel confirmPanel;
 
-	Label beltCountLabel;
-	public int beltCount {get; private set;} = 20;
+	Label[] countLabels;
+	public int[] counts {get; private set;}
 
 	public override void _Ready()
 	{
@@ -29,25 +31,41 @@ public partial class GameUi : CanvasLayer
 
 		pauseIcon = GD.Load<Texture2D>("res://Menus/Textures/Play.png");
 
-		beltCountLabel = GetNode<Label>("Buttons/BeltButton/Count");
-		beltCountLabel.Text = beltCount.ToString();
+		countLabels = new Label[2]
+        {
+            GetNode<Label>("Buttons/BeltButton/Count"),
+			GetNode<Label>("Buttons/SplitterButton/Count")
+        };
+		counts = new int[2] {
+			20,
+			1
+		};
+		
+		for (int i = 0; i < counts.Length; i++)
+			countLabels[i].Text = counts[i].ToString();
 	}
 
-	public void ChangeBeltCount(int value)
+	public void ChangeBeltCount(PlaceMode mode, int value)
 	{
-		beltCount += value;
+		if (mode == PlaceMode.Remove)
+			return;
+		int index = (int)mode;
+		counts[index] += value;
 
-		beltCountLabel.Text = beltCount.ToString();
-	}
-
-	public void _on_belt_button_pressed()
-	{
-		mode = PlaceMode.Belt;
+		countLabels[index].Text = counts[index].ToString();
 	}
 
 	public void _on_remove_button_pressed()
 	{
 		mode = PlaceMode.Remove;
+	}
+	public void _on_belt_button_pressed()
+	{
+		mode = PlaceMode.Belt;
+	}
+	public void _on_splitter_button_pressed()
+	{
+		mode = PlaceMode.Splitter;
 	}
 
 	public void _on_menu_button_pressed()

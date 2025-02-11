@@ -20,6 +20,8 @@ public partial class Belt : Node2D
 	public BeltInput output {get; private set;} = BeltInput.None;
 	public int speed {get; private set;} = 50;
 
+	public Building building = null;
+
 	public Belt(Vector2I pos, AnimatedSprite2D synchro, Belt previousBelt)
 	{
         this.pos = pos;
@@ -218,7 +220,7 @@ public partial class Belt : Node2D
 		UpdateAnimation();
 	}
 
-	private void OutputLost(bool first = false)
+	public void OutputLost(bool first = false)
 	{
 		for(int i = 0; i <= (int)BeltInput.Left; i++)
 		{

@@ -39,4 +39,8 @@ public partial class Source : Building
         timer.Paused = isPaused;
         this.isPaused = isPaused;
     }
+    public override bool Remove()
+    {
+        return false;
+    }
 }
