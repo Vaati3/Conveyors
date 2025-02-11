@@ -228,8 +228,11 @@ public partial class Belt : Node2D
 				continue;
 			otherBelts[i].OutputLost();
 		}
-		inputs[(int)output] = !first;
-		output = BeltInput.None;
+		if (output != BeltInput.None)
+		{
+			inputs[(int)output] = !first;
+			output = BeltInput.None;
+		}
 		UpdateAnimation();
 	}
 

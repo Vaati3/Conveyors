@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 
 public partial class Shop : Building
@@ -65,9 +66,8 @@ public partial class Shop : Building
         this.isPaused = isPaused;
     }
 
-    public override bool Remove()
+    public override void Remove(Dictionary<Vector2I, Node2D> nodes)
     {
-        return false;
     }
 
     public delegate void GameLostEventHandler();

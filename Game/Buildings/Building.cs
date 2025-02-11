@@ -76,7 +76,15 @@ public abstract partial class Building : Node2D
 	}
 
 	public abstract void Pause(bool isPaused);
-	public abstract bool Remove();
+	public virtual void Remove(Dictionary<Vector2I, Node2D> nodes)
+	{
+		foreach(Belt belt in output)
+		{
+			nodes.Remove(belt.pos);
+			belt.Remove();
+		}
+		QueueFree();
+	}
 
 	public delegate void OutputCreatedEventHandler(Belt belt);
 	public OutputCreatedEventHandler OutputCreated;

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 
 public partial class Source : Building
@@ -22,6 +23,7 @@ public partial class Source : Building
         AddChild(timer);
 
         AddOutput(Vector2I.Zero);
+        size = Vector2I.Zero;
     }
 
     private void CreateItem()
@@ -39,8 +41,7 @@ public partial class Source : Building
         timer.Paused = isPaused;
         this.isPaused = isPaused;
     }
-    public override bool Remove()
+    public override void Remove(Dictionary<Vector2I, Node2D> nodes)
     {
-        return false;
     }
 }

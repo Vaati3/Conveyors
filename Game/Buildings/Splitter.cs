@@ -23,9 +23,14 @@ public partial class Splitter : Building
     {
         if (other.Owner is Item item)
         {
-            if (output[outputIndex].output == BeltInput.None){
-                item.QueueFree();
-                return;
+            if (output[outputIndex].output == BeltInput.None)
+            {
+                outputIndex = outputIndex == 0 ? 1 : 0;
+                if (output[outputIndex].output == BeltInput.None)
+                {
+                    item.QueueFree();
+                    return;
+                }
             }
             item.Position = output[outputIndex].pos * Map.tilesize;
             item.belt = output[outputIndex];
@@ -36,13 +41,5 @@ public partial class Splitter : Building
     public override void Pause(bool isPaused)
     {
         this.isPaused = isPaused;
-    }
-
-    public override bool Remove()
-    {
-        output[0].Remove();
-        output[1].Remove();
-        QueueFree();
-        return true;
     }
 }

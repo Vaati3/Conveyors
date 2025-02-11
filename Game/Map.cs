@@ -94,7 +94,7 @@ public partial class Map : Node2D
 			if (belt.building != null)
 			{
 				ui.ChangeBeltCount(belt.building.mode, 1);
-				belt.building.Remove();
+				spawner.RemoveBuilding(belt.building);
 				return;
 			}
 			belt.Remove();
@@ -105,7 +105,7 @@ public partial class Map : Node2D
 		if (spawner.GetNodeAt(pos) is Building building)
 		{
 			ui.ChangeBeltCount(building.mode, 1);
-			building.Remove();
+			spawner.RemoveBuilding(building);
 		}
 	}
 

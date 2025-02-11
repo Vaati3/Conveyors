@@ -89,6 +89,18 @@ public partial class Spawner : Node
         }
     }
 
+    public void RemoveBuilding(Building building)
+    {
+        for (int x = building.pos.X; x < building.pos.X + building.size.X; x++)
+        {
+            for (int y = building.pos.Y; y < building.pos.Y + building.size.Y; y++)
+            {
+                nodes.Remove(new Vector2I(x,y));
+            }
+        }
+        building.Remove(nodes);
+    }
+
     public bool CanPlace(Vector2I pos, Vector2I size)
     {
         for (int x = pos.X; x < pos.X + size.X; x++)
