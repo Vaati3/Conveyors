@@ -2,6 +2,7 @@ using Godot;
 using System;
 
 public enum ItemType {
+    None = -1,
     Circle = 1,
     Triangle = 3,
     Square,

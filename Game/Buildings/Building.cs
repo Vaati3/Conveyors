@@ -40,7 +40,7 @@ public abstract partial class Building : Node2D
 
 	protected void AddOutput(Vector2I outputPos)
 	{
-		Belt belt = new Belt(pos + outputPos, null, null);//missing synchro
+		Belt belt = new Belt(pos + outputPos, null, null);
 		belt.building = this;
 		output.Add(belt);
 		InternalBeltCreated(belt);
@@ -48,7 +48,7 @@ public abstract partial class Building : Node2D
 
 	protected void AddInput(Vector2I inputPos, BeltInput beltType)
 	{
-		Belt belt = new Belt(pos + inputPos, null, null);//missing synchro
+		Belt belt = new Belt(pos + inputPos, null, null);
 		belt.building = this;
 		belt.isBuildingInput = true;
 		input.Add(belt);
