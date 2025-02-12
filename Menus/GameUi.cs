@@ -12,21 +12,25 @@ public partial class GameUi : CanvasLayer
 {
 	public PlaceMode mode{get; private set;} = PlaceMode.Belt;
 
-	public delegate void QuitToMenuEventHandler();
-	public QuitToMenuEventHandler QuitToMenu;
-
-	public bool isPaused{get; private set;} = false;
-	
-	Button pauseButton;
-	Texture2D pauseIcon;
-	Panel confirmPanel;
-
 	Label[] countLabels;
 	public int[] counts {get; private set;}
+
+	Panel confirmPanel;
+	Panel GameLostPanel;
+
+	Texture2D pauseIcon;
+	Button pauseButton;
+	public bool isPaused{get; private set;} = false;
+
+	public delegate void PauseEventHandler(bool state);
+	public PauseEventHandler Pause;
+	public delegate void QuitToMenuEventHandler();
+	public QuitToMenuEventHandler QuitToMenu;
 
 	public override void _Ready()
 	{
 		confirmPanel = GetNode<Panel>("Confirm");
+		GameLostPanel = GetNode<Panel>("GameLost");
 		pauseButton = GetNode<Button>("PauseButton");
 
 		pauseIcon = GD.Load<Texture2D>("res://Menus/Textures/Play.png");
@@ -53,6 +57,11 @@ public partial class GameUi : CanvasLayer
 		counts[index] += value;
 
 		countLabels[index].Text = counts[index].ToString();
+	}
+
+	public void GameLost()
+	{
+		GameLostPanel.Visible = true;
 	}
 
 	public void _on_remove_button_pressed()
@@ -82,9 +91,6 @@ public partial class GameUi : CanvasLayer
 
 		Pause(isPaused);
 	}
-
-	public delegate void PauseEventHandler(bool state);
-	public PauseEventHandler Pause;
 
 	public void _on_yes_pressed()
 	{

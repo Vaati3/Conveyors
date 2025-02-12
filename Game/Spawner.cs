@@ -68,13 +68,14 @@ public partial class Spawner : Node
 
     private void CreateShop(ItemType type)
     {
-        int rot = 270;//90 * rng.RandiRange(0, 3);
+        int rot = 90 * rng.RandiRange(0, 3);
         Vector2I size = rot == 0 || rot == 180 ? new Vector2I(3,2) : new Vector2I(2,3);
         Vector2I? pos = GetRandomPos(size);
         if (pos == null)
             return;
         Shop shop = new Shop(pos.Value, InternalBeltCreated, type, rot);
         ui.Pause += shop.Pause;
+        shop.GameLost += ui.GameLost;
         AddBuilding(shop);
     }
 

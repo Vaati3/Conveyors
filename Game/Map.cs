@@ -81,6 +81,8 @@ public partial class Map : Node2D
 
 	public override void _Process(double delta)
 	{
+		if (ui.isPaused)
+			return;
 		float value = camera.Zoom.X - zoomOutSpeed * (float)delta;
 		camera.Zoom = new Vector2(value, value);
 		background.Size = GetViewportRect().Size/camera.Zoom;

@@ -178,6 +178,58 @@ theme = ExtResource("7_ox0l1")
 text = "No
 "
 
+[node name="GameLost" type="Panel" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -155.0
+offset_top = -71.0
+offset_right = 156.0
+offset_bottom = 81.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_b515y")
+
+[node name="Label" type="Label" parent="GameLost"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.298
+anchor_right = 0.5
+anchor_bottom = 0.298
+offset_left = -108.5
+offset_top = -27.296
+offset_right = 109.5
+offset_bottom = 42.704
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_i3rbk")
+text = "Game Over
+
+Score: 9999"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Yes" type="Button" parent="GameLost"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -24.0
+offset_top = -47.0
+offset_right = 24.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 0
+theme = ExtResource("7_ox0l1")
+text = "Back to Menu"
+
 [node name="PauseButton" type="Button" parent="."]
 anchors_preset = 1
 anchor_left = 1.0
@@ -198,4 +250,5 @@ icon = ExtResource("8_ifqhr")
 [connection signal="pressed" from="Buttons/BeltButton" to="." method="_on_belt_button_pressed"]
 [connection signal="pressed" from="Confirm/Yes" to="." method="_on_yes_pressed"]
 [connection signal="pressed" from="Confirm/No" to="." method="_on_no_pressed"]
+[connection signal="pressed" from="GameLost/Yes" to="." method="_on_yes_pressed"]
 [connection signal="pressed" from="PauseButton" to="." method="_on_pause_button_pressed"]
