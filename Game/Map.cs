@@ -21,7 +21,7 @@ public partial class Map : Node2D
 	{	
 		if (!IsInLimits(pos))
 			return;
-		if (!nodes.ContainsKey(pos) && ui.counts[(int)PlaceMode.Belt] > 0)
+		if (!nodes.ContainsKey(pos) && ui.GetCount(PlaceMode.Belt) > 0)
 		{
 			Belt belt = new Belt(pos, synchro, previousBelt);
 			ui.Pause += belt.Pause;
@@ -30,18 +30,29 @@ public partial class Map : Node2D
 			nodes.Add(pos, belt);
 			beltLayer.AddChild(belt);
 			previousBelt = belt;
-			ui.ChangeBeltCount(PlaceMode.Belt, -1);
+			ui.ChangeCount(PlaceMode.Belt, -1);
 		}
 	}
 
 	private void PlaceSplitter(Vector2I pos)
 	{
-		if (spawner.CanPlace(pos, Vector2I.One * 2))
+		if (ui.GetCount(PlaceMode.Splitter) > 0 && spawner.CanPlace(pos, Vector2I.One * 2))
 		{
         	Splitter splitter = new Splitter(pos, spawner.InternalBeltCreated);
         	ui.Pause += splitter.Pause;
 			spawner.AddBuilding(splitter);
-			ui.ChangeBeltCount(PlaceMode.Splitter, -1);
+			ui.ChangeCount(PlaceMode.Splitter, -1);
+		}
+	}
+
+	private void PlaceOperator(Vector2I pos)
+	{
+		if (ui.GetCount(PlaceMode.Operator) > 0 && spawner.CanPlace(pos, Vector2I.One))
+		{
+			Operator @operator = new Operator(pos, spawner.InternalBeltCreated);
+        	ui.Pause += @operator.Pause;
+			spawner.AddBuilding(@operator);
+			ui.ChangeCount(PlaceMode.Operator, -1);
 		}
 	}
 
@@ -97,18 +108,18 @@ public partial class Map : Node2D
 			{
 				if (!belt.building.isRemovable)
 					return;
-				ui.ChangeBeltCount(belt.building.mode, 1);
+				ui.ChangeCount(belt.building.mode, 1);
 				spawner.RemoveBuilding(belt.building);
 				return;
 			}
 			belt.Remove();
 			nodes.Remove(pos);
-			ui.ChangeBeltCount(PlaceMode.Belt, 1);
+			ui.ChangeCount(PlaceMode.Belt, 1);
 			return;
 		}
 		if (spawner.GetNodeAt(pos) is Building building)
 		{
-			ui.ChangeBeltCount(building.mode, 1);
+			ui.ChangeCount(building.mode, 1);
 			spawner.RemoveBuilding(building);
 		}
 	}
@@ -155,29 +166,31 @@ public partial class Map : Node2D
 						}
 						return;
 					}
-				}	
-				if (ui.mode == PlaceMode.Remove)
-				{
-					Remove(pos);
 				}
-				if (ui.mode == PlaceMode.Belt)
+				switch(ui.mode)
 				{
-					if (button.Pressed)
-					{
-						if (spawner.GetNodeAt(pos) is Belt belt)
-							previousBelt = belt;
-						else
-							PlaceBelt(GetTilePos(mousePos));
-					}
-					else
-						previousBelt = null;
-				}
-				if (ui.mode == PlaceMode.Splitter)
-				{
-					if (button.Pressed)
-					{
-						PlaceSplitter(pos);
-					}
+					case PlaceMode.Remove:
+						Remove(pos);
+						break;
+					case PlaceMode.Belt:
+						if (button.Pressed)
+						{
+							if (spawner.GetNodeAt(pos) is Belt belt)
+								previousBelt = belt;
+							else
+								PlaceBelt(GetTilePos(mousePos));
+						} else
+							previousBelt = null;
+						break;
+					case PlaceMode.Splitter:
+						if (button.Pressed)
+							PlaceSplitter(pos);
+						break;
+					case PlaceMode.Operator:
+						if (button.Pressed)
+							PlaceOperator(pos);
+						break;
+
 				}
 			}
 		}

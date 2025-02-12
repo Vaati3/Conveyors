@@ -62,6 +62,36 @@ size_flags_vertical = 4
 theme_override_styles/normal = SubResource("StyleBoxFlat_cf87c")
 icon = ExtResource("4_g7773")
 
+[node name="OperatorButton" type="Button" parent="Buttons"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_i3rbk")
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("StyleBoxFlat_0tjhk")
+text = "+/- 1"
+
+[node name="Count" type="Label" parent="Buttons/OperatorButton"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_top = 6.0
+offset_right = 20.0
+offset_bottom = 27.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_i3rbk")
+text = "1
+"
+horizontal_alignment = 1
+
 [node name="SplitterButton" type="Button" parent="Buttons"]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -113,22 +143,31 @@ theme_override_fonts/font = ExtResource("6_i3rbk")
 text = "10"
 horizontal_alignment = 1
 
-[node name="Confirm" type="Panel" parent="."]
+[node name="Confirm" type="Control" parent="."]
 visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="Confirm"]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -155.0
-offset_top = -71.0
-offset_right = 156.0
-offset_bottom = 81.0
+offset_left = -155.5
+offset_top = -76.0
+offset_right = 155.5
+offset_bottom = 76.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_b515y")
 
-[node name="Label" type="Label" parent="Confirm"]
+[node name="Label" type="Label" parent="Confirm/Panel"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -146,7 +185,7 @@ text = "Go back to menu ?"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Yes" type="Button" parent="Confirm"]
+[node name="Yes" type="Button" parent="Confirm/Panel"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -160,7 +199,7 @@ size_flags_horizontal = 0
 theme = ExtResource("7_ox0l1")
 text = "Yes"
 
-[node name="No" type="Button" parent="Confirm"]
+[node name="No" type="Button" parent="Confirm/Panel"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -178,22 +217,31 @@ theme = ExtResource("7_ox0l1")
 text = "No
 "
 
-[node name="GameLost" type="Panel" parent="."]
+[node name="GameLost" type="Control" parent="."]
 visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="GameLost"]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -155.0
-offset_top = -71.0
-offset_right = 156.0
-offset_bottom = 81.0
+offset_left = -155.5
+offset_top = -76.0
+offset_right = 155.5
+offset_bottom = 76.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_b515y")
 
-[node name="Label" type="Label" parent="GameLost"]
+[node name="Label" type="Label" parent="GameLost/Panel"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -213,7 +261,7 @@ Score: 9999"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Yes" type="Button" parent="GameLost"]
+[node name="Yes" type="Button" parent="GameLost/Panel"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -246,9 +294,10 @@ icon = ExtResource("8_ifqhr")
 
 [connection signal="pressed" from="MenuButton" to="." method="_on_menu_button_pressed"]
 [connection signal="pressed" from="Buttons/RemoveButton" to="." method="_on_remove_button_pressed"]
+[connection signal="pressed" from="Buttons/OperatorButton" to="." method="_on_opertator_button_pressed"]
 [connection signal="pressed" from="Buttons/SplitterButton" to="." method="_on_splitter_button_pressed"]
 [connection signal="pressed" from="Buttons/BeltButton" to="." method="_on_belt_button_pressed"]
-[connection signal="pressed" from="Confirm/Yes" to="." method="_on_yes_pressed"]
-[connection signal="pressed" from="Confirm/No" to="." method="_on_no_pressed"]
-[connection signal="pressed" from="GameLost/Yes" to="." method="_on_yes_pressed"]
+[connection signal="pressed" from="Confirm/Panel/Yes" to="." method="_on_yes_pressed"]
+[connection signal="pressed" from="Confirm/Panel/No" to="." method="_on_no_pressed"]
+[connection signal="pressed" from="GameLost/Panel/Yes" to="." method="_on_yes_pressed"]
 [connection signal="pressed" from="PauseButton" to="." method="_on_pause_button_pressed"]

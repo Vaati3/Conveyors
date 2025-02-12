@@ -56,6 +56,13 @@ public partial class Item : Node2D
 		return Vector2.Zero;
     }
 
+    public void SetType(ItemType type)
+    {
+        this.type = type;
+
+        sprite.Texture = GD.Load<Texture2D>("res://Game/Items/" + type.ToString() + ".png");
+    }
+
     public override void _PhysicsProcess(double delta)
     {
         if (isPaused)

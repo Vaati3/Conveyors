@@ -5,7 +5,8 @@ using System.Collections.Generic;
 public enum PlaceMode {
 	Remove = -1,
 	Belt,
-	Splitter
+	Splitter,
+	Operator
 }
 
 public partial class GameUi : CanvasLayer
@@ -15,8 +16,8 @@ public partial class GameUi : CanvasLayer
 	Label[] countLabels;
 	public int[] counts {get; private set;}
 
-	Panel confirmPanel;
-	Panel GameLostPanel;
+	Control confirmPanel;
+	Control GameLostPanel;
 
 	Texture2D pauseIcon;
 	Button pauseButton;
@@ -29,27 +30,29 @@ public partial class GameUi : CanvasLayer
 
 	public override void _Ready()
 	{
-		confirmPanel = GetNode<Panel>("Confirm");
-		GameLostPanel = GetNode<Panel>("GameLost");
+		confirmPanel = GetNode<Control>("Confirm");
+		GameLostPanel = GetNode<Control>("GameLost");
 		pauseButton = GetNode<Button>("PauseButton");
 
 		pauseIcon = GD.Load<Texture2D>("res://Menus/Textures/Play.png");
 
-		countLabels = new Label[2]
+		countLabels = new Label[3]
         {
             GetNode<Label>("Buttons/BeltButton/Count"),
-			GetNode<Label>("Buttons/SplitterButton/Count")
+			GetNode<Label>("Buttons/SplitterButton/Count"),
+			GetNode<Label>("Buttons/OperatorButton/Count")
         };
-		counts = new int[2] {
+		counts = new int[3] {
 			20,
-			1
+			1,
+			5
 		};
 		
 		for (int i = 0; i < counts.Length; i++)
 			countLabels[i].Text = counts[i].ToString();
 	}
 
-	public void ChangeBeltCount(PlaceMode mode, int value)
+	public void ChangeCount(PlaceMode mode, int value)
 	{
 		if (mode == PlaceMode.Remove)
 			return;
@@ -57,6 +60,11 @@ public partial class GameUi : CanvasLayer
 		counts[index] += value;
 
 		countLabels[index].Text = counts[index].ToString();
+	}
+
+	public int GetCount(PlaceMode mode)
+	{
+		return counts[(int)mode];
 	}
 
 	public void GameLost()
@@ -75,6 +83,10 @@ public partial class GameUi : CanvasLayer
 	public void _on_splitter_button_pressed()
 	{
 		mode = PlaceMode.Splitter;
+	}
+	public void _on_opertator_button_pressed()
+	{
+		mode = PlaceMode.Operator;
 	}
 
 	public void _on_menu_button_pressed()

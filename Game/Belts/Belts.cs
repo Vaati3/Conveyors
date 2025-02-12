@@ -63,7 +63,7 @@ public partial class Belt : Node2D
 
 	private void SetBeltType(Belt previousBelt)
 	{
-		if (previousBelt == null)
+		if (previousBelt == null || (previousBelt.pos.X != pos.X && previousBelt.pos.Y != pos.Y))
 		{
 			UpdateAnimation();
 			return;

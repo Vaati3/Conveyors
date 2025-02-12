@@ -66,7 +66,7 @@ public partial class Shop : Building
             } else {
                 itemNeeded++;
                 if (itemNeeded > itemLimit)
-                    GD.Print("lost");
+                    GameLost();
             }
             UpdateLabel();
             item.QueueFree();
