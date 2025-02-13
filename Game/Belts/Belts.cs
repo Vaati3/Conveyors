@@ -157,7 +157,8 @@ public partial class Belt : Node2D
 
 	public void Connect(Belt belt)
 	{
-		if (output != BeltInput.None && belt.output != BeltInput.None)
+		if ((output != BeltInput.None && belt.output != BeltInput.None)
+			|| (belt.building != null && building != null))
 			return;
 
 		if (belt.output != BeltInput.None)

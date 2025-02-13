@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3 uid="uid://7foojhxs0pd"]
+
+[ext_resource type="Script" path="res://Menus/RewardButton.cs" id="1_3gqqt"]
+[ext_resource type="Theme" uid="uid://c5amex4kn3q35" path="res://Menus/Themes/Button.tres" id="1_r6pa1"]
+[ext_resource type="Texture2D" uid="uid://dw0xwggstdism" path="res://Menus/Textures/Splitter.png" id="3_thvo3"]
+[ext_resource type="FontFile" uid="uid://csgpd6kbdx8qy" path="res://Menus/Themes/Audiowide-Regular.ttf" id="4_l7as8"]
+[ext_resource type="Texture2D" uid="uid://jc7iqetluglw" path="res://Menus/Textures/beltLogo.png" id="5_1lt0k"]
+
+[node name="RewardButton" type="Button"]
+custom_minimum_size = Vector2(256, 128)
+theme = ExtResource("1_r6pa1")
+script = ExtResource("1_3gqqt")
+
+[node name="Rewards" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 18.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 55
+alignment = 1
+
+[node name="Building" type="VBoxContainer" parent="Rewards"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Texture" type="TextureRect" parent="Rewards/Building"]
+layout_mode = 2
+texture = ExtResource("3_thvo3")
+
+[node name="Label" type="Label" parent="Rewards/Building"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_l7as8")
+theme_override_font_sizes/font_size = 20
+text = "4"
+horizontal_alignment = 1
+
+[node name="Bets" type="VBoxContainer" parent="Rewards"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Texture" type="TextureRect" parent="Rewards/Bets"]
+layout_mode = 2
+texture = ExtResource("5_1lt0k")
+
+[node name="Label" type="Label" parent="Rewards/Bets"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_l7as8")
+theme_override_font_sizes/font_size = 20
+text = "4"
+horizontal_alignment = 1

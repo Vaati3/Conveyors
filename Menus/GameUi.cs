@@ -17,7 +17,8 @@ public partial class GameUi : CanvasLayer
 	public int[] counts {get; private set;}
 
 	Control confirmPanel;
-	Control GameLostPanel;
+	Control gameLostPanel;
+	Control rewardPanel;
 
 	Texture2D pauseIcon;
 	Button pauseButton;
@@ -28,11 +29,18 @@ public partial class GameUi : CanvasLayer
 	public delegate void QuitToMenuEventHandler();
 	public QuitToMenuEventHandler QuitToMenu;
 
+
+	Timer rewardTimer;
+	RewardButton rewardButtonLeft;
+	RewardButton rewardButtonRight;
+
 	public override void _Ready()
 	{
 		confirmPanel = GetNode<Control>("Confirm");
-		GameLostPanel = GetNode<Control>("GameLost");
+		gameLostPanel = GetNode<Control>("GameLost");
 		pauseButton = GetNode<Button>("PauseButton");
+		rewardButtonLeft = GetNode<RewardButton>("Rewards/Choices/RewardButtonLeft");
+		rewardButtonRight = GetNode<RewardButton>("Rewards/Choices/RewardButtonRight");
 
 		pauseIcon = GD.Load<Texture2D>("res://Menus/Textures/Play.png");
 
@@ -50,6 +58,18 @@ public partial class GameUi : CanvasLayer
 		
 		for (int i = 0; i < counts.Length; i++)
 			countLabels[i].Text = counts[i].ToString();
+
+		rewardPanel = GetNode<Control>("Rewards");
+		rewardButtonLeft.RewardSelected += RewardSelected;
+		rewardButtonRight.RewardSelected += RewardSelected;
+
+		rewardTimer = new Timer() {
+			Autostart = true,
+			OneShot = false,
+			WaitTime = 110
+		};
+		AddChild(rewardTimer);
+		rewardTimer.Timeout += GiveRewards;
 	}
 
 	public void ChangeCount(PlaceMode mode, int value)
@@ -69,7 +89,29 @@ public partial class GameUi : CanvasLayer
 
 	public void GameLost()
 	{
-		GameLostPanel.Visible = true;
+		gameLostPanel.Visible = true;
+		TogglePause();
+	}
+
+	public void GiveRewards()
+	{
+		TogglePause();
+		RandomNumberGenerator rng = new RandomNumberGenerator();
+		int a = rng.RandiRange(0, 2);
+		int b = rng.RandiRange(0, 2);
+		b += b >= a ? 1 : 0;
+		rewardButtonLeft.Update((PlaceMode)a);
+		rewardButtonRight.Update((PlaceMode)b);
+		rewardPanel.Visible = true;
+	}
+
+	public void RewardSelected(int beltAmount, PlaceMode building, int buildingAmount)
+	{
+		ChangeCount(PlaceMode.Belt, beltAmount);
+		if (building > PlaceMode.Belt)
+			ChangeCount(building, buildingAmount);
+		rewardPanel.Visible = false;
+		TogglePause();
 	}
 
 	public void _on_remove_button_pressed()
@@ -92,14 +134,16 @@ public partial class GameUi : CanvasLayer
 	public void _on_menu_button_pressed()
 	{
 		confirmPanel.Visible = true;
+		TogglePause();
 	}
 
-	public void _on_pause_button_pressed()
+	public void TogglePause()
 	{
 		isPaused = !isPaused;
 		Texture2D buffer = pauseButton.Icon;
 		pauseButton.Icon = pauseIcon;
 		pauseIcon = buffer;
+		rewardTimer.Paused = isPaused;
 
 		Pause(isPaused);
 	}
@@ -112,5 +156,6 @@ public partial class GameUi : CanvasLayer
 	public void _on_no_pressed()
 	{
 		confirmPanel.Visible = false;
+		TogglePause();
 	}
 }

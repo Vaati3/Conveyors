@@ -1,13 +1,15 @@
-[gd_scene load_steps=18 format=3 uid="uid://bi0wjqbff4inl"]
+[gd_scene load_steps=20 format=3 uid="uid://bi0wjqbff4inl"]
 
 [ext_resource type="Texture2D" uid="uid://4tnmw7mbun4t" path="res://Menus/Textures/arrow.png" id="1_4ngkf"]
 [ext_resource type="Script" path="res://Menus/GameUi.cs" id="1_8qi4p"]
 [ext_resource type="Texture2D" uid="uid://ba4qfu83cviiq" path="res://Menus/Textures/arrowgrey.png" id="1_sspid"]
 [ext_resource type="Texture2D" uid="uid://jc7iqetluglw" path="res://Menus/Textures/beltLogo.png" id="3_nnjs2"]
 [ext_resource type="Texture2D" uid="uid://b1n2safo1pqav" path="res://Menus/Textures/bin.png" id="4_g7773"]
+[ext_resource type="Texture2D" uid="uid://dw0xwggstdism" path="res://Menus/Textures/Splitter.png" id="6_255ug"]
 [ext_resource type="FontFile" uid="uid://csgpd6kbdx8qy" path="res://Menus/Themes/Audiowide-Regular.ttf" id="6_i3rbk"]
 [ext_resource type="Theme" uid="uid://c5amex4kn3q35" path="res://Menus/Themes/Button.tres" id="7_ox0l1"]
 [ext_resource type="Texture2D" uid="uid://dxpg7knqf1s1e" path="res://Menus/Textures/Pause.png" id="8_ifqhr"]
+[ext_resource type="PackedScene" uid="uid://7foojhxs0pd" path="res://Menus/RewardButton.tscn" id="9_ndwp7"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gstht"]
 texture = ExtResource("1_sspid")
@@ -97,7 +99,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/normal = SubResource("StyleBoxFlat_0tjhk")
-icon = ExtResource("3_nnjs2")
+icon = ExtResource("6_255ug")
 
 [node name="Count" type="Label" parent="Buttons/SplitterButton"]
 layout_mode = 1
@@ -278,6 +280,36 @@ size_flags_horizontal = 0
 theme = ExtResource("7_ox0l1")
 text = "Back to Menu"
 
+[node name="Rewards" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Choices" type="HBoxContainer" parent="Rewards"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -125.0
+offset_bottom = 125.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 195
+alignment = 1
+
+[node name="RewardButtonLeft" parent="Rewards/Choices" instance=ExtResource("9_ndwp7")]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="RewardButtonRight" parent="Rewards/Choices" instance=ExtResource("9_ndwp7")]
+layout_mode = 2
+size_flags_vertical = 4
+
 [node name="PauseButton" type="Button" parent="."]
 anchors_preset = 1
 anchor_left = 1.0
@@ -300,4 +332,4 @@ icon = ExtResource("8_ifqhr")
 [connection signal="pressed" from="Confirm/Panel/Yes" to="." method="_on_yes_pressed"]
 [connection signal="pressed" from="Confirm/Panel/No" to="." method="_on_no_pressed"]
 [connection signal="pressed" from="GameLost/Panel/Yes" to="." method="_on_yes_pressed"]
-[connection signal="pressed" from="PauseButton" to="." method="_on_pause_button_pressed"]
+[connection signal="pressed" from="PauseButton" to="." method="TogglePause"]

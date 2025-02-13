@@ -24,6 +24,7 @@ public partial class Spawner : Node
         this.nodes = nodes;
         getLimits += map.GetLimits;
         ui = map.ui;
+        ui.Pause += Pause;
         synchro = map.synchro;
 
         beltLayer = map.GetNode<Node>("Belts");
@@ -205,5 +206,13 @@ public partial class Spawner : Node
         ui.Pause += belt.Pause;
         belt.synchro = synchro;
         beltLayer.AddChild(belt);
+    }
+
+    private void Pause(bool isPaused)
+    {
+        if (isPaused)
+            synchro.Pause();
+        else
+            synchro.Play();
     }
 }
