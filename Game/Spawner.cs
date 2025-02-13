@@ -59,6 +59,7 @@ public partial class Spawner : Node
 
     private void CreateSource(ItemType type)
     {
+        ui.soundManager.PlaySFX("Source");
         Vector2I? pos = GetRandomPos(Vector2I.One);
         if (pos == null)
             return;
@@ -69,6 +70,7 @@ public partial class Spawner : Node
 
     private void CreateShop(ItemType type)
     {
+        ui.soundManager.PlaySFX("Shop");
         int rot = 90 * rng.RandiRange(0, 3);
         Vector2I size = rot == 0 || rot == 180 ? new Vector2I(3,2) : new Vector2I(2,3);
         Vector2I? pos = GetRandomPos(size);
@@ -82,6 +84,7 @@ public partial class Spawner : Node
 
     public void AddBuilding(Building building)
     {
+        ui.soundManager.PlaySFX("Place");
         buildingLayer.AddChild(building);
         for (int x = building.pos.X; x < building.pos.X + building.size.X; x++)
         {
@@ -214,5 +217,7 @@ public partial class Spawner : Node
             synchro.Pause();
         else
             synchro.Play();
+        
+        timer.Paused = isPaused;
     }
 }

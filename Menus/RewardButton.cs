@@ -11,6 +11,7 @@ public partial class RewardButton : Button
     Control buildingBox;
     TextureRect buildingIcon;
     Label buildingLabel;
+    SoundManager soundManager;
 
     public override void _Ready()
     {
@@ -19,6 +20,8 @@ public partial class RewardButton : Button
         buildingBox = GetNode<Control>("Rewards/Building");
         buildingIcon = GetNode<TextureRect>("Rewards/Building/Texture");
         buildingLabel = GetNode<Label>("Rewards/Building/Label");
+
+        soundManager = GetNode<SoundManager>("/root/SoundManager");
 
         Pressed += RewardChosen;
     }
@@ -57,5 +60,6 @@ public partial class RewardButton : Button
     private void RewardChosen()
     {
         RewardSelected(beltAmount, mode, buildingAmount);
+        soundManager.PlaySFX("Button");
     }
 }

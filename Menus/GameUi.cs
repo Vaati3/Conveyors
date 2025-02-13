@@ -11,6 +11,7 @@ public enum PlaceMode {
 
 public partial class GameUi : CanvasLayer
 {
+	public SoundManager soundManager {get; private set;}
 	public PlaceMode mode{get; private set;} = PlaceMode.Belt;
 
 	Label[] countLabels;
@@ -36,6 +37,7 @@ public partial class GameUi : CanvasLayer
 
 	public override void _Ready()
 	{
+		soundManager = GetNode<SoundManager>("/root/SoundManager");
 		confirmPanel = GetNode<Control>("Confirm");
 		gameLostPanel = GetNode<Control>("GameLost");
 		pauseButton = GetNode<Button>("PauseButton");
@@ -66,7 +68,7 @@ public partial class GameUi : CanvasLayer
 		rewardTimer = new Timer() {
 			Autostart = true,
 			OneShot = false,
-			WaitTime = 110
+			WaitTime = 10
 		};
 		AddChild(rewardTimer);
 		rewardTimer.Timeout += GiveRewards;
@@ -89,12 +91,14 @@ public partial class GameUi : CanvasLayer
 
 	public void GameLost()
 	{
+		soundManager.PlaySFX("End");
 		gameLostPanel.Visible = true;
 		TogglePause();
 	}
 
 	public void GiveRewards()
 	{
+		soundManager.PlaySFX("Reward");
 		TogglePause();
 		RandomNumberGenerator rng = new RandomNumberGenerator();
 		int a = rng.RandiRange(0, 2);
@@ -116,23 +120,28 @@ public partial class GameUi : CanvasLayer
 
 	public void _on_remove_button_pressed()
 	{
+		soundManager.PlaySFX("Tic");
 		mode = PlaceMode.Remove;
 	}
 	public void _on_belt_button_pressed()
 	{
+		soundManager.PlaySFX("Tic");
 		mode = PlaceMode.Belt;
 	}
 	public void _on_splitter_button_pressed()
 	{
+		soundManager.PlaySFX("Tic");
 		mode = PlaceMode.Splitter;
 	}
 	public void _on_opertator_button_pressed()
 	{
+		soundManager.PlaySFX("Tic");
 		mode = PlaceMode.Operator;
 	}
 
 	public void _on_menu_button_pressed()
 	{
+		soundManager.PlaySFX("button");
 		confirmPanel.Visible = true;
 		TogglePause();
 	}
@@ -150,11 +159,13 @@ public partial class GameUi : CanvasLayer
 
 	public void _on_yes_pressed()
 	{
+		soundManager.PlaySFX("button");
 		QuitToMenu();
 	}
 
 	public void _on_no_pressed()
 	{
+		soundManager.PlaySFX("button");
 		confirmPanel.Visible = false;
 		TogglePause();
 	}

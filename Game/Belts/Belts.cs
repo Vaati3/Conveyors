@@ -8,6 +8,7 @@ public enum BeltInput{
  
 public partial class Belt : Node2D
 {
+	SoundManager soundManager;
     public Vector2I pos {get; private set;}
 	public AnimatedSprite2D sprite {get; private set;}
 	public AnimatedSprite2D synchro;
@@ -24,8 +25,9 @@ public partial class Belt : Node2D
 
 	public bool isBuildingInput = false;
 
-	public Belt(Vector2I pos, AnimatedSprite2D synchro, Belt previousBelt)
+	public Belt(Vector2I pos, AnimatedSprite2D synchro, Belt previousBelt, SoundManager soundManager)
 	{
+		this.soundManager = soundManager;
         this.pos = pos;
 		Position = pos * Map.tilesize;
 		otherBelts = new Belt[4];
@@ -59,6 +61,9 @@ public partial class Belt : Node2D
 		colisionArea.AreaEntered += ColisionAreaEntered;
 		colisionArea.AreaExited += ColisionAreaExited;
 		SetBeltType(previousBelt);
+
+		if (soundManager != null)
+			soundManager.PlaySFX("Place");
 	}
 
 	private void SetBeltType(Belt previousBelt)
@@ -199,6 +204,8 @@ public partial class Belt : Node2D
 				continue;
 			otherBelts[i].Remove(this);
 		}
+		if (soundManager != null)
+			soundManager.PlaySFX("Remove");
 		QueueFree();
 	}
 

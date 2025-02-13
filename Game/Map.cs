@@ -23,7 +23,7 @@ public partial class Map : Node2D
 			return;
 		if (!nodes.ContainsKey(pos) && ui.GetCount(PlaceMode.Belt) > 0)
 		{
-			Belt belt = new Belt(pos, synchro, previousBelt);
+			Belt belt = new Belt(pos, synchro, previousBelt, ui.soundManager);
 			ui.Pause += belt.Pause;
 			if (ui.isPaused)
 				belt.Pause(true);
