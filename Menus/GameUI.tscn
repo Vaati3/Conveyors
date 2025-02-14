@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bi0wjqbff4inl"]
+[gd_scene load_steps=21 format=3 uid="uid://bi0wjqbff4inl"]
 
 [ext_resource type="Texture2D" uid="uid://4tnmw7mbun4t" path="res://Menus/Textures/arrow.png" id="1_4ngkf"]
 [ext_resource type="Script" path="res://Menus/GameUi.cs" id="1_8qi4p"]
@@ -27,6 +27,9 @@ bg_color = Color(0.813258, 0.813258, 0.813257, 1)
 bg_color = Color(0.813258, 0.813258, 0.813257, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b515y"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o06f7"]
+bg_color = Color(0.211765, 0.211765, 0.211765, 0.529412)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s7soy"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -280,14 +283,14 @@ size_flags_horizontal = 0
 theme = ExtResource("7_ox0l1")
 text = "Back to Menu"
 
-[node name="Rewards" type="Control" parent="."]
+[node name="Rewards" type="Panel" parent="."]
 visible = false
-layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_o06f7")
 
 [node name="Choices" type="HBoxContainer" parent="Rewards"]
 layout_mode = 1

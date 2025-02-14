@@ -15,7 +15,7 @@ public partial class Map : Node2D
 
 	ColorRect background;
 	Camera2D camera;
-	const float zoomOutSpeed = 0.001f;
+	const float zoomOutSpeed = 0.003f;
 	
 	private void PlaceBelt(Vector2I pos)
 	{	

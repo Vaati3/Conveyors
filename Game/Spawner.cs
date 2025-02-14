@@ -7,7 +7,8 @@ public partial class Spawner : Node
 {
     RandomNumberGenerator rng;
     Dictionary<Vector2I, Node2D> nodes;
-    Timer timer;
+    Timer sourceTimer;
+    Timer shopTimer;
 
     GameUi ui;
     Node beltLayer;
@@ -18,6 +19,8 @@ public partial class Spawner : Node
     private GetLimits getLimits;
 
     AnimatedSprite2D synchro;
+
+    ItemType lastType;
 
     public Spawner(Dictionary<Vector2I, Node2D> nodes, Map map)
     {
@@ -32,29 +35,44 @@ public partial class Spawner : Node
 		buildingLayer = map.GetNode<Node>("Buildings");
 
         rng = new RandomNumberGenerator();
-        timer = new Timer() {
-            Autostart = true,
-            OneShot = true,
-            WaitTime = 2
-        };
-        timer.Timeout += CreateSourceAndShop;
-        AddChild(timer);
-    }
 
-    private void CreateSourceAndShop()
-    {
+        sourceTimer = new Timer() {
+            Autostart = false,
+            OneShot = true,
+            WaitTime = 30
+        };
+        sourceTimer.Timeout += SourceTimeout;
+        AddChild(sourceTimer);
+
+        shopTimer = new Timer() {
+            Autostart = false,
+            OneShot = true,
+            WaitTime = 60
+        };
+        shopTimer.Timeout += ShopTimeout; // Change to createshop or upgrade existing one or upgrade on source upgrade
+        AddChild(shopTimer);
+
         int n = rng.RandiRange(1, 6);
         n = n == 2 ? 1 : n;
-        ItemType type = (ItemType)n;
-		
-        CreateSource(type);
-        CreateShop(type);
+        lastType = (ItemType)n;
+        CreateSource(lastType);
+        CreateShop(lastType);
+    }
 
-        if (timer.IsStopped())
-        {
-            timer.WaitTime += 60;
-            timer.Start();
-        }
+    private void SourceTimeout()
+    {
+        int n = rng.RandiRange((int)lastType-1, (int)lastType+1);
+        n = n == 2 || n < 1 ? 1 : n;
+        lastType = (ItemType)n;
+        CreateSource(lastType);
+    }
+
+    private void ShopTimeout()
+    {
+        int n = rng.RandiRange((int)lastType-1, (int)lastType+1);
+        n = n == 2 || n < 1 ? 1 : n;
+        lastType = (ItemType)n;
+        CreateShop(lastType);
     }
 
     private void CreateSource(ItemType type)
@@ -167,7 +185,7 @@ public partial class Spawner : Node
 
     private Vector2I? GetRandomPos(Vector2I size)
     {
-        Vector2I limits = getLimits();
+        Vector2I limits = getLimits() - Vector2I.One;
         Vector2I start = new Vector2I(rng.RandiRange(-limits.X, limits.X), rng.RandiRange(-limits.Y, limits.Y));
         Vector2I pos;
 
@@ -218,6 +236,7 @@ public partial class Spawner : Node
         else
             synchro.Play();
         
-        timer.Paused = isPaused;
+        sourceTimer.Paused = isPaused;
+        shopTimer.Paused = isPaused;
     }
 }

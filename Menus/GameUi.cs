@@ -68,7 +68,7 @@ public partial class GameUi : CanvasLayer
 		rewardTimer = new Timer() {
 			Autostart = true,
 			OneShot = false,
-			WaitTime = 10
+			WaitTime = 110
 		};
 		AddChild(rewardTimer);
 		rewardTimer.Timeout += GiveRewards;
