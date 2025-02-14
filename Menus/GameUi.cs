@@ -34,6 +34,9 @@ public partial class GameUi : CanvasLayer
 	RewardButton rewardButtonLeft;
 	RewardButton rewardButtonRight;
 
+	int score = 0;
+	Label scoreLabel;
+
 	public override void _Ready()
 	{
 		soundManager = GetNode<SoundManager>("/root/SoundManager");
@@ -42,6 +45,7 @@ public partial class GameUi : CanvasLayer
 		pauseButton = GetNode<Button>("PauseButton");
 		rewardButtonLeft = GetNode<RewardButton>("Rewards/Choices/RewardButtonLeft");
 		rewardButtonRight = GetNode<RewardButton>("Rewards/Choices/RewardButtonRight");
+		scoreLabel = GetNode<Label>("Score");
 
 		pauseIcon = GD.Load<Texture2D>("res://Menus/Textures/Play.png");
 
@@ -92,7 +96,8 @@ public partial class GameUi : CanvasLayer
 	{
 		if (gameLostPanel.Visible == false)
 		{
-		soundManager.PlaySFX("End");
+			GetNode<Label>("GameLost/Panel/Label").Text = "Game Over\n\nScore : " + score;
+			soundManager.PlaySFX("End");
 			gameLostPanel.Visible = true;
 			TogglePause();
 		}
@@ -118,6 +123,12 @@ public partial class GameUi : CanvasLayer
 			ChangeCount(building, buildingAmount);
 		rewardPanel.Visible = false;
 		TogglePause();
+	}
+
+	public void UpdateScore(int value)
+	{
+		score += value;
+		scoreLabel.Text = "Score : " + score;
 	}
 
 	public void _on_remove_button_pressed()

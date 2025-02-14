@@ -99,6 +99,7 @@ public partial class Spawner : Node
         Shop shop = new Shop(pos.Value, InternalBeltCreated, type, rot);
         ui.Pause += shop.Pause;
         shop.GameLost += ui.GameLost;
+        shop.ScoreUpdated += ui.UpdateScore;
         AddBuilding(shop);
         shops.Add(shop);
     }

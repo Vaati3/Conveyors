@@ -52,6 +52,21 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_gstht")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_hhom3")
 theme_override_styles/normal = SubResource("StyleBoxTexture_1l0mx")
 
+[node name="Score" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -82.0
+offset_top = 9.0
+offset_right = 84.0
+offset_bottom = 86.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_i3rbk")
+text = "Score: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="PauseButton" type="Button" parent="."]
 anchors_preset = 1
 anchor_left = 1.0
@@ -71,6 +86,7 @@ offset_left = 1.0
 offset_top = 80.0
 offset_right = 96.0
 offset_bottom = 649.0
+mouse_filter = 0
 theme_override_constants/separation = 30
 alignment = 1
 

@@ -166,7 +166,6 @@ public partial class Belt : Node2D
 			|| (belt.building != null && building != null && belt.building == building))
 			return;
 
-		SetBeltType(belt);
 		if (belt.output != BeltInput.None)
 		{
 			output = GetOutput(belt.pos);

@@ -109,7 +109,7 @@ public partial class Map : Node2D
 				if (!belt.building.isRemovable)
 					return;
 				ui.ChangeCount(belt.building.mode, 1);
-				spawner.RemoveBuilding(belt.building);
+				// spawner.RemoveBuilding(belt.building);
 				return;
 			}
 			belt.Remove();
@@ -137,7 +137,6 @@ public partial class Map : Node2D
 				if (spawner.GetNodeAt(pos) is Belt belt && belt.pos != previousBelt.pos)
 				{
 					belt.Connect(previousBelt);
-					previousBelt.Connect(belt);
 					previousBelt = belt;
 				} else
 					PlaceBelt(GetTilePos(mousePos));

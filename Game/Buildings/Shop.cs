@@ -26,6 +26,8 @@ public partial class Shop : Building
 
         itemNeededLabel = new Label();
         AddChild(itemNeededLabel);
+        // itemNeededLabel.HorizontalAlignment = HorizontalAlignment.Center;
+        // itemNeededLabel.VerticalAlignment = VerticalAlignment.Center;
         itemNeededLabel.RotationDegrees = -rot;
         itemNeededLabel.Set("theme_override_fonts/font", GD.Load<Font>("res://Menus/Themes/Audiowide-Regular.ttf"));
         itemNeededLabel.Set("theme_override_font_sizes/font_size", 100);
@@ -63,8 +65,10 @@ public partial class Shop : Building
             if (item.type == type)
             {
 			    itemNeeded -= itemNeeded - 1 < 0 ? 0 : 1;
+                ScoreUpdated(1);
             } else {
                 itemNeeded++;
+                ScoreUpdated(-1);
                 if (itemNeeded > itemLimit)
                     GameLost();
             }
@@ -101,6 +105,9 @@ public partial class Shop : Building
         else
             itemNeededLabel.Text = itemNeeded + "/" + itemLimit; 
     }
+
+    public delegate void ScoreUpdatedEventHandler(int value);
+    public ScoreUpdatedEventHandler ScoreUpdated;
 
     public override void Rotate(){}
 
