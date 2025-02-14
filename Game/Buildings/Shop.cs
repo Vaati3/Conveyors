@@ -7,15 +7,15 @@ public partial class Shop : Building
     ItemType type;
 
     int itemNeeded = 0;
-    int itemLimit = 9;
-    Label itemNeededLabel;//replace with icons
+    int itemLimit = 8;
+    Label itemNeededLabel;
     
     public Shop(Vector2I pos, InternalBeltCreatedEventHandler outputCreated, ItemType type, int rot) : base(pos, type.ToString() + "Shop", outputCreated)
     {
         this.type = type;
         timer = new Timer(){
             Autostart = true,
-            WaitTime = 5,
+            WaitTime = Source.itemTime + 1,
             OneShot = false,
         };
         timer.Timeout += Timeout;
@@ -79,6 +79,13 @@ public partial class Shop : Building
         UpdateLabel();
         if (itemNeeded > itemLimit)
             GameLost();
+    }
+
+    public void Upgrade()
+    {
+        timer.WaitTime /= 2;
+        itemLimit = (int)(itemLimit * 1.5);
+        UpdateLabel();
     }
 
     public override void Pause(bool isPaused)

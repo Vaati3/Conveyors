@@ -20,17 +20,6 @@ texture = ExtResource("1_sspid")
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1l0mx"]
 texture = ExtResource("1_4ngkf")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cf87c"]
-bg_color = Color(0.813258, 0.813258, 0.813257, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0tjhk"]
-bg_color = Color(0.813258, 0.813258, 0.813257, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b515y"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o06f7"]
-bg_color = Color(0.211765, 0.211765, 0.211765, 0.529412)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s7soy"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
@@ -39,6 +28,17 @@ bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ckbsx"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cf87c"]
+bg_color = Color(0.813258, 0.813258, 0.813257, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0tjhk"]
+bg_color = Color(0.813258, 0.813258, 0.813257, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o06f7"]
+bg_color = Color(0.211765, 0.211765, 0.211765, 0.529412)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b515y"]
 
 [node name="GameUi" type="CanvasLayer"]
 script = ExtResource("1_8qi4p")
@@ -51,6 +51,20 @@ offset_bottom = 73.0
 theme_override_styles/hover = SubResource("StyleBoxTexture_gstht")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_hhom3")
 theme_override_styles/normal = SubResource("StyleBoxTexture_1l0mx")
+
+[node name="PauseButton" type="Button" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -73.0
+offset_top = 25.0
+offset_right = -33.0
+offset_bottom = 73.0
+grow_horizontal = 0
+theme_override_styles/hover = SubResource("StyleBoxFlat_s7soy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_34c14")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ckbsx")
+icon = ExtResource("8_ifqhr")
 
 [node name="Buttons" type="VBoxContainer" parent="."]
 offset_left = 1.0
@@ -147,6 +161,36 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("6_i3rbk")
 text = "10"
 horizontal_alignment = 1
+
+[node name="Rewards" type="Panel" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_o06f7")
+
+[node name="Choices" type="HBoxContainer" parent="Rewards"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -125.0
+offset_bottom = 125.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 195
+alignment = 1
+
+[node name="RewardButtonLeft" parent="Rewards/Choices" instance=ExtResource("9_ndwp7")]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="RewardButtonRight" parent="Rewards/Choices" instance=ExtResource("9_ndwp7")]
+layout_mode = 2
+size_flags_vertical = 4
 
 [node name="Confirm" type="Control" parent="."]
 visible = false
@@ -283,51 +327,8 @@ size_flags_horizontal = 0
 theme = ExtResource("7_ox0l1")
 text = "Back to Menu"
 
-[node name="Rewards" type="Panel" parent="."]
-visible = false
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_o06f7")
-
-[node name="Choices" type="HBoxContainer" parent="Rewards"]
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -125.0
-offset_bottom = 125.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 195
-alignment = 1
-
-[node name="RewardButtonLeft" parent="Rewards/Choices" instance=ExtResource("9_ndwp7")]
-layout_mode = 2
-size_flags_vertical = 4
-
-[node name="RewardButtonRight" parent="Rewards/Choices" instance=ExtResource("9_ndwp7")]
-layout_mode = 2
-size_flags_vertical = 4
-
-[node name="PauseButton" type="Button" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -73.0
-offset_top = 25.0
-offset_right = -33.0
-offset_bottom = 73.0
-grow_horizontal = 0
-theme_override_styles/hover = SubResource("StyleBoxFlat_s7soy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_34c14")
-theme_override_styles/normal = SubResource("StyleBoxFlat_ckbsx")
-icon = ExtResource("8_ifqhr")
-
 [connection signal="pressed" from="MenuButton" to="." method="_on_menu_button_pressed"]
+[connection signal="pressed" from="PauseButton" to="." method="TogglePause"]
 [connection signal="pressed" from="Buttons/RemoveButton" to="." method="_on_remove_button_pressed"]
 [connection signal="pressed" from="Buttons/OperatorButton" to="." method="_on_opertator_button_pressed"]
 [connection signal="pressed" from="Buttons/SplitterButton" to="." method="_on_splitter_button_pressed"]
@@ -335,4 +336,3 @@ icon = ExtResource("8_ifqhr")
 [connection signal="pressed" from="Confirm/Panel/Yes" to="." method="_on_yes_pressed"]
 [connection signal="pressed" from="Confirm/Panel/No" to="." method="_on_no_pressed"]
 [connection signal="pressed" from="GameLost/Panel/Yes" to="." method="_on_yes_pressed"]
-[connection signal="pressed" from="PauseButton" to="." method="TogglePause"]

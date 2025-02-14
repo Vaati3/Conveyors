@@ -5,7 +5,7 @@ public partial class Source : Building
 {
     ItemType type;
     Timer timer;
-    static float itemTime = 2.5f;
+    public static float itemTime = 5f;
 
     Node itemLayer;
 

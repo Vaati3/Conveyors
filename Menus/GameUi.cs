@@ -30,7 +30,6 @@ public partial class GameUi : CanvasLayer
 	public delegate void QuitToMenuEventHandler();
 	public QuitToMenuEventHandler QuitToMenu;
 
-
 	Timer rewardTimer;
 	RewardButton rewardButtonLeft;
 	RewardButton rewardButtonRight;
@@ -91,9 +90,12 @@ public partial class GameUi : CanvasLayer
 
 	public void GameLost()
 	{
+		if (gameLostPanel.Visible == false)
+		{
 		soundManager.PlaySFX("End");
-		gameLostPanel.Visible = true;
-		TogglePause();
+			gameLostPanel.Visible = true;
+			TogglePause();
+		}
 	}
 
 	public void GiveRewards()

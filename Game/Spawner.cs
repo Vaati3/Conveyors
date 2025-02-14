@@ -20,6 +20,7 @@ public partial class Spawner : Node
 
     AnimatedSprite2D synchro;
 
+    List<Shop> shops;
     ItemType lastType;
 
     public Spawner(Dictionary<Vector2I, Node2D> nodes, Map map)
@@ -35,49 +36,51 @@ public partial class Spawner : Node
 		buildingLayer = map.GetNode<Node>("Buildings");
 
         rng = new RandomNumberGenerator();
+        shops = new List<Shop>();
 
         sourceTimer = new Timer() {
-            Autostart = false,
-            OneShot = true,
+            Autostart = true,
+            OneShot = false,
             WaitTime = 30
         };
         sourceTimer.Timeout += SourceTimeout;
         AddChild(sourceTimer);
 
         shopTimer = new Timer() {
-            Autostart = false,
+            Autostart = true,
             OneShot = true,
-            WaitTime = 60
+            WaitTime = 1.5
         };
         shopTimer.Timeout += ShopTimeout; // Change to createshop or upgrade existing one or upgrade on source upgrade
         AddChild(shopTimer);
 
-        int n = rng.RandiRange(1, 6);
-        n = n == 2 ? 1 : n;
-        lastType = (ItemType)n;
-        CreateSource(lastType);
-        CreateShop(lastType);
     }
 
     private void SourceTimeout()
     {
-        int n = rng.RandiRange((int)lastType-1, (int)lastType+1);
-        n = n == 2 || n < 1 ? 1 : n;
-        lastType = (ItemType)n;
-        CreateSource(lastType);
+        ui.soundManager.PlaySFX("Source");
+        CreateSource(GetRandomType());
+        
+        int index = rng.RandiRange(0, shops.Count - 1);
+        shops[index].Upgrade();
     }
 
     private void ShopTimeout()
     {
-        int n = rng.RandiRange((int)lastType-1, (int)lastType+1);
-        n = n == 2 || n < 1 ? 1 : n;
-        lastType = (ItemType)n;
-        CreateShop(lastType);
+        if (shopTimer.WaitTime == 1)
+        {
+            shopTimer.WaitTime = 80;
+            shopTimer.OneShot = false;
+            shopTimer.Start();
+        }
+
+        ui.soundManager.PlaySFX("Shop");
+        CreateShop(GetRandomType());
+        CreateSource(GetRandomType());
     }
 
     private void CreateSource(ItemType type)
     {
-        ui.soundManager.PlaySFX("Source");
         Vector2I? pos = GetRandomPos(Vector2I.One);
         if (pos == null)
             return;
@@ -88,7 +91,6 @@ public partial class Spawner : Node
 
     private void CreateShop(ItemType type)
     {
-        ui.soundManager.PlaySFX("Shop");
         int rot = 90 * rng.RandiRange(0, 3);
         Vector2I size = rot == 0 || rot == 180 ? new Vector2I(3,2) : new Vector2I(2,3);
         Vector2I? pos = GetRandomPos(size);
@@ -98,11 +100,13 @@ public partial class Spawner : Node
         ui.Pause += shop.Pause;
         shop.GameLost += ui.GameLost;
         AddBuilding(shop);
+        shops.Add(shop);
     }
 
     public void AddBuilding(Building building)
     {
-        ui.soundManager.PlaySFX("Place");
+        if (building.isRemovable)
+            ui.soundManager.PlaySFX("Place");
         buildingLayer.AddChild(building);
         for (int x = building.pos.X; x < building.pos.X + building.size.X; x++)
         {
@@ -181,6 +185,15 @@ public partial class Spawner : Node
             }
         }
         return true;
+    }
+
+    private ItemType GetRandomType()
+    {
+        int n = rng.RandiRange((int)lastType-1, (int)lastType+1);
+        n = n == 2 ? 3 : n;
+        n = n < 1 ? 1 : n;
+        lastType = (ItemType)n;
+        return lastType;
     }
 
     private Vector2I? GetRandomPos(Vector2I size)
