@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 public enum PlaceMode {
-	Remove = -1,
+	Remove,
 	Belt,
 	Splitter,
 	Operator
@@ -14,8 +14,8 @@ public partial class GameUi : CanvasLayer
 	public SoundManager soundManager {get; private set;}
 	public PlaceMode mode{get; private set;} = PlaceMode.Belt;
 
-	Label[] countLabels;
-	public int[] counts {get; private set;}
+	SelectionButton[] selectionButtons;
+
 
 	Control confirmPanel;
 	Control gameLostPanel;
@@ -49,20 +49,13 @@ public partial class GameUi : CanvasLayer
 
 		pauseIcon = GD.Load<Texture2D>("res://Menus/Textures/Play.png");
 
-		countLabels = new Label[3]
+		selectionButtons = new SelectionButton[4]
         {
-            GetNode<Label>("Buttons/BeltButton/Count"),
-			GetNode<Label>("Buttons/SplitterButton/Count"),
-			GetNode<Label>("Buttons/OperatorButton/Count")
+			GetNode<SelectionButton>("Buttons/RemoveButton"),
+			GetNode<SelectionButton>("Buttons/BeltButton"),
+			GetNode<SelectionButton>("Buttons/SplitterButton"),
+            GetNode<SelectionButton>("Buttons/OperatorButton")
         };
-		counts = new int[3] {
-			20,
-			1,
-			5
-		};
-		
-		for (int i = 0; i < counts.Length; i++)
-			countLabels[i].Text = counts[i].ToString();
 
 		rewardPanel = GetNode<Control>("Rewards");
 		rewardButtonLeft.RewardSelected += RewardSelected;
@@ -81,15 +74,13 @@ public partial class GameUi : CanvasLayer
 	{
 		if (mode == PlaceMode.Remove)
 			return;
-		int index = (int)mode;
-		counts[index] += value;
 
-		countLabels[index].Text = counts[index].ToString();
+		selectionButtons[(int)mode].UpdateCount(value);
 	}
 
 	public int GetCount(PlaceMode mode)
 	{
-		return counts[(int)mode];
+		return selectionButtons[(int)mode].count;
 	}
 
 	public void GameLost()
@@ -109,7 +100,7 @@ public partial class GameUi : CanvasLayer
 		TogglePause();
 		RandomNumberGenerator rng = new RandomNumberGenerator();
 		int a = rng.RandiRange(0, 2);
-		int b = rng.RandiRange(0, 2);
+		int b = rng.RandiRange(0, 1);
 		b += b >= a ? 1 : 0;
 		rewardButtonLeft.Update((PlaceMode)a);
 		rewardButtonRight.Update((PlaceMode)b);
@@ -131,25 +122,11 @@ public partial class GameUi : CanvasLayer
 		scoreLabel.Text = "Score : " + score;
 	}
 
-	public void _on_remove_button_pressed()
+	private void SelectMode(PlaceMode mode)
 	{
 		soundManager.PlaySFX("Tic");
-		mode = PlaceMode.Remove;
-	}
-	public void _on_belt_button_pressed()
-	{
-		soundManager.PlaySFX("Tic");
-		mode = PlaceMode.Belt;
-	}
-	public void _on_splitter_button_pressed()
-	{
-		soundManager.PlaySFX("Tic");
-		mode = PlaceMode.Splitter;
-	}
-	public void _on_opertator_button_pressed()
-	{
-		soundManager.PlaySFX("Tic");
-		mode = PlaceMode.Operator;
+		selectionButtons[(int)this.mode].Unselect();
+		this.mode = mode;
 	}
 
 	public void _on_menu_button_pressed()

@@ -2,16 +2,12 @@
 
 [ext_resource type="FontFile" uid="uid://csgpd6kbdx8qy" path="res://Menus/Themes/Audiowide-Regular.ttf" id="1_3rmkm"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7c4e5"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5wovn"]
 content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
-bg_color = Color(0.1, 0.1, 0.1, 0.3)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
+bg_color = Color(0.965605, 0.989301, 0.520493, 1)
 corner_detail = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b1wo1"]
@@ -48,7 +44,7 @@ content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
-bg_color = Color(0.603874, 0.6634, 0.585621, 1)
+bg_color = Color(0.501961, 0.501961, 0.501961, 1)
 corner_detail = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sr8ml"]
@@ -56,7 +52,7 @@ content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
-bg_color = Color(0, 0, 0, 0.6)
+bg_color = Color(0, 0, 0, 1)
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
@@ -83,7 +79,7 @@ Button/constants/icon_max_width = 0
 Button/constants/outline_size = 0
 Button/font_sizes/font_size = 16
 Button/fonts/font = ExtResource("1_3rmkm")
-Button/styles/disabled = SubResource("StyleBoxFlat_7c4e5")
+Button/styles/disabled = SubResource("StyleBoxFlat_5wovn")
 Button/styles/focus = SubResource("StyleBoxFlat_b1wo1")
 Button/styles/hover = SubResource("StyleBoxFlat_npqt5")
 Button/styles/normal = SubResource("StyleBoxFlat_uxnnx")

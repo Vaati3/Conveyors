@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dmyrewop65wd4"
-path="res://.godot/imported/beltLogo.png-31e18af4949dbdc37bcfdebf0252cd7a.ctex"
+uid="uid://dgw4dgteg3tbf"
+path="res://.godot/imported/Belt.png-96da792b8d6d121cea2ea0355b3a4f4d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Menus/Textures/beltLogo.png"
-dest_files=["res://.godot/imported/beltLogo.png-31e18af4949dbdc37bcfdebf0252cd7a.ctex"]
+source_file="res://Menus/Textures/Belt.png"
+dest_files=["res://.godot/imported/Belt.png-96da792b8d6d121cea2ea0355b3a4f4d.ctex"]
 
 [params]
 

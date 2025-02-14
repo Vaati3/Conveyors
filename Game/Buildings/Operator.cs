@@ -15,7 +15,8 @@ public partial class Operator : Building
         button = new Button(){
             Size = Vector2.One * 60,
             Text = "+ 1",
-            Position = Vector2.One * -32
+            Position = Vector2.One * -32,
+            MouseFilter = Control.MouseFilterEnum.Pass
             //add theme
         };
         sprite.AddChild(button);

@@ -185,7 +185,7 @@ public partial class Belt : Node2D
 		if (output != BeltInput.None)
 		{
 			belt.Connect(this);
-			return;
+			// return;
 		}
 
 		otherBelts[(int)GetOutput(belt.pos)] = belt;
@@ -231,7 +231,7 @@ public partial class Belt : Node2D
 				continue;
 			otherBelts[i].OutputLost();
 		}
-		if (output != BeltInput.None)
+		if (output != BeltInput.None && !isBuildingInput)
 		{
 			inputs[(int)output] = !first;
 			output = BeltInput.None;

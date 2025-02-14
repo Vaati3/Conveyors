@@ -1,15 +1,13 @@
-[gd_scene load_steps=21 format=3 uid="uid://bi0wjqbff4inl"]
+[gd_scene load_steps=17 format=3 uid="uid://bi0wjqbff4inl"]
 
 [ext_resource type="Texture2D" uid="uid://4tnmw7mbun4t" path="res://Menus/Textures/arrow.png" id="1_4ngkf"]
 [ext_resource type="Script" path="res://Menus/GameUi.cs" id="1_8qi4p"]
 [ext_resource type="Texture2D" uid="uid://ba4qfu83cviiq" path="res://Menus/Textures/arrowgrey.png" id="1_sspid"]
-[ext_resource type="Texture2D" uid="uid://jc7iqetluglw" path="res://Menus/Textures/beltLogo.png" id="3_nnjs2"]
-[ext_resource type="Texture2D" uid="uid://b1n2safo1pqav" path="res://Menus/Textures/bin.png" id="4_g7773"]
-[ext_resource type="Texture2D" uid="uid://dw0xwggstdism" path="res://Menus/Textures/Splitter.png" id="6_255ug"]
 [ext_resource type="FontFile" uid="uid://csgpd6kbdx8qy" path="res://Menus/Themes/Audiowide-Regular.ttf" id="6_i3rbk"]
 [ext_resource type="Theme" uid="uid://c5amex4kn3q35" path="res://Menus/Themes/Button.tres" id="7_ox0l1"]
 [ext_resource type="Texture2D" uid="uid://dxpg7knqf1s1e" path="res://Menus/Textures/Pause.png" id="8_ifqhr"]
 [ext_resource type="PackedScene" uid="uid://7foojhxs0pd" path="res://Menus/RewardButton.tscn" id="9_ndwp7"]
+[ext_resource type="PackedScene" uid="uid://c5h84301mt8yx" path="res://Menus/SelectionButton.tscn" id="10_hy0ko"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gstht"]
 texture = ExtResource("1_sspid")
@@ -28,12 +26,6 @@ bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ckbsx"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cf87c"]
-bg_color = Color(0.813258, 0.813258, 0.813257, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0tjhk"]
-bg_color = Color(0.813258, 0.813258, 0.813257, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o06f7"]
 bg_color = Color(0.211765, 0.211765, 0.211765, 0.529412)
@@ -87,96 +79,31 @@ offset_top = 80.0
 offset_right = 96.0
 offset_bottom = 649.0
 mouse_filter = 0
-theme_override_constants/separation = 30
+theme_override_constants/separation = 55
 alignment = 1
 
-[node name="RemoveButton" type="Button" parent="Buttons"]
+[node name="RemoveButton" parent="Buttons" instance=ExtResource("10_hy0ko")]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="OperatorButton" parent="Buttons" instance=ExtResource("10_hy0ko")]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_styles/normal = SubResource("StyleBoxFlat_cf87c")
-icon = ExtResource("4_g7773")
+mode = 3
+count = 3
 
-[node name="OperatorButton" type="Button" parent="Buttons"]
-custom_minimum_size = Vector2(40, 40)
+[node name="SplitterButton" parent="Buttons" instance=ExtResource("10_hy0ko")]
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("6_i3rbk")
-theme_override_font_sizes/font_size = 15
-theme_override_styles/normal = SubResource("StyleBoxFlat_0tjhk")
-text = "+/- 1"
+mode = 2
+count = 1
 
-[node name="Count" type="Label" parent="Buttons/OperatorButton"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -19.0
-offset_top = 6.0
-offset_right = 20.0
-offset_bottom = 27.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("6_i3rbk")
-text = "1
-"
-horizontal_alignment = 1
-
-[node name="SplitterButton" type="Button" parent="Buttons"]
+[node name="BeltButton" parent="Buttons" instance=ExtResource("10_hy0ko")]
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_styles/normal = SubResource("StyleBoxFlat_0tjhk")
-icon = ExtResource("6_255ug")
-
-[node name="Count" type="Label" parent="Buttons/SplitterButton"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -19.0
-offset_top = 6.0
-offset_right = 20.0
-offset_bottom = 27.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("6_i3rbk")
-text = "1
-"
-horizontal_alignment = 1
-
-[node name="BeltButton" type="Button" parent="Buttons"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_styles/normal = SubResource("StyleBoxFlat_0tjhk")
-icon = ExtResource("3_nnjs2")
-
-[node name="Count" type="Label" parent="Buttons/BeltButton"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -19.0
-offset_top = 6.0
-offset_right = 20.0
-offset_bottom = 27.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("6_i3rbk")
-text = "10"
-horizontal_alignment = 1
+mode = 1
+count = 25
 
 [node name="Rewards" type="Panel" parent="."]
 visible = false
@@ -345,10 +272,10 @@ text = "Back to Menu"
 
 [connection signal="pressed" from="MenuButton" to="." method="_on_menu_button_pressed"]
 [connection signal="pressed" from="PauseButton" to="." method="TogglePause"]
-[connection signal="pressed" from="Buttons/RemoveButton" to="." method="_on_remove_button_pressed"]
-[connection signal="pressed" from="Buttons/OperatorButton" to="." method="_on_opertator_button_pressed"]
-[connection signal="pressed" from="Buttons/SplitterButton" to="." method="_on_splitter_button_pressed"]
-[connection signal="pressed" from="Buttons/BeltButton" to="." method="_on_belt_button_pressed"]
+[connection signal="ModeSelected" from="Buttons/RemoveButton" to="." method="SelectMode"]
+[connection signal="ModeSelected" from="Buttons/OperatorButton" to="." method="SelectMode"]
+[connection signal="ModeSelected" from="Buttons/SplitterButton" to="." method="SelectMode"]
+[connection signal="ModeSelected" from="Buttons/BeltButton" to="." method="SelectMode"]
 [connection signal="pressed" from="Confirm/Panel/Yes" to="." method="_on_yes_pressed"]
 [connection signal="pressed" from="Confirm/Panel/No" to="." method="_on_no_pressed"]
 [connection signal="pressed" from="GameLost/Panel/Yes" to="." method="_on_yes_pressed"]

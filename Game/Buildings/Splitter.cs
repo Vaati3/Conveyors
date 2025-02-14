@@ -24,7 +24,8 @@ public partial class Splitter : Building
 
         buttonTop = new Button(){
             Size = Vector2.One * 60,
-            Position = new Vector2(18, -95)
+            Position = new Vector2(18, -95),
+            MouseFilter = Control.MouseFilterEnum.Pass
             //add theme
         };
         sprite.AddChild(buttonTop);
@@ -32,7 +33,8 @@ public partial class Splitter : Building
 
         buttonBottom = new Button(){
             Size = Vector2.One * 60,
-            Position = new Vector2(18, 45)
+            Position = new Vector2(18, 45),
+            MouseFilter = Control.MouseFilterEnum.Pass
             //add theme
         };
         sprite.AddChild(buttonBottom);
