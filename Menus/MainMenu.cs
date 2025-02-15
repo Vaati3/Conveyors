@@ -6,9 +6,12 @@ public partial class MainMenu : Control
 	Map map;
 	SoundManager soundManager;
 
+	Panel optionsMenu;
+
     public override void _Ready()
     {
         soundManager = GetNode<SoundManager>("/root/SoundManager");
+		optionsMenu = GetNode<Panel>("Options");
     }
 
     public void QuitGame()
@@ -28,7 +31,12 @@ public partial class MainMenu : Control
 	public void _on_options_pressed()
 	{
 		soundManager.PlaySFX("Button");
-		GD.Print("Options");
+		optionsMenu.Visible = true;
+	}
+	public void _on_back_button_pressed()
+	{
+		soundManager.PlaySFX("Button");
+		optionsMenu.Visible = false;
 	}
 	public void _on_quit_pressed()
 	{

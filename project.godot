@@ -15,9 +15,13 @@ run/main_scene="res://Menus/MainMenu.tscn"
 config/features=PackedStringArray("4.3", "C#", "Mobile")
 config/icon="res://icon.svg"
 
+[audio]
+
+buses/default_bus_layout="res://Sounds/AudioBusLayout.tres"
+
 [autoload]
 
-SoundManager="*res://SoundManager.cs"
+SoundManager="*res://Sounds/SoundManager.cs"
 
 [display]
 

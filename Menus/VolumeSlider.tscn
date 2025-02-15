@@ -1,0 +1,67 @@
+[gd_scene load_steps=3 format=3 uid="uid://cp10rxv4iq406"]
+
+[ext_resource type="Script" path="res://Menus/VolumeSlider.cs" id="1_83qob"]
+[ext_resource type="FontFile" uid="uid://csgpd6kbdx8qy" path="res://Menus/Themes/Audiowide-Regular.ttf" id="2_v12f6"]
+
+[node name="VolumeSlider" type="Control"]
+custom_minimum_size = Vector2(600, 200)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 600.0
+offset_bottom = 200.0
+scale = Vector2(0.7, 0.7)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_83qob")
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -250.0
+offset_top = 13.0
+offset_right = 250.0
+offset_bottom = 63.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_v12f6")
+theme_override_font_sizes/font_size = 22
+text = "Master Volume"
+vertical_alignment = 1
+
+[node name="Slider" type="HSlider" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -25.0
+offset_right = 250.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 1.0
+step = 0.001
+value = 0.5
+
+[node name="Mute" type="CheckBox" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 51.0675
+offset_top = -76.8662
+offset_right = 153.067
+offset_bottom = -22.8662
+grow_vertical = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_v12f6")
+theme_override_font_sizes/font_size = 0
+text = "    Mute"
+
+[connection signal="value_changed" from="Slider" to="." method="_on_slider_value_changed"]
+[connection signal="toggled" from="Mute" to="." method="_on_mute_toggled"]

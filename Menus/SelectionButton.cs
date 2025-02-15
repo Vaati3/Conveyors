@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 public partial class SelectionButton : Control
@@ -23,8 +24,10 @@ public partial class SelectionButton : Control
         else
             UpdateCount(0);
 
-        if (mode == PlaceMode.Belt)
+        if (mode == PlaceMode.Belt){
+            selected = true;
             button.Disabled = true;
+        }
     }
 
     public void UpdateCount(int value)
@@ -38,14 +41,26 @@ public partial class SelectionButton : Control
     {
         button.Disabled = false;
         selected = false;
+        weight = 0; 
     }
 
+    [Signal] public delegate void ModeSelectedEventHandler(PlaceMode mode);
     private void Pressed()
     {
         button.Disabled = true;
+        selected = true;
+        weight = 0; 
         EmitSignal(nameof(ModeSelected), (int)mode);
     }
 
+    float weight = 0;
+    public override void _PhysicsProcess(double delta)
+    {
+        weight += (float)delta/5;
 
-    [Signal] public delegate void ModeSelectedEventHandler(PlaceMode mode);
+        float originAngle = selected ? MathF.PI / 4 : 0;
+        float destAngle = selected ? MathF.PI / 4 : 0;
+
+        button.Rotation = Mathf.LerpAngle(originAngle, destAngle, weight);
+    }
 }
