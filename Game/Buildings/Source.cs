@@ -41,5 +41,4 @@ public partial class Source : Building
         timer.Paused = isPaused;
         this.isPaused = isPaused;
     }
-    public override void Rotate(){}
 }

@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 public partial class Spawner : Node
 {
@@ -91,17 +90,20 @@ public partial class Spawner : Node
 
     private void CreateShop(ItemType type)
     {
-        int rot = 90 * rng.RandiRange(0, 3);
-        Vector2I size = rot == 0 || rot == 180 ? new Vector2I(3,2) : new Vector2I(2,3);
-        Vector2I? pos = GetRandomPos(size);
+        float angle = MathF.PI/2 * rng.RandiRange(0, 3);
+        Vector2I? pos = GetRandomPos(Vector2I.One * 2);
         if (pos == null)
+        {
+            GD.Print("what");
             return;
-        Shop shop = new Shop(pos.Value, InternalBeltCreated, type, rot);
+        }
+        Shop shop = new Shop(pos.Value, InternalBeltCreated, type, angle);
         ui.Pause += shop.Pause;
         shop.GameLost += ui.GameLost;
         shop.ScoreUpdated += ui.UpdateScore;
         AddBuilding(shop);
         shops.Add(shop);
+        RotateBuilding(shop, angle);
     }
 
     public void AddBuilding(Building building)
@@ -143,7 +145,7 @@ public partial class Spawner : Node
         building.QueueFree();
     }
 
-    public void RotateBuilding(Building building)
+    public void RotateBuilding(Building building, float angle = MathF.PI/2)
     {
         Vector2 center = new Vector2(building.pos.X + (((float)building.size.X-1)/2), building.pos.Y + (((float)building.size.Y-1)/2));
         
@@ -154,8 +156,8 @@ public partial class Spawner : Node
             for (int y = building.pos.Y; y < building.pos.Y + building.size.Y; y++)
             {
                 Vector2I pos;
-                pos.X = (int)((x - center.X) * MathF.Cos(MathF.PI/2) - (y - center.Y) * MathF.Sin(MathF.PI/2) + center.X);
-                pos.Y = (int)((x - center.X) * MathF.Sin(MathF.PI/2) + (y - center.Y) * MathF.Cos(MathF.PI/2) + center.Y);
+                pos.X = (int)((x - center.X) * MathF.Cos(angle) - (y - center.Y) * MathF.Sin(angle) + center.X);
+                pos.Y = (int)((x - center.X) * MathF.Sin(angle) + (y - center.Y) * MathF.Cos(angle) + center.Y);
 
                 Node node = GetNodeAt(new Vector2I(x, y));
                 if (node is Belt belt)
@@ -172,7 +174,7 @@ public partial class Spawner : Node
             nodes[belt.pos] = belt;
         foreach(Vector2I pos in parts)
             nodes[pos] = building;
-        building.Rotate();
+        building.RotateBuilding(angle);
     }
 
     public bool CanPlace(Vector2I pos, Vector2I size)

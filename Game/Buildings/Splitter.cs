@@ -128,9 +128,4 @@ public partial class Splitter : Building
     {
         this.isPaused = isPaused;
     }
-
-    public override void Rotate()
-    {
-        sprite.RotationDegrees += 90;
-    }
 }

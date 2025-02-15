@@ -58,7 +58,10 @@ public abstract partial class Building : Node2D
 
 	public abstract void Pause(bool isPaused);
 
-	public abstract void Rotate();
+	public virtual void RotateBuilding(float angle)
+	{
+		sprite.Rotation = angle;
+	}
 
 	public delegate void InternalBeltCreatedEventHandler(Belt belt);
 	public InternalBeltCreatedEventHandler InternalBeltCreated;

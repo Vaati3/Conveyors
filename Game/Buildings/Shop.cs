@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -10,8 +11,9 @@ public partial class Shop : Building
     int itemLimit = 8;
     Label itemNeededLabel;
     
-    public Shop(Vector2I pos, InternalBeltCreatedEventHandler outputCreated, ItemType type, int rot) : base(pos, type.ToString() + "Shop", outputCreated)
+    public Shop(Vector2I pos, InternalBeltCreatedEventHandler outputCreated, ItemType type, float angle) : base(pos, type.ToString() + "Shop", outputCreated)
     {
+        sprite.Position = new Vector2(Map.tilesize * 0.5f, Map.tilesize * 0.5f);
         this.type = type;
         timer = new Timer(){
             Autostart = true,
@@ -25,36 +27,17 @@ public partial class Shop : Building
         isRemovable = false;
 
         itemNeededLabel = new Label();
+        itemNeededLabel.Position = new Vector2(75, -25);
         AddChild(itemNeededLabel);
-        // itemNeededLabel.HorizontalAlignment = HorizontalAlignment.Center;
-        // itemNeededLabel.VerticalAlignment = VerticalAlignment.Center;
-        itemNeededLabel.RotationDegrees = -rot;
         itemNeededLabel.Set("theme_override_fonts/font", GD.Load<Font>("res://Menus/Themes/Audiowide-Regular.ttf"));
-        itemNeededLabel.Set("theme_override_font_sizes/font_size", 100);
+        itemNeededLabel.Set("theme_override_font_sizes/font_size", 75);
         itemNeededLabel.Set("theme_override_constants/line_spacing", -50);
-        // itemNeededLabel.Position = new Vector2I(10, 30);
 
-        RotationDegrees = rot;
-        if (rot == 0){
-            size = new Vector2I(3, 2);
-            sprite.Position = new Vector2(Map.tilesize, Map.tilesize * 0.5f);
+        size = new Vector2I(2, 2);
+        if (angle == MathF.PI || angle == 3 * (MathF.PI/2))
+            AddInput(new Vector2I(0, 0), BeltInput.Top);
+        else
             AddInput(new Vector2I(0, 0), BeltInput.Bottom);
-        } else if (rot == 90)
-        {
-            size = new Vector2I(2, 3);
-            sprite.Position = new Vector2(Map.tilesize, Map.tilesize * -0.5f);
-            AddInput(new Vector2I(1, 0), BeltInput.Right);
-        } else if (rot == 180)
-        {
-            size = new Vector2I(3, 2);
-            sprite.Position = new Vector2(-Map.tilesize, Map.tilesize * -0.5f);
-            AddInput(new Vector2I(2, 1), BeltInput.Left);
-        } else if (rot == 270){
-            size = new Vector2I(2, 3);
-            sprite.Position = new Vector2(-Map.tilesize, Map.tilesize *0.5f);
-            AddInput(new Vector2I(0, 2), BeltInput.Top);
-        }
-
         UpdateLabel();
     }
 
@@ -100,16 +83,20 @@ public partial class Shop : Building
 
     private void UpdateLabel()
     {
-        if (RotationDegrees == 90 || RotationDegrees == 270)
-            itemNeededLabel.Text = itemNeeded + "\n—\n" + itemLimit;
-        else
-            itemNeededLabel.Text = itemNeeded + "/" + itemLimit; 
+        itemNeededLabel.Text = itemNeeded + "\n—\n" + itemLimit;
+        // itemNeededLabel.Text = itemNeeded + "/" + itemLimit; 
     }
 
     public delegate void ScoreUpdatedEventHandler(int value);
     public ScoreUpdatedEventHandler ScoreUpdated;
 
-    public override void Rotate(){}
+    public override void RotateBuilding(float angle)
+    {
+        base.RotateBuilding(angle);
+        
+        if (angle == MathF.PI/2 || angle == MathF.PI)
+            itemNeededLabel.Position = new Vector2(-25, -25);
+    }
 
     public delegate void GameLostEventHandler();
     public GameLostEventHandler GameLost;

@@ -71,6 +71,7 @@ grow_vertical = 2
 theme = ExtResource("2_4o5v7")
 
 [node name="Label" type="Label" parent="Options"]
+layout_mode = 0
 offset_left = 59.0
 offset_top = 27.0
 offset_right = 358.0

@@ -54,5 +54,4 @@ public partial class Operator : Building
     {
         this.isPaused = isPaused;
     }
-    public override void Rotate(){}
 }
