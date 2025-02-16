@@ -27,7 +27,7 @@ public partial class GameUi : CanvasLayer
 
 	public delegate void PauseEventHandler(bool state);
 	public PauseEventHandler Pause;
-	public delegate void QuitToMenuEventHandler();
+	public delegate void QuitToMenuEventHandler(int score);
 	public QuitToMenuEventHandler QuitToMenu;
 
 	Timer rewardTimer;
@@ -35,6 +35,7 @@ public partial class GameUi : CanvasLayer
 	RewardButton rewardButtonRight;
 
 	int score = 0;
+	public int bestScore;
 	Label scoreLabel;
 
 	public override void _Ready()
@@ -87,7 +88,8 @@ public partial class GameUi : CanvasLayer
 	{
 		if (gameLostPanel.Visible == false)
 		{
-			GetNode<Label>("GameLost/Panel/Label").Text = "Game Over\n\nScore : " + score;
+			bestScore = score > bestScore ? score : bestScore;
+			GetNode<Label>("GameLost/Panel/Label").Text = "Game Over\n\nBest Score : " + bestScore + "\nScore : " + score;
 			soundManager.PlaySFX("End");
 			gameLostPanel.Visible = true;
 			TogglePause();
@@ -150,7 +152,7 @@ public partial class GameUi : CanvasLayer
 	public void _on_yes_pressed()
 	{
 		soundManager.PlaySFX("button");
-		QuitToMenu();
+		QuitToMenu(score);
 	}
 
 	public void _on_no_pressed()

@@ -9,6 +9,9 @@ public partial class VolumeSlider : Control
 	SoundManager soundManager;
 	int busIndex;
 
+	public bool isMuted {get; private set;}
+	public float volume {get; private set;}
+
 	public override void _Ready()
 	{
 		soundManager = GetNode<SoundManager>("/root/SoundManager");
@@ -22,21 +25,19 @@ public partial class VolumeSlider : Control
 		AudioServer.SetBusVolumeDb(busIndex, Mathf.LinearToDb(volume));
 		GetNode<HSlider>("Slider").Value = volume;
 		AudioServer.SetBusMute(busIndex, isMuted);
-		CheckBox checkBox = GetNode<CheckBox>("Mute");
-		checkBox.ButtonPressed = isMuted;
-		checkBox.Toggled += _on_mute_toggled;
+		GetNode<CheckBox>("Mute").ButtonPressed = isMuted;
 	}
 
 	public void _on_slider_value_changed(float value)
 	{
 		AudioServer.SetBusVolumeDb(busIndex, Mathf.LinearToDb(value));
-		// gameManager.settings.volumes[busName] = value;
+		volume = value;
 	}
 
 	public void _on_mute_toggled(bool state)
 	{
 		soundManager.PlaySFX("Tic");
 		AudioServer.SetBusMute(busIndex, state);
-		// gameManager.settings.muted[busName] = state;
+		isMuted = state;
 	}
 }
