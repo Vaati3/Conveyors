@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 public partial class Splitter : Building
@@ -13,7 +14,7 @@ public partial class Splitter : Building
         sprite.Position = new Vector2(Map.tilesize * 0.5f, Map.tilesize * 0.5f);
 
         size = new Vector2I(2, 2);
-        AddInput(new Vector2I(0, 1), BeltInput.Bottom);
+        AddInput(new Vector2I(0, 1), BeltInput.Top);
         AddOutput(new Vector2I(1, 0));
         AddOutput(new Vector2I(1, 1));
 

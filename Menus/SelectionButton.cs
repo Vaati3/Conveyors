@@ -53,12 +53,14 @@ public partial class SelectionButton : Control
         EmitSignal(nameof(ModeSelected), (int)mode);
     }
 
-    float weight = 0;
+    float weight = 5;
     public override void _PhysicsProcess(double delta)
     {
-        weight += (float)delta/5;
+        if (weight > 1)
+            return;
+        weight += (float)delta * 2;
 
-        float originAngle = selected ? MathF.PI / 4 : 0;
+        float originAngle = selected ? 0 : MathF.PI / 4;
         float destAngle = selected ? MathF.PI / 4 : 0;
 
         button.Rotation = Mathf.LerpAngle(originAngle, destAngle, weight);

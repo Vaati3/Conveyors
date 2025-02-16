@@ -73,37 +73,53 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_34c14")
 theme_override_styles/normal = SubResource("StyleBoxFlat_ckbsx")
 icon = ExtResource("8_ifqhr")
 
-[node name="Buttons" type="VBoxContainer" parent="."]
-offset_left = 1.0
-offset_top = 80.0
-offset_right = 96.0
-offset_bottom = 649.0
-mouse_filter = 0
+[node name="Buttons" type="HBoxContainer" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -260.0
+offset_top = -171.0
+offset_right = 260.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
 theme_override_constants/separation = 55
 alignment = 1
 
-[node name="RemoveButton" parent="Buttons" instance=ExtResource("10_hy0ko")]
+[node name="Remove" parent="Buttons" instance=ExtResource("10_hy0ko")]
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 4
 
-[node name="OperatorButton" parent="Buttons" instance=ExtResource("10_hy0ko")]
+[node name="Belt" parent="Buttons" instance=ExtResource("10_hy0ko")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mode = 1
+count = 25
+
+[node name="Operator" parent="Buttons" instance=ExtResource("10_hy0ko")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mode = 2
+count = 3
+
+[node name="Splitter" parent="Buttons" instance=ExtResource("10_hy0ko")]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mode = 3
-count = 3
-
-[node name="SplitterButton" parent="Buttons" instance=ExtResource("10_hy0ko")]
-layout_mode = 2
-size_flags_horizontal = 4
-mode = 2
 count = 1
 
-[node name="BeltButton" parent="Buttons" instance=ExtResource("10_hy0ko")]
+[node name="Merger" parent="Buttons" instance=ExtResource("10_hy0ko")]
 layout_mode = 2
 size_flags_horizontal = 4
-mode = 1
-count = 25
+size_flags_vertical = 4
+mode = 4
+count = 1
 
 [node name="Rewards" type="Panel" parent="."]
 visible = false
@@ -273,10 +289,11 @@ text = "Back to Menu"
 
 [connection signal="pressed" from="MenuButton" to="." method="_on_menu_button_pressed"]
 [connection signal="pressed" from="PauseButton" to="." method="TogglePause"]
-[connection signal="ModeSelected" from="Buttons/RemoveButton" to="." method="SelectMode"]
-[connection signal="ModeSelected" from="Buttons/OperatorButton" to="." method="SelectMode"]
-[connection signal="ModeSelected" from="Buttons/SplitterButton" to="." method="SelectMode"]
-[connection signal="ModeSelected" from="Buttons/BeltButton" to="." method="SelectMode"]
+[connection signal="ModeSelected" from="Buttons/Remove" to="." method="SelectMode"]
+[connection signal="ModeSelected" from="Buttons/Belt" to="." method="SelectMode"]
+[connection signal="ModeSelected" from="Buttons/Operator" to="." method="SelectMode"]
+[connection signal="ModeSelected" from="Buttons/Splitter" to="." method="SelectMode"]
+[connection signal="ModeSelected" from="Buttons/Merger" to="." method="SelectMode"]
 [connection signal="pressed" from="Confirm/Panel/Yes" to="." method="_on_yes_pressed"]
 [connection signal="pressed" from="Confirm/Panel/No" to="." method="_on_no_pressed"]
 [connection signal="pressed" from="GameLost/Panel/Yes" to="." method="_on_yes_pressed"]

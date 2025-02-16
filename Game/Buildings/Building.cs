@@ -60,7 +60,7 @@ public abstract partial class Building : Node2D
 
 	public virtual void RotateBuilding(float angle)
 	{
-		sprite.Rotation = angle;
+		sprite.Rotation += angle;
 	}
 
 	public delegate void InternalBeltCreatedEventHandler(Belt belt);

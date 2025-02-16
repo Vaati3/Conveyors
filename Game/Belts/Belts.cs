@@ -270,7 +270,25 @@ public partial class Belt : Node2D
 			}
 		}
 		if (!isBuildingInput)
-			output = BeltInput.None;//add condition when inputs become belts
+			output = BeltInput.None;
+		else
+		{
+			switch(output)
+			{
+				case BeltInput.Top:
+					output = BeltInput.Right;
+					break;
+				case BeltInput.Right:
+					output = BeltInput.Bottom;
+					break;
+				case BeltInput.Bottom:
+					output = BeltInput.Left;
+					break;
+				case BeltInput.Left:
+					output = BeltInput.Top;
+					break;
+			}
+		}
 		UpdateAnimation();
 	}
 

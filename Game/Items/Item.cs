@@ -20,6 +20,7 @@ public partial class Item : Node2D
     private Area2D area;
 
     public bool isPaused;
+    public bool isStoped = false;
 
 	public Item(ItemType type)
 	{
@@ -65,7 +66,7 @@ public partial class Item : Node2D
 
     public override void _PhysicsProcess(double delta)
     {
-        if (isPaused)
+        if (isPaused || isStoped)
             return;
         Position = Position + (GetDirection() * belt.speed * (float)delta);
     }

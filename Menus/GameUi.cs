@@ -5,8 +5,9 @@ using System.Collections.Generic;
 public enum PlaceMode {
 	Remove,
 	Belt,
+	Operator,
 	Splitter,
-	Operator
+	Merger
 }
 
 public partial class GameUi : CanvasLayer
@@ -50,13 +51,10 @@ public partial class GameUi : CanvasLayer
 
 		pauseIcon = GD.Load<Texture2D>("res://Menus/Textures/Play.png");
 
-		selectionButtons = new SelectionButton[4]
-        {
-			GetNode<SelectionButton>("Buttons/RemoveButton"),
-			GetNode<SelectionButton>("Buttons/BeltButton"),
-			GetNode<SelectionButton>("Buttons/SplitterButton"),
-            GetNode<SelectionButton>("Buttons/OperatorButton")
-        };
+		int len =  Enum.GetNames(typeof(PlaceMode)).Length;
+		selectionButtons = new SelectionButton[len];
+		for (int i = 0; i < len; i++)
+			selectionButtons[i] = GetNode<SelectionButton>("Buttons/" + ((PlaceMode)i).ToString());
 
 		rewardPanel = GetNode<Control>("Rewards");
 		rewardButtonLeft.RewardSelected += RewardSelected;

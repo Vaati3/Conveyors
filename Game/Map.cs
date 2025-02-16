@@ -56,6 +56,17 @@ public partial class Map : Node2D
 		}
 	}
 
+	private void PlaceMerger(Vector2I pos)
+	{
+		if (ui.GetCount(PlaceMode.Merger) > 0 && spawner.CanPlace(pos, Vector2I.One))
+		{
+			Merger merger = new Merger(pos, spawner.InternalBeltCreated);
+        	ui.Pause += merger.Pause;
+			spawner.AddBuilding(merger);
+			ui.ChangeCount(PlaceMode.Merger, -1);
+		}
+	}
+
 	public override void _Ready()
 	{
 		ui = GetNode<GameUi>("GameUi");
@@ -191,6 +202,10 @@ public partial class Map : Node2D
 					case PlaceMode.Operator:
 						if (button.Pressed)
 							PlaceOperator(pos);
+						break;
+					case PlaceMode.Merger:
+						if (button.Pressed)
+							PlaceMerger(pos);
 						break;
 
 				}

@@ -241,6 +241,7 @@ public partial class Spawner : Node
     public void InternalBeltCreated(Belt belt)
     {
         ui.Pause += belt.Pause;
+        belt.Pause(ui.isPaused);
         belt.synchro = synchro;
         belt.sprite.SetFrameAndProgress(synchro.Frame, synchro.FrameProgress);
         beltLayer.AddChild(belt);
