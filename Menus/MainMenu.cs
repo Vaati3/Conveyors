@@ -68,7 +68,7 @@ public partial class MainMenu : Control
 		foreach(VolumeSlider slider in sliders)
 		{
 			string[] line = file.GetLine().Split(" ");
-			slider.Setup(line[1].ToFloat(), line[0] == "1");
+			slider.Setup(float.Parse(line[1]), line[0] == "1");
 		}
 		file.Close();
 		scoreLabel.Text = "Best Score : " + highScore;

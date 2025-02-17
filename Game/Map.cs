@@ -15,12 +15,18 @@ public partial class Map : Node2D
 
 	ColorRect background;
 	Camera2D camera;
-	const float zoomOutSpeed = 0.003f;
+	const float zoomOutSpeed = 0.005f;
+	const float startZoom = 0.85f;
+	const float endZoom = 0.35f;
+	double weight = 0;
 	
 	private void PlaceBelt(Vector2I pos)
 	{	
 		if (!IsInLimits(pos))
+		{
+			previousBelt = null;
 			return;
+		}
 		
 		if (!nodes.ContainsKey(pos) && ui.GetCount(PlaceMode.Belt) > 0)
 		{
@@ -39,7 +45,7 @@ public partial class Map : Node2D
 
 	private void PlaceSplitter(Vector2I pos)
 	{
-		if (ui.GetCount(PlaceMode.Splitter) > 0 && spawner.CanPlace(pos, Vector2I.One * 2))
+		if (ui.GetCount(PlaceMode.Splitter) > 0 && spawner.CanPlace(pos, Vector2I.One * 2, GetLimits()))
 		{
         	Splitter splitter = new Splitter(pos, spawner.InternalBeltCreated);
         	ui.Pause += splitter.Pause;
@@ -50,7 +56,7 @@ public partial class Map : Node2D
 
 	private void PlaceOperator(Vector2I pos)
 	{
-		if (ui.GetCount(PlaceMode.Operator) > 0 && spawner.CanPlace(pos, Vector2I.One))
+		if (ui.GetCount(PlaceMode.Operator) > 0 && spawner.CanPlace(pos, Vector2I.One, GetLimits()))
 		{
 			Operator @operator = new Operator(pos, spawner.InternalBeltCreated);
         	ui.Pause += @operator.Pause;
@@ -61,7 +67,7 @@ public partial class Map : Node2D
 
 	private void PlaceMerger(Vector2I pos)
 	{
-		if (ui.GetCount(PlaceMode.Merger) > 0 && spawner.CanPlace(pos, Vector2I.One))
+		if (ui.GetCount(PlaceMode.Merger) > 0 && spawner.CanPlace(pos, Vector2I.One, GetLimits()))
 		{
 			Merger merger = new Merger(pos, spawner.InternalBeltCreated);
         	ui.Pause += merger.Pause;
@@ -108,8 +114,10 @@ public partial class Map : Node2D
 	{
 		if (ui.isPaused)
 			return;
-		float value = camera.Zoom.X - zoomOutSpeed * (float)delta;
+		weight += zoomOutSpeed * (float)delta;
+		float value = (float)Mathf.Lerp(startZoom, endZoom, weight);
 		camera.Zoom = new Vector2(value, value);
+
 		background.Size = GetViewportRect().Size/camera.Zoom;
 		background.Position = -background.Size/2;
 	}

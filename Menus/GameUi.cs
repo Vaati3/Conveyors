@@ -129,7 +129,15 @@ public partial class GameUi : CanvasLayer
 		this.mode = mode;
 	}
 
-	public void _on_menu_button_pressed()
+    public override void _Input(InputEvent @event)
+    {
+        if (@event.IsActionPressed("Pause"))
+		{
+			TogglePause();
+		}
+    }
+
+    public void _on_menu_button_pressed()
 	{
 		soundManager.PlaySFX("button");
 		confirmPanel.Visible = true;

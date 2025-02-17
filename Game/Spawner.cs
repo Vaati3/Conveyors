@@ -50,9 +50,11 @@ public partial class Spawner : Node
             OneShot = true,
             WaitTime = 1.5
         };
-        shopTimer.Timeout += ShopTimeout; // Change to createshop or upgrade existing one or upgrade on source upgrade
+        shopTimer.Timeout += ShopTimeout;
         AddChild(shopTimer);
 
+        int type = rng.RandiRange(2, 6);
+        lastType = type == 2 ? ItemType.Circle : (ItemType)type;
     }
 
     private void SourceTimeout()
@@ -66,7 +68,7 @@ public partial class Spawner : Node
 
     private void ShopTimeout()
     {
-        if (shopTimer.WaitTime == 1)
+        if (shopTimer.WaitTime < 80)
         {
             shopTimer.WaitTime = 80;
             shopTimer.OneShot = false;
@@ -177,12 +179,14 @@ public partial class Spawner : Node
         building.RotateBuilding(angle);
     }
 
-    public bool CanPlace(Vector2I pos, Vector2I size)
+    public bool CanPlace(Vector2I pos, Vector2I size, Vector2I limits)
     {
         for (int x = pos.X; x < pos.X + size.X; x++)
         {
             for (int y = pos.Y; y < pos.Y + size.Y; y++)
             {
+                if (Math.Abs(pos.X) > limits.X || Math.Abs(pos.Y) > limits.Y)
+                    return false;
                 if (nodes.ContainsKey(new Vector2I(x, y)))
                     return false;
             }
@@ -211,7 +215,7 @@ public partial class Spawner : Node
             for (pos.Y = start.Y; pos.Y < limits.Y; pos.Y++)
             {
                 // GD.Print("1 " + pos);
-                if (CanPlace(pos, size))
+                if (CanPlace(pos, size, limits))
                 {
                     return pos;
                 }
@@ -222,7 +226,7 @@ public partial class Spawner : Node
             for (pos.Y = -limits.Y; pos.Y < start.Y; pos.Y++)
             {
                 // GD.Print("2 " + pos);
-                if (CanPlace(pos, size))
+                if (CanPlace(pos, size, limits))
                 {
                     return pos;
                 }

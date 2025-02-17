@@ -9,7 +9,6 @@ script = ExtResource("1_g05ti")
 
 [node name="Synchro" type="AnimatedSprite2D" parent="."]
 visible = false
-position = Vector2(597, 305)
 sprite_frames = ExtResource("3_vlqob")
 animation = &"RightLeftToBottom"
 
