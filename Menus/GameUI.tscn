@@ -105,21 +105,19 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mode = 2
-count = 3
+count = 2
 
 [node name="Splitter" parent="Buttons" instance=ExtResource("10_hy0ko")]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mode = 3
-count = 1
 
 [node name="Merger" parent="Buttons" instance=ExtResource("10_hy0ko")]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mode = 4
-count = 1
 
 [node name="Rewards" type="Panel" parent="."]
 visible = false
@@ -265,7 +263,7 @@ grow_vertical = 2
 theme_override_fonts/font = ExtResource("6_i3rbk")
 text = "Game Over
 
-Best Score: 9999
+HighScore: 9999
 Score: 0"
 horizontal_alignment = 1
 vertical_alignment = 1

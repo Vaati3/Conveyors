@@ -36,7 +36,7 @@ public partial class GameUi : CanvasLayer
 	RewardButton rewardButtonRight;
 
 	int score = 0;
-	public int bestScore;
+	public int highScore;
 	Label scoreLabel;
 
 	public override void _Ready()
@@ -63,7 +63,7 @@ public partial class GameUi : CanvasLayer
 		rewardTimer = new Timer() {
 			Autostart = true,
 			OneShot = false,
-			WaitTime = 110
+			WaitTime = 100
 		};
 		AddChild(rewardTimer);
 		rewardTimer.Timeout += GiveRewards;
@@ -86,8 +86,8 @@ public partial class GameUi : CanvasLayer
 	{
 		if (gameLostPanel.Visible == false)
 		{
-			bestScore = score > bestScore ? score : bestScore;
-			GetNode<Label>("GameLost/Panel/Label").Text = "Game Over\n\nBest Score : " + bestScore + "\nScore : " + score;
+			highScore = score > highScore ? score : highScore;
+			GetNode<Label>("GameLost/Panel/Label").Text = "Game Over\n\nHighScore : " + highScore + "\nScore : " + score;
 			soundManager.PlaySFX("End");
 			gameLostPanel.Visible = true;
 			TogglePause();
@@ -99,8 +99,8 @@ public partial class GameUi : CanvasLayer
 		soundManager.PlaySFX("Reward");
 		TogglePause();
 		RandomNumberGenerator rng = new RandomNumberGenerator();
-		int a = rng.RandiRange(0, 2);
-		int b = rng.RandiRange(0, 1);
+		int a = rng.RandiRange(1, 4);
+		int b = rng.RandiRange(1, 3);
 		b += b >= a ? 1 : 0;
 		rewardButtonLeft.Update((PlaceMode)a);
 		rewardButtonRight.Update((PlaceMode)b);

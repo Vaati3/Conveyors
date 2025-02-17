@@ -10,6 +10,7 @@ public partial class Shop : Building
     int itemNeeded = 0;
     int itemLimit = 8;
     Label itemNeededLabel;
+    int level = 1;
 
     bool isDemo = false;
     
@@ -74,8 +75,9 @@ public partial class Shop : Building
 
     public void Upgrade()
     {
-        timer.WaitTime /= 2;
-        itemLimit = (int)(itemLimit * 1.5);
+        level++;
+        timer.WaitTime = (Source.itemTime + 1) / level;
+        itemLimit += 2;
         UpdateLabel();
     }
 

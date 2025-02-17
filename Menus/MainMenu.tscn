@@ -41,7 +41,7 @@ offset_right = 479.0
 offset_bottom = 176.0
 theme = ExtResource("3_yjfts")
 theme_override_font_sizes/font_size = 14
-text = "Best Score : 0"
+text = "HighScore : 0"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Menu"]
 layout_mode = 0

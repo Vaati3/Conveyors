@@ -27,6 +27,7 @@ public partial class SelectionButton : Control
         if (mode == PlaceMode.Belt){
             selected = true;
             button.Disabled = true;
+            button.RotationDegrees = 45;
         }
     }
 
@@ -35,6 +36,12 @@ public partial class SelectionButton : Control
         count += value;
         count = count < 0 ? 0 : count;
         countLabel.Text = count.ToString();
+        if (mode != PlaceMode.Remove && mode != PlaceMode.Belt && count < 1)
+        {
+            Visible = false;
+        } else {
+            Visible = true;
+        }
     }
     
     public void Unselect()

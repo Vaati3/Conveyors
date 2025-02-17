@@ -39,15 +39,21 @@ public partial class RewardButton : Button
             case PlaceMode.Splitter:
                 beltAmount = 10;
                 buildingAmount = 1;
-                buildingIcon.Texture = GD.Load<Texture2D>("res://Menus/Textures/Splitter.png");
-                buildingLabel.Text = buildingAmount.ToString();
                 break;
             case PlaceMode.Operator:
                 beltAmount = 15;
                 buildingAmount = 2;
-                buildingIcon.Texture = null;
-                buildingLabel.Text = "+/- 1\n" + buildingAmount.ToString();//create icon
                 break;
+            case PlaceMode.Merger:
+                beltAmount = 15;
+                buildingAmount = 1;
+                break;
+
+        }
+        if (mode != PlaceMode.Belt)
+        {
+            buildingIcon.Texture = GD.Load<Texture2D>("res://Menus/Textures/" + mode.ToString() + ".png");
+            buildingLabel.Text = buildingAmount.ToString();
         }
 
         beltLabel.Text = beltAmount.ToString();
