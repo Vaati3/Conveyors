@@ -21,6 +21,7 @@ public partial class Map : Node2D
 	{	
 		if (!IsInLimits(pos))
 			return;
+		
 		if (!nodes.ContainsKey(pos) && ui.GetCount(PlaceMode.Belt) > 0)
 		{
 			Belt belt = new Belt(pos, synchro, previousBelt, ui.soundManager);
@@ -31,6 +32,8 @@ public partial class Map : Node2D
 			beltLayer.AddChild(belt);
 			previousBelt = belt;
 			ui.ChangeCount(PlaceMode.Belt, -1);
+		} else if (!nodes.ContainsKey(pos)) {
+			previousBelt = null;
 		}
 	}
 
@@ -84,7 +87,7 @@ public partial class Map : Node2D
 
 	public Vector2I GetLimits()
 	{
-		return new Vector2I((int)MathF.Floor(background.Size.X / 2 / tilesize), (int)MathF.Floor(background.Size.Y / 2 / tilesize));
+		return new Vector2I((int)MathF.Floor((background.Size.X-tilesize) / 2 / tilesize) , (int)MathF.Floor((background.Size.Y-tilesize) / 2 / tilesize));
 	}
 
 	private bool IsInLimits(Vector2I pos)
@@ -145,7 +148,7 @@ public partial class Map : Node2D
 		{
 			if (Input.IsActionPressed("Click") && ui.mode == PlaceMode.Belt)
 			{
-				if (spawner.GetNodeAt(pos) is Belt belt && belt.pos != previousBelt.pos)
+				if (spawner.GetNodeAt(pos) is Belt belt && previousBelt != null && belt.pos != previousBelt.pos)
 				{
 					belt.Connect(previousBelt);
 					previousBelt = belt;

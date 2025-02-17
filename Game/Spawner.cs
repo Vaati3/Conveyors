@@ -90,11 +90,10 @@ public partial class Spawner : Node
 
     private void CreateShop(ItemType type)
     {
-        float angle = MathF.PI/2 * rng.RandiRange(0, 3);
+        int angle = rng.RandiRange(0, 3);
         Vector2I? pos = GetRandomPos(Vector2I.One * 2);
         if (pos == null)
         {
-            GD.Print("what");
             return;
         }
         Shop shop = new Shop(pos.Value, InternalBeltCreated, type, angle);
@@ -103,7 +102,8 @@ public partial class Spawner : Node
         shop.ScoreUpdated += ui.UpdateScore;
         AddBuilding(shop);
         shops.Add(shop);
-        RotateBuilding(shop, angle);
+        for(int i = 0; i < angle; i++)
+            RotateBuilding(shop);
     }
 
     public void AddBuilding(Building building)
@@ -201,31 +201,34 @@ public partial class Spawner : Node
 
     private Vector2I? GetRandomPos(Vector2I size)
     {
-        Vector2I limits = getLimits() - Vector2I.One;
+        Vector2I limits = getLimits();
         Vector2I start = new Vector2I(rng.RandiRange(-limits.X, limits.X), rng.RandiRange(-limits.Y, limits.Y));
         Vector2I pos;
 
-        for (pos.X = start.X; pos.X < limits.X; pos.X++)
+        // GD.Print(size + " lim " + limits + " start " + start);
+        for (pos.X = start.X; pos.X <= limits.X; pos.X++)
         {
             for (pos.Y = start.Y; pos.Y < limits.Y; pos.Y++)
             {
+                // GD.Print("1 " + pos);
                 if (CanPlace(pos, size))
                 {
                     return pos;
                 }
             }
         }
-        for (pos.X = -limits.X; pos.X < start.X; pos.X++)
+        for (pos.X = -limits.X; pos.X <= start.X; pos.X++)
         {
             for (pos.Y = -limits.Y; pos.Y < start.Y; pos.Y++)
             {
+                // GD.Print("2 " + pos);
                 if (CanPlace(pos, size))
                 {
                     return pos;
                 }
             }
         }
-        
+        // GD.Print("pos not found");
         return null;
     }
 

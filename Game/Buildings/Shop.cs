@@ -34,10 +34,7 @@ public partial class Shop : Building
         itemNeededLabel.Set("theme_override_constants/line_spacing", -50);
 
         size = new Vector2I(2, 2);
-        if (angle == MathF.PI || angle == 3 * (MathF.PI/2))
-            AddInput(new Vector2I(0, 0), BeltInput.Top);
-        else
-            AddInput(new Vector2I(0, 0), BeltInput.Bottom);
+        AddInput(new Vector2I(0, 0), BeltInput.Right);
         UpdateLabel();
     }
 
@@ -84,7 +81,6 @@ public partial class Shop : Building
     private void UpdateLabel()
     {
         itemNeededLabel.Text = itemNeeded + "\n—\n" + itemLimit;
-        // itemNeededLabel.Text = itemNeeded + "/" + itemLimit; 
     }
 
     public delegate void ScoreUpdatedEventHandler(int value);
@@ -94,7 +90,7 @@ public partial class Shop : Building
     {
         base.RotateBuilding(angle);
         
-        if (angle == MathF.PI/2 || angle == MathF.PI)
+        if (sprite.Rotation == MathF.PI/2 || sprite.Rotation == MathF.PI)
             itemNeededLabel.Position = new Vector2(-25, -25);
     }
 
