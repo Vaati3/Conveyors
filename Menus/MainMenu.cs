@@ -19,7 +19,7 @@ public partial class MainMenu : Control
         soundManager = GetNode<SoundManager>("/root/SoundManager");
 		optionsMenu = GetNode<Panel>("Options");
 		scoreLabel = GetNode<Label>("Menu/Score");
-
+		belts = GetNode<Node>("Scene/Belts");
 
 		sliders = new VolumeSlider[3]{
 			GetNode<VolumeSlider>("Options/MasterVolumeSlider"),
@@ -27,6 +27,7 @@ public partial class MainMenu : Control
 			GetNode<VolumeSlider>("Options/SFXVolumeSlider")
 		};
 		Load();
+		SetupScene();
     }
 
     public void QuitGame(int score)
@@ -71,6 +72,59 @@ public partial class MainMenu : Control
 		}
 		file.Close();
 		scoreLabel.Text = "Best Score : " + bestScore;
+	}
+
+	Node belts;
+	Belt belt = null;
+	public void SetupScene()
+	{
+		int type = new RandomNumberGenerator().RandiRange(2, 6);
+		type = type == 2 ? 1 : type;
+
+		Node buildings = GetNode<Node>("Scene/Buildings");
+		Splitter splitter = new Splitter(new Vector2I(2, 1), LinkBelt);
+		buildings.AddChild(splitter);
+		belt = new Belt(new Vector2I(1, 2), null, splitter.input[0], null);
+		belts.AddChild(belt);
+		Operator op = new Operator(new Vector2I(0, 2), LinkBelt);
+		buildings.AddChild(op);
+		belt = new Belt(new Vector2I(0, 1), null, op.output[0], null);
+		belts.AddChild(belt);
+		Source source = new Source(new Vector2I(0, 0), LinkBelt, (ItemType)type, GetNode<Node>("Scene/Items"));
+		buildings.AddChild(source);
+
+		belt = null;
+		int dif = type == 6 ? 0 : 1;
+		dif = type == 1 ? 2 : dif;
+		Shop shop = new Shop(new Vector2I(4, -2), LinkBelt, (ItemType)(type+dif));
+		shop.SetDemo();
+		buildings.AddChild(shop);
+		belt = new Belt(new Vector2I(3, -2), null, shop.input[0], null);
+		belts.AddChild(belt);
+		belt = new Belt(new Vector2I(3, -1), null, belt, null);
+		belts.AddChild(belt);
+		belt = new Belt(new Vector2I(3, 0), null, belt, null);
+		belts.AddChild(belt);
+		belt.Connect(splitter.output[0]);
+		
+		belt = null;
+		dif = type < 1 ? 0 : 1;
+		dif = type == 3 ? 2 : dif;
+		Shop shop1 = new Shop(new Vector2I(5, 2), LinkBelt, (ItemType)(type-dif));
+		shop1.SetDemo();
+		buildings.AddChild(shop1);
+		belt = new Belt(new Vector2I(4, 2), null, shop1.input[0], null);
+		belts.AddChild(belt);
+		belt.Connect(splitter.output[1]);
+	}
+
+	public void LinkBelt(Belt newBelt)
+	{
+		if (belt != null)
+		{
+			belt.Connect(newBelt);
+		}
+		belts.AddChild(newBelt);
 	}
 
 	public void _on_play_pressed()

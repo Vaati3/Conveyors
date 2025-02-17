@@ -41,7 +41,6 @@ public partial class Merger : Building
         if (other.Owner is Item item)
         {
             item.isStoped = true;
-            item.Visible = false;
             if (input[0].items.Contains(item))
             {
                 items1.Enqueue(item);
@@ -74,8 +73,6 @@ public partial class Merger : Building
                 item2.belt = output[0];
                 item1.isStoped = false;
                 item2.isStoped = false;
-                item1.Visible = true;
-                item2.Visible = true;
             }
         }
     }

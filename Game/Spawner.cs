@@ -96,7 +96,7 @@ public partial class Spawner : Node
         {
             return;
         }
-        Shop shop = new Shop(pos.Value, InternalBeltCreated, type, angle);
+        Shop shop = new Shop(pos.Value, InternalBeltCreated, type);
         ui.Pause += shop.Pause;
         shop.GameLost += ui.GameLost;
         shop.ScoreUpdated += ui.UpdateScore;

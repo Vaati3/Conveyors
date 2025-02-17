@@ -10,8 +10,10 @@ public partial class Shop : Building
     int itemNeeded = 0;
     int itemLimit = 8;
     Label itemNeededLabel;
+
+    bool isDemo = false;
     
-    public Shop(Vector2I pos, InternalBeltCreatedEventHandler outputCreated, ItemType type, float angle) : base(pos, type.ToString() + "Shop", outputCreated)
+    public Shop(Vector2I pos, InternalBeltCreatedEventHandler outputCreated, ItemType type) : base(pos, type.ToString() + "Shop", outputCreated)
     {
         sprite.Position = new Vector2(Map.tilesize * 0.5f, Map.tilesize * 0.5f);
         this.type = type;
@@ -42,6 +44,11 @@ public partial class Shop : Building
 	{
 		if (other.Owner is Item item)
 		{
+            if (isDemo)
+            {
+                item.QueueFree();
+                return;
+            }
             if (item.type == type)
             {
 			    itemNeeded -= itemNeeded - 1 < 0 ? 0 : 1;
@@ -81,6 +88,13 @@ public partial class Shop : Building
     private void UpdateLabel()
     {
         itemNeededLabel.Text = itemNeeded + "\n—\n" + itemLimit;
+    }
+
+    public void SetDemo()
+    {
+        itemNeededLabel.Visible = false;
+        isDemo = true;
+        timer.Stop();
     }
 
     public delegate void ScoreUpdatedEventHandler(int value);

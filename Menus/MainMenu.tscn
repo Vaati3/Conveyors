@@ -133,6 +133,16 @@ size_flags_horizontal = 0
 theme = ExtResource("4_lwbhh")
 text = "Back to Menu"
 
+[node name="Scene" type="Node2D" parent="."]
+position = Vector2(500, 300)
+scale = Vector2(0.7, 0.7)
+
+[node name="Belts" type="Node2D" parent="Scene"]
+
+[node name="Items" type="Node2D" parent="Scene"]
+
+[node name="Buildings" type="Node2D" parent="Scene"]
+
 [connection signal="pressed" from="Menu/VBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="Menu/VBoxContainer/Options" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="Menu/VBoxContainer/Quit" to="." method="_on_quit_pressed"]

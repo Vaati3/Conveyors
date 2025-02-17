@@ -15,7 +15,7 @@ public partial class Operator : Building
         button = new Button(){
             Size = Vector2.One * 60,
             Text = "+ 1",
-            Position = Vector2.One * -32,
+            Position = Vector2.One * -36,
             MouseFilter = Control.MouseFilterEnum.Pass
             //add theme
         };
@@ -33,7 +33,7 @@ public partial class Operator : Building
             if (operation > 0)
             {
                 newType += newType == ItemType.None || newType == ItemType.Circle ? 2 : 1;
-                newType = (int)newType > 6 ? ItemType.Circle : newType;
+                newType = (int)newType > 6 ? ItemType.Hexagon : newType;
                 item.SetType(newType);
                 return;
             }

@@ -18,9 +18,8 @@ public partial class Splitter : Building
         AddOutput(new Vector2I(1, 0));
         AddOutput(new Vector2I(1, 1));
 
-        ((RectangleShape2D)area.GetChild<CollisionShape2D>(0).Shape).Size = new Vector2(Map.tilesize, Map.tilesize*2);
-        area.GetChild<CollisionShape2D>(0).Position = area.GetChild<CollisionShape2D>(0).Position + Vector2.Left * Map.tilesize * 0.5f; 
-
+        // ((RectangleShape2D)area.GetChild<CollisionShape2D>(0).Shape).Size = new Vector2(Map.tilesize, Map.tilesize*2);
+        // area.GetChild<CollisionShape2D>(0).Position = area.GetChild<CollisionShape2D>(0).Position + Vector2.Left * Map.tilesize * 0.5f; 
         area.AreaEntered += AreaEntered;
 
         buttonTop = new Button(){
@@ -34,7 +33,7 @@ public partial class Splitter : Building
 
         buttonBottom = new Button(){
             Size = Vector2.One * 60,
-            Position = new Vector2(18, 45),
+            Position = new Vector2(18, 35),
             MouseFilter = Control.MouseFilterEnum.Pass
             //add theme
         };

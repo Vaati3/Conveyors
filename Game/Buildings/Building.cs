@@ -30,7 +30,7 @@ public abstract partial class Building : Node2D
 		sprite.AddChild(area);
 		area.AddChild(new CollisionShape2D(){
 			Shape = new RectangleShape2D() {
-				Size = sprite.Texture.GetSize() - Vector2.One * 64f,
+				Size = sprite.Texture.GetSize() - Vector2.One * 86f,
 			}
 		});
 
