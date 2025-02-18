@@ -11,11 +11,14 @@ public partial class SelectionButton : Control
     [Export] public int count = 0; 
     Label countLabel;
 
+    Panel blocker;
+
     public override void _Ready()
     {
         icon = GetNode<TextureRect>("Icon");
         button = GetNode<Button>("Button");
         countLabel = GetNode<Label>("Count");
+        blocker = GetNode<Panel>("Panel");
 
         icon.Texture = GD.Load<Texture2D>("res://Menus/Textures/" + mode.ToString() + ".png");
 
@@ -36,11 +39,27 @@ public partial class SelectionButton : Control
         count += value;
         count = count < 0 ? 0 : count;
         countLabel.Text = count.ToString();
-        if (mode != PlaceMode.Remove && mode != PlaceMode.Belt && count < 1)
+
+        if (mode == PlaceMode.Remove || mode == PlaceMode.Belt)
+            return;
+
+        Color colourBtn = button.SelfModulate;
+        Color colourIcon = button.SelfModulate;
+        if (count < 1)
         {
-            Visible = false;
+            countLabel.Visible = false;
+            blocker.Visible = true;
+            colourBtn.A = 0.5f;
+            colourIcon.A = 0.5f;
+            button.SelfModulate = colourBtn;
+            icon.SelfModulate = colourIcon;
         } else {
-            Visible = true;
+            countLabel.Visible = true;
+            blocker.Visible = false;
+            colourBtn.A = 1;
+            colourIcon.A = 1;
+            button.SelfModulate = colourBtn;
+            icon.SelfModulate = colourIcon;
         }
     }
     
@@ -52,7 +71,7 @@ public partial class SelectionButton : Control
     }
 
     [Signal] public delegate void ModeSelectedEventHandler(PlaceMode mode);
-    private void Pressed()
+    public void Pressed()
     {
         button.Disabled = true;
         selected = true;

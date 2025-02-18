@@ -199,6 +199,7 @@ public partial class Spawner : Node
         int n = rng.RandiRange((int)lastType-1, (int)lastType+1);
         n = n == 2 ? 3 : n;
         n = n < 1 ? 1 : n;
+        n = n > 6 ? 6 : n;
         lastType = (ItemType)n;
         return lastType;
     }
@@ -209,12 +210,10 @@ public partial class Spawner : Node
         Vector2I start = new Vector2I(rng.RandiRange(-limits.X, limits.X), rng.RandiRange(-limits.Y, limits.Y));
         Vector2I pos;
 
-        // GD.Print(size + " lim " + limits + " start " + start);
         for (pos.X = start.X; pos.X <= limits.X; pos.X++)
         {
             for (pos.Y = start.Y; pos.Y < limits.Y; pos.Y++)
             {
-                // GD.Print("1 " + pos);
                 if (CanPlace(pos, size, limits))
                 {
                     return pos;
@@ -225,14 +224,12 @@ public partial class Spawner : Node
         {
             for (pos.Y = -limits.Y; pos.Y < start.Y; pos.Y++)
             {
-                // GD.Print("2 " + pos);
                 if (CanPlace(pos, size, limits))
                 {
                     return pos;
                 }
             }
         }
-        // GD.Print("pos not found");
         return null;
     }
 

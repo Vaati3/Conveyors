@@ -20,7 +20,7 @@ public partial class Shop : Building
         this.type = type;
         timer = new Timer(){
             Autostart = true,
-            WaitTime = Source.itemTime + 1,
+            WaitTime = Source.itemTime + 2,
             OneShot = false,
         };
         timer.Timeout += Timeout;
@@ -30,7 +30,7 @@ public partial class Shop : Building
         isRemovable = false;
 
         itemNeededLabel = new Label();
-        itemNeededLabel.Position = new Vector2(75, -25);
+        itemNeededLabel.Position = new Vector2(30, -30);
         AddChild(itemNeededLabel);
         itemNeededLabel.Set("theme_override_fonts/font", GD.Load<Font>("res://Menus/Themes/Audiowide-Regular.ttf"));
         itemNeededLabel.Set("theme_override_font_sizes/font_size", 75);
@@ -101,14 +101,6 @@ public partial class Shop : Building
 
     public delegate void ScoreUpdatedEventHandler(int value);
     public ScoreUpdatedEventHandler ScoreUpdated;
-
-    public override void RotateBuilding(float angle)
-    {
-        base.RotateBuilding(angle);
-        
-        if (sprite.Rotation == MathF.PI/2 || sprite.Rotation == MathF.PI)
-            itemNeededLabel.Position = new Vector2(-25, -25);
-    }
 
     public delegate void GameLostEventHandler();
     public GameLostEventHandler GameLost;
