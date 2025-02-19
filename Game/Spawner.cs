@@ -144,11 +144,14 @@ public partial class Spawner : Node
                 nodes.Remove(new Vector2I(x,y));
             }
         }
+        building.Remove();
         building.QueueFree();
     }
 
     public void RotateBuilding(Building building, float angle = MathF.PI/2)
     {
+        if (building.size == Vector2I.One)
+            return;
         Vector2 center = new Vector2(building.pos.X + (((float)building.size.X-1)/2), building.pos.Y + (((float)building.size.Y-1)/2));
         
         List<Belt> belts = new List<Belt>();

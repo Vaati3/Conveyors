@@ -119,6 +119,12 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 mode = 4
 
+[node name="Teleporter" parent="Buttons" instance=ExtResource("10_hy0ko")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mode = 5
+
 [node name="Rewards" type="Panel" parent="."]
 visible = false
 anchors_preset = 15
@@ -292,6 +298,7 @@ text = "Back to Menu"
 [connection signal="ModeSelected" from="Buttons/Operator" to="." method="SelectMode"]
 [connection signal="ModeSelected" from="Buttons/Splitter" to="." method="SelectMode"]
 [connection signal="ModeSelected" from="Buttons/Merger" to="." method="SelectMode"]
+[connection signal="ModeSelected" from="Buttons/Teleporter" to="." method="SelectMode"]
 [connection signal="pressed" from="Confirm/Panel/Yes" to="." method="_on_yes_pressed"]
 [connection signal="pressed" from="Confirm/Panel/No" to="." method="_on_no_pressed"]
 [connection signal="pressed" from="GameLost/Panel/Yes" to="." method="_on_yes_pressed"]

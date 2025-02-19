@@ -7,7 +7,8 @@ public enum PlaceMode {
 	Belt,
 	Operator,
 	Splitter,
-	Merger
+	Merger,
+	Teleporter
 }
 
 public partial class GameUi : CanvasLayer
@@ -101,8 +102,8 @@ public partial class GameUi : CanvasLayer
 		soundManager.PlaySFX("Reward");
 		TogglePause();
 		RandomNumberGenerator rng = new RandomNumberGenerator();
-		int a = rng.RandiRange(1, 4);
-		int b = rng.RandiRange(1, 3);
+		int a = rng.RandiRange(1, 5);
+		int b = rng.RandiRange(1, 4);
 		b += b >= a ? 1 : 0;
 		rewardButtonLeft.Update((PlaceMode)a);
 		rewardButtonRight.Update((PlaceMode)b);

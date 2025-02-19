@@ -48,7 +48,10 @@ public partial class RewardButton : Button
                 beltAmount = 15;
                 buildingAmount = 1;
                 break;
-
+            case PlaceMode.Teleporter:
+                beltAmount = 5;
+                buildingAmount = 2;
+                break;
         }
         if (mode != PlaceMode.Belt)
         {

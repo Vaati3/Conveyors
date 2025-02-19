@@ -19,6 +19,8 @@ public partial class Map : Node2D
 	const float startZoom = 0.85f;
 	const float endZoom = 0.35f;
 	double weight = 0;
+
+	List<Teleporter> teleporters;
 	
 	private void PlaceBelt(Vector2I pos)
 	{	
@@ -76,6 +78,18 @@ public partial class Map : Node2D
 		}
 	}
 
+	private void PlaceTeleporter(Vector2I pos)
+	{
+		if (ui.GetCount(PlaceMode.Teleporter) > 0 && spawner.CanPlace(pos, Vector2I.One, GetLimits()))
+		{
+			Teleporter teleporter = new Teleporter(pos, spawner.InternalBeltCreated, teleporters);
+        	ui.Pause += teleporter.Pause;
+			spawner.AddBuilding(teleporter);
+			ui.ChangeCount(PlaceMode.Teleporter, -1);
+			teleporters.Add(teleporter);
+		}
+	}
+
 	public override void _Ready()
 	{
 		ui = GetNode<GameUi>("GameUi");
@@ -89,6 +103,8 @@ public partial class Map : Node2D
 		
 		spawner = new Spawner(nodes, this);
 		AddChild(spawner);
+
+		teleporters = new List<Teleporter>();
 	}
 
 	public Vector2I GetLimits()
@@ -217,6 +233,10 @@ public partial class Map : Node2D
 					case PlaceMode.Merger:
 						if (button.Pressed)
 							PlaceMerger(pos);
+						break;
+					case PlaceMode.Teleporter:
+						if (button.Pressed)
+							PlaceTeleporter(pos);
 						break;
 
 				}

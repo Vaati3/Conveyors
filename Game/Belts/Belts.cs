@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 public enum BeltInput{
-	None = -1, Bottom, Top, Right, Left 
+	None = -1, Bottom, Top, Right, Left, Center
 }
  
 public partial class Belt : Node2D
@@ -85,6 +85,8 @@ public partial class Belt : Node2D
 
 	public void UpdateAnimation()
 	{
+		if (output == BeltInput.Center)
+			return;
 		if (!inputs[0] && !inputs[1] && !inputs[2] && !inputs[3] && output == BeltInput.None)
 		{
 			sprite.Animation = "Dot";
@@ -158,6 +160,13 @@ public partial class Belt : Node2D
 	public void Connect(BeltInput output)
 	{
 		this.output = output;
+
+		for(int i = 0; i <= (int)BeltInput.Left; i++)
+		{
+			if (otherBelts[i] == null)
+				continue;
+			otherBelts[i].UpdateLine(this);
+		}
 		UpdateAnimation();
 	}
 
@@ -234,7 +243,8 @@ public partial class Belt : Node2D
 		}
 		if (output != BeltInput.None && !isBuildingInput)
 		{
-			inputs[(int)output] = !first;
+			if (output != BeltInput.Center)
+				inputs[(int)output] = !first;
 			output = BeltInput.None;
 		}
 		UpdateAnimation();
