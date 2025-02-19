@@ -18,7 +18,6 @@ public partial class GameUi : CanvasLayer
 
 	SelectionButton[] selectionButtons;
 
-
 	Control confirmPanel;
 	Control gameLostPanel;
 	Control rewardPanel;
@@ -68,6 +67,10 @@ public partial class GameUi : CanvasLayer
 		};
 		AddChild(rewardTimer);
 		rewardTimer.Timeout += GiveRewards;
+
+		Pause += PauseFiller;
+		if (highScore == 0)
+			AddChild(new TutorialBubble(TogglePause));
 	}
 
 	public void ChangeCount(PlaceMode mode, int value)
@@ -170,4 +173,6 @@ public partial class GameUi : CanvasLayer
 		confirmPanel.Visible = false;
 		TogglePause();
 	}
+
+	private void PauseFiller(bool isPaused) {}
 }

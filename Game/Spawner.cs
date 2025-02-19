@@ -55,6 +55,9 @@ public partial class Spawner : Node
 
         int type = rng.RandiRange(2, 6);
         lastType = type == 2 ? ItemType.Circle : (ItemType)type;
+
+        sourceTimer.Paused = ui.isPaused;
+        shopTimer.Paused = ui.isPaused;
     }
 
     private void SourceTimeout()
