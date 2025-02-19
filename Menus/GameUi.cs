@@ -69,8 +69,7 @@ public partial class GameUi : CanvasLayer
 		rewardTimer.Timeout += GiveRewards;
 
 		Pause += PauseFiller;
-		if (highScore == 0)
-			AddChild(new TutorialBubble(TogglePause));
+		
 	}
 
 	public void ChangeCount(PlaceMode mode, int value)

@@ -44,8 +44,7 @@ public partial class SoundManager : Node
 
     private Dictionary<string, AudioStream> LoadSounds(string path)
     {
-        DirAccess dir = DirAccess.Open(path);
-
+        DirAccess dir = DirAccess.Open(path);   
         if (dir == null)
             return null;
 
@@ -54,8 +53,9 @@ public partial class SoundManager : Node
         string fileName = dir.GetNext();
         while(fileName != "")
         {
-            if (!dir.CurrentIsDir() && !fileName.Contains("import"))
+            if (!dir.CurrentIsDir() && fileName.EndsWith(".import"))
             {
+                fileName = fileName.Split(".import")[0];
                 AudioStream audio = GD.Load<AudioStream>(path + fileName);
                 if (audio != null)
                     sounds.Add(fileName.GetBaseName(), audio);

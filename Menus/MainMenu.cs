@@ -129,8 +129,7 @@ public partial class MainMenu : Control
 		soundManager.PlaySFX("Start");
 		map = GD.Load<PackedScene>("res://Game/Map.tscn").Instantiate<Map>();
 		GetTree().Root.AddChild(map);
-		map.ui.QuitToMenu += QuitGame;
-		map.ui.highScore = highScore;
+		map.SetupUI(highScore, QuitGame);
 		Visible = false;
 	}
 	public void _on_options_pressed()

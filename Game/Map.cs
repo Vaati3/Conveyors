@@ -107,6 +107,14 @@ public partial class Map : Node2D
 		teleporters = new List<Teleporter>();
 	}
 
+	public void SetupUI(int highScore, GameUi.QuitToMenuEventHandler quitToMenu)
+	{
+		ui.highScore = highScore;
+		ui.QuitToMenu += quitToMenu;
+		if (highScore == 0)
+			ui.AddChild(new TutorialBubble(ui.TogglePause));
+	}
+
 	public Vector2I GetLimits()
 	{
 		return new Vector2I((int)MathF.Floor((background.Size.X-tilesize) / 2 / tilesize) , (int)MathF.Floor((background.Size.Y-tilesize) / 2 / tilesize));
