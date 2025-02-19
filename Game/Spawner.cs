@@ -84,7 +84,11 @@ public partial class Spawner : Node
     {
         Vector2I? pos = GetRandomPos(Vector2I.One);
         if (pos == null)
-            return;
+        {
+            pos = GetRandomPos(Vector2I.One * 2);
+            if (pos == null)
+                return;
+        }
         Source source = new Source(pos.Value, InternalBeltCreated, type, itemLayer);
         ui.Pause += source.Pause;
 		AddBuilding(source);
@@ -96,8 +100,20 @@ public partial class Spawner : Node
         Vector2I? pos = GetRandomPos(Vector2I.One * 2);
         if (pos == null)
         {
-            return;
+            pos = GetRandomPos(Vector2I.One * 2);
+            if (pos == null)
+                return;
         }
+        Vector2I limits = getLimits();
+        if (pos.Value.X >= limits.X - 1)
+            angle = pos.Value.Y < 0 ? 0 : 3;
+        else if (pos.Value.X <= -(limits.X - 1))
+            angle = pos.Value.Y < 0 ? 2 : 1;
+        else if (pos.Value.Y >= limits.Y - 1)
+            angle = pos.Value.X < 0 ? 1 : 0;
+        else if (pos.Value.Y <= -(limits.Y - 1))
+            angle = pos.Value.X < 0 ? 3 : 2;
+
         Shop shop = new Shop(pos.Value, InternalBeltCreated, type);
         ui.Pause += shop.Pause;
         shop.GameLost += ui.GameLost;
