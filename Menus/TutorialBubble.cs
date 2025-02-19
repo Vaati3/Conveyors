@@ -19,9 +19,12 @@ public partial class TutorialBubble : Control
     public delegate void TogglePauseEventHandler();
     private TogglePauseEventHandler TogglePause;
 
-    public TutorialBubble(TogglePauseEventHandler togglePause)
+    CheckBox tutoCheck;
+
+    public TutorialBubble(TogglePauseEventHandler togglePause, CheckBox tutoCheck)
     {
         TogglePause = togglePause;
+        this.tutoCheck = tutoCheck;
         TogglePause();
         SetAnchorsPreset(LayoutPreset.FullRect);
         GuiInput += input;
@@ -32,6 +35,7 @@ public partial class TutorialBubble : Control
             Theme = GD.Load<Theme>("res://Menus/Themes/TutorialPanel.tres")
         };
         panel.SetAnchorsPreset(LayoutPreset.CenterTop);
+        panel.MouseFilter = MouseFilterEnum.Ignore;
         AddChild(panel);
         
         label = new RichTextLabel()
@@ -41,6 +45,7 @@ public partial class TutorialBubble : Control
             BbcodeEnabled = true,
             Text = texts[index]
         };
+        label.MouseFilter = MouseFilterEnum.Ignore;
         label.Set("theme_override_fonts/normal_font", GD.Load<Font>("res://Menus/Themes/Audiowide-Regular.ttf"));
         panel.AddChild(label);
     }
@@ -57,6 +62,7 @@ public partial class TutorialBubble : Control
                 soundManager.PlaySFX("Reward");
                 if (index >= texts.Length)
                 {
+                    tutoCheck.ButtonPressed = false;
                     TogglePause();
                     QueueFree();
                     return;

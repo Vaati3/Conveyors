@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://bhc64fsuahjaj"]
+[gd_scene load_steps=7 format=3 uid="uid://bhc64fsuahjaj"]
 
 [ext_resource type="Script" path="res://Menus/MainMenu.cs" id="1_uaq6d"]
 [ext_resource type="Theme" uid="uid://dxkh1hgxmbi5s" path="res://Menus/Themes/Panel.tres" id="2_4o5v7"]
 [ext_resource type="Theme" uid="uid://fomyfd7h6s1l" path="res://Menus/Themes/Text.tres" id="3_yjfts"]
 [ext_resource type="Theme" uid="uid://c5amex4kn3q35" path="res://Menus/Themes/Button.tres" id="4_lwbhh"]
 [ext_resource type="PackedScene" uid="uid://cp10rxv4iq406" path="res://Menus/VolumeSlider.tscn" id="5_cyxyh"]
+[ext_resource type="FontFile" uid="uid://csgpd6kbdx8qy" path="res://Menus/Themes/Audiowide-Regular.ttf" id="6_eamog"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -63,6 +64,13 @@ size_flags_horizontal = 0
 theme = ExtResource("4_lwbhh")
 text = "Options"
 
+[node name="Credits" type="Button" parent="Menu/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("4_lwbhh")
+text = "Credits
+"
+
 [node name="Quit" type="Button" parent="Menu/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
@@ -93,9 +101,9 @@ text = "Options"
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.0461847
-anchor_top = 0.216049
+anchor_top = 0.155864
 anchor_right = 0.0461847
-anchor_bottom = 0.216049
+anchor_bottom = 0.155864
 label = "Master Volume"
 busName = "Master"
 
@@ -103,9 +111,9 @@ busName = "Master"
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.0461847
-anchor_top = 0.430555
+anchor_top = 0.361111
 anchor_right = 0.0461847
-anchor_bottom = 0.430555
+anchor_bottom = 0.361111
 label = "Music Volume"
 busName = "Music"
 
@@ -113,13 +121,61 @@ busName = "Music"
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.0461847
-anchor_top = 0.648148
+anchor_top = 0.569444
 anchor_right = 0.0461847
-anchor_bottom = 0.648148
+anchor_bottom = 0.569444
 label = "Sound Effects Volume"
 busName = "SFX"
 
+[node name="TutorialCheck" type="CheckBox" parent="Options"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 54.0
+offset_top = -141.0
+offset_right = 228.0
+offset_bottom = -87.0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_eamog")
+theme_override_font_sizes/font_size = 0
+text = "    Show Tutorial"
+
 [node name="BackButton" type="Button" parent="Options"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 43.0
+offset_top = -66.0
+offset_right = 188.0
+offset_bottom = -32.0
+grow_vertical = 0
+size_flags_horizontal = 0
+theme = ExtResource("4_lwbhh")
+text = "Back to Menu"
+
+[node name="Credits" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -654.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_4o5v7")
+
+[node name="Label" type="Label" parent="Credits"]
+offset_left = 59.0
+offset_top = 27.0
+offset_right = 358.0
+offset_bottom = 92.0
+theme = ExtResource("3_yjfts")
+text = "Credits"
+
+[node name="BackButton" type="Button" parent="Credits"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -145,5 +201,7 @@ scale = Vector2(0.7, 0.7)
 
 [connection signal="pressed" from="Menu/VBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="Menu/VBoxContainer/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="Menu/VBoxContainer/Credits" to="." method="_on_credits_pressed"]
 [connection signal="pressed" from="Menu/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="Options/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="Credits/BackButton" to="." method="_on_back_button_pressed"]

@@ -7,23 +7,27 @@ public partial class MainMenu : Control
 	SoundManager soundManager;
 
 	Panel optionsMenu;
+	Panel credits;
 
 	VolumeSlider[] sliders;
 
+	const string saveFile = "user://save.save";
 	int highScore;
 	Label scoreLabel;
-	const string saveFile = "user://save.save";
+	CheckBox tutoCheck;
 
     public override void _Ready()
     {
         soundManager = GetNode<SoundManager>("/root/SoundManager");
 		optionsMenu = GetNode<Panel>("Options");
+		credits = GetNode<Panel>("Credits");
 		scoreLabel = GetNode<Label>("Menu/Score");
+		tutoCheck = GetNode<CheckBox>("Options/TutorialCheck");
 		belts = GetNode<Node>("Scene/Belts");
 
 		sliders = new VolumeSlider[3]{
 			GetNode<VolumeSlider>("Options/MasterVolumeSlider"),
-			GetNode<VolumeSlider>("Options/MasterVolumeSlider"),
+			GetNode<VolumeSlider>("Options/MusicVolumeSlider"),
 			GetNode<VolumeSlider>("Options/SFXVolumeSlider")
 		};
 		Load();
@@ -53,6 +57,8 @@ public partial class MainMenu : Control
 			char muted = slider.isMuted ? '1' : '0';
 			file.StoreLine(muted + " " + slider.volume.ToString());
 		}
+		file.StoreLine(tutoCheck.ButtonPressed ? "1" : "0");
+		file.Close();
 	}
 
 	public void Load()
@@ -63,6 +69,7 @@ public partial class MainMenu : Control
 			highScore = 0;
 			foreach(VolumeSlider slider in sliders)
 				slider.Setup(0.5f, false);
+			tutoCheck.ButtonPressed = true;
 			return ;
 		}
 		highScore = file.GetLine().ToInt();
@@ -71,6 +78,7 @@ public partial class MainMenu : Control
 			string[] line = file.GetLine().Split(" ");
 			slider.Setup(float.Parse(line[1]), line[0] == "1");
 		}
+		tutoCheck.ButtonPressed = file.GetLine() == "1";
 		file.Close();
 		scoreLabel.Text = "Best Score : " + highScore;
 	}
@@ -108,7 +116,7 @@ public partial class MainMenu : Control
 		belt.Connect(splitter.output[0]);
 		
 		belt = null;
-		Shop shop1 = new Shop(new Vector2I(5, 2), LinkBelt, (ItemType)(type));
+		Shop shop1 = new Shop(new Vector2I(5, 2), LinkBelt, (ItemType)type);
 		shop1.SetDemo();
 		buildings.AddChild(shop1);
 		belt = new Belt(new Vector2I(4, 2), null, shop1.input[0], null);
@@ -130,7 +138,7 @@ public partial class MainMenu : Control
 		soundManager.PlaySFX("Start");
 		map = GD.Load<PackedScene>("res://Game/Map.tscn").Instantiate<Map>();
 		GetTree().Root.AddChild(map);
-		map.SetupUI(highScore, QuitGame);
+		map.SetupUI(highScore, QuitGame, tutoCheck);
 		Visible = false;
 	}
 	public void _on_options_pressed()
@@ -138,11 +146,21 @@ public partial class MainMenu : Control
 		soundManager.PlaySFX("Button");
 		optionsMenu.Visible = true;
 	}
+	public void _on_credits_pressed()
+	{
+		soundManager.PlaySFX("Button");
+		credits.Visible = true;
+	}
 	public void _on_back_button_pressed()
 	{
 		soundManager.PlaySFX("Button");
-		optionsMenu.Visible = false;
-		Save();
+		if (optionsMenu.Visible)
+		{
+			optionsMenu.Visible = false;
+			Save();
+		} else {
+			credits.Visible = false;
+		}
 	}
 	public void _on_quit_pressed()
 	{

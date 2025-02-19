@@ -107,12 +107,12 @@ public partial class Map : Node2D
 		teleporters = new List<Teleporter>();
 	}
 
-	public void SetupUI(int highScore, GameUi.QuitToMenuEventHandler quitToMenu)
+	public void SetupUI(int highScore, GameUi.QuitToMenuEventHandler quitToMenu, CheckBox tutoCheck)
 	{
 		ui.highScore = highScore;
 		ui.QuitToMenu += quitToMenu;
-		if (highScore == 0)
-			ui.AddChild(new TutorialBubble(ui.TogglePause));
+		if (tutoCheck.ButtonPressed)
+			ui.AddChild(new TutorialBubble(ui.TogglePause, tutoCheck));
 	}
 
 	public Vector2I GetLimits()
