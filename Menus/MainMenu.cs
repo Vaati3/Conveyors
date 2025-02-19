@@ -28,6 +28,7 @@ public partial class MainMenu : Control
 		};
 		Load();
 		SetupScene();
+		soundManager.PlayMusic("Music");
     }
 
     public void QuitGame(int score)

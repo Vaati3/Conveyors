@@ -28,13 +28,14 @@ public partial class SoundManager : Node
         }
     }
 
-    private void  PlayStream(AudioStream stream)
+    private void PlayStream(AudioStream stream)
     {
         for(int i = 0; i < playerAmount; i++)
         {
             if(!players[i].Playing)
             {
                 players[i].Stream = stream;
+                
                 players[i].Play();
                 return ;
             }

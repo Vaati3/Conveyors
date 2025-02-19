@@ -144,7 +144,7 @@ public partial class GameUi : CanvasLayer
 
     public void _on_menu_button_pressed()
 	{
-		soundManager.PlaySFX("button");
+		soundManager.PlaySFX("Button");
 		confirmPanel.Visible = true;
 		TogglePause();
 	}
@@ -162,13 +162,13 @@ public partial class GameUi : CanvasLayer
 
 	public void _on_yes_pressed()
 	{
-		soundManager.PlaySFX("button");
+		
 		QuitToMenu(score);
 	}
 
 	public void _on_no_pressed()
 	{
-		soundManager.PlaySFX("button");
+		soundManager.PlaySFX("Button");
 		confirmPanel.Visible = false;
 		TogglePause();
 	}
