@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using Godot;
 
 public partial class Source : Building
@@ -17,8 +18,8 @@ public partial class Source : Building
 
         timer = new Timer(){
             Autostart = true,
-            OneShot = false,
-            WaitTime = itemTime
+            OneShot = true,
+            WaitTime = 0.5f
         };
         timer.Timeout += CreateItem;
         AddChild(timer);
@@ -28,6 +29,11 @@ public partial class Source : Building
 
     private void CreateItem()
     {   
+        if (timer.OneShot)
+        {
+            timer.OneShot = false;
+            timer.Start(itemTime);
+        }
         if (output[0].output == BeltInput.None)
             return;
         Item item = new Item(type);
@@ -40,5 +46,15 @@ public partial class Source : Building
     {
         timer.Paused = isPaused;
         this.isPaused = isPaused;
+    }
+
+    public override void _Process(double delta)
+    {
+        if (output[0].output == BeltInput.None)
+        {
+            timer.Paused = true;
+        } else if (timer.Paused) {
+            timer.Paused = false;
+        }
     }
 }
