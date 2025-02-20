@@ -168,12 +168,35 @@ grow_vertical = 2
 theme = ExtResource("2_4o5v7")
 
 [node name="Label" type="Label" parent="Credits"]
+layout_mode = 0
 offset_left = 59.0
 offset_top = 27.0
 offset_right = 358.0
 offset_bottom = 92.0
 theme = ExtResource("3_yjfts")
 text = "Credits"
+
+[node name="Label2" type="RichTextLabel" parent="Credits"]
+layout_mode = 0
+offset_left = 39.0
+offset_top = 166.0
+offset_right = 415.0
+offset_bottom = 512.0
+theme = ExtResource("3_yjfts")
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("6_eamog")
+theme_override_font_sizes/normal_font_size = 22
+bbcode_enabled = true
+text = "[center]Game Design & Development
+Honorin Pouteau
+
+
+Music
+Bastien Giroire
+
+
+Made with Godot  [img]res://Menus/Textures/Godot.png[/img]
+godotengine.org/license"
 
 [node name="BackButton" type="Button" parent="Credits"]
 layout_mode = 1
