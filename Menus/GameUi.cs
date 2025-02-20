@@ -162,7 +162,7 @@ public partial class GameUi : CanvasLayer
 
 	public void _on_yes_pressed()
 	{
-		
+		soundManager.PlaySFX("Button");
 		QuitToMenu(score);
 	}
 
