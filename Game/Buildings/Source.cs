@@ -50,7 +50,7 @@ public partial class Source : Building
 
     public override void _Process(double delta)
     {
-        if (output[0].output == BeltInput.None)
+        if (!isPaused && output[0].output == BeltInput.None)
         {
             timer.Paused = true;
         } else if (timer.Paused) {

@@ -15,7 +15,7 @@ public partial class Map : Node2D
 
 	ColorRect background;
 	Camera2D camera;
-	const float zoomOutSpeed = 0.003f;
+	const float zoomOutSpeed = 0.004f;
 	const float startZoom = 0.85f;
 	const float endZoom = 0.35f;
 	double weight = 0;

@@ -10,7 +10,7 @@ public partial class TutorialBubble : Control
     static string[] texts = {
         "[center]Welcome to Conveyors\n\n\nTap to continue[/center]",
         "[center]The objective of the game is to deliver different type of items to their destination using conveyor belts\nSelect Belts with the [img]res://Menus/Textures/Belt.png[/img] button then place them on the map by tapping or dragging [/center]",
-        "[center]Each source and destination can produce/receive only one type of items.\n A item value define its shape and colour from [img]res://Game/Items/Circle.png[/img] to [img]res://Game/Items/Hexagon.png[/img]\nIf a building counter overflow the game end[/center]",
+        "[center]Each source and destination can produce/receive only one type of items.\n A item value define its shape and colour from [img]res://Game/Items/Circle.png[/img] to [img]res://Game/Items/Hexagon.png[/img]\nIf a building counter decrease to zero the game end[/center]",
         "[center]You can use buildings to adjust the shape of the items.\nPlace building by using the other buttons [img]res://Menus/Textures/Operator.png[/img] [img]res://Menus/Textures/Splitter.png[/img] [img]res://Menus/Textures/Merger.png[/img] [img]res://Menus/Textures/Teleporter.png[/img]\n Then connect them with belts[/center]",
         "[center]You are limited in the amount of belts and buildings you can use\nBuilding inputs are in red and output in Blue\nRecover belts and buildings using [img]res://Menus/Textures/Remove.png[/img]\n Earn more through regular rewards[/center]",
         "[center]Use [img]res://Menus/Textures/Pause.png[/img]/[img]res://Menus/Textures/Play.png[/img] to pause and resume the game\n\nTap to start[/center]"

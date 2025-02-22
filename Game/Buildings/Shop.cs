@@ -7,8 +7,8 @@ public partial class Shop : Building
     Timer timer;
     ItemType type;
 
-    int itemNeeded = 0;
-    int itemLimit = 8;
+    int itemNeeded = 8;
+    int maxItem = 8;
     Label itemNeededLabel;
     int level = 1;
 
@@ -52,12 +52,12 @@ public partial class Shop : Building
             }
             if (item.type == type)
             {
-			    itemNeeded -= itemNeeded - 1 < 0 ? 0 : 1;
+			    itemNeeded += itemNeeded + 1 > maxItem ? 0 : 1;
                 ScoreUpdated(1);
             } else {
-                itemNeeded++;
+                itemNeeded--;
                 ScoreUpdated(-1);
-                if (itemNeeded > itemLimit)
+                if (itemNeeded > maxItem)
                     GameLost();
             }
             UpdateLabel();
@@ -67,9 +67,9 @@ public partial class Shop : Building
 
     public void Timeout()
     {
-        itemNeeded++;
+        itemNeeded--;
         UpdateLabel();
-        if (itemNeeded > itemLimit)
+        if (itemNeeded <= 0)
             GameLost();
     }
 
@@ -77,7 +77,8 @@ public partial class Shop : Building
     {
         level++;
         timer.WaitTime = (Source.itemTime + 1) / level;
-        itemLimit += 2;
+        maxItem += 2;
+        itemNeeded += 2;
         UpdateLabel();
     }
 
@@ -89,12 +90,12 @@ public partial class Shop : Building
 
     private void UpdateLabel()
     {
-        itemNeededLabel.Text = itemNeeded + "\n—\n" + itemLimit;
+        itemNeededLabel.Text = itemNeeded + "\n—\n" + maxItem;
     }
 
     public void SetDemo()
     {
-        itemNeededLabel.Visible = false;
+        // itemNeededLabel.Visible = false;
         isDemo = true;
         timer.Stop();
     }
