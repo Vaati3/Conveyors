@@ -136,7 +136,7 @@ public partial class GameUi : CanvasLayer
 
     public override void _Input(InputEvent @event)
     {
-        if (@event.IsActionPressed("Pause"))
+        if (Input.IsActionJustPressed("Pause"))
 		{
 			TogglePause();
 		}
