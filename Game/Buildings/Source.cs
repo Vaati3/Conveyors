@@ -48,16 +48,16 @@ public partial class Source : Building
         this.isPaused = isPaused;
     }
 
-    public override void _Process(double delta)
-    {
-        base._Process(delta);
-        if (output[0].output == BeltInput.None)
-        {
-            timer.Paused = true;
-        } else if (!isPaused && timer.Paused) {
-            timer.Paused = false;
-        }
-    }
+    // public override void _Process(double delta)
+    // {
+    //     base._Process(delta);
+    //     if (output[0].output == BeltInput.None)
+    //     {
+    //         timer.Paused = true;
+    //     } else if (!isPaused && timer.Paused) {
+    //         timer.Paused = false;
+    //     }
+    // }
 
     public void Upgrade(int level)
     {
