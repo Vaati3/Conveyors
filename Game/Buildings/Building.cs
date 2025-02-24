@@ -16,7 +16,32 @@ public abstract partial class Building : Node2D
 	public PlaceMode mode = PlaceMode.Remove;
 	public bool isRemovable {protected set; get;}= true;
 
-	public Building(Vector2I pos, string textureName, InternalBeltCreatedEventHandler outputCreated)
+	bool grow = true;
+	float weight;
+	float speed = 0.05f;
+
+    public override void _Process(double delta)
+    {
+		if (grow)
+		{
+        	weight += speed + (float)delta;
+			float value = Mathf.Lerp(1.1f, 1.2f, weight);
+			sprite.Scale = new Vector2(value, value);
+			if (weight >= 1)
+			{
+				weight = 0;
+				grow = false;
+			}
+
+		} else if ( weight < 1)
+		{
+			weight += speed + (float)delta;
+			float value = Mathf.Lerp(1.2f, 1, weight);
+			sprite.Scale = new Vector2(value, value);
+		}
+    }
+
+    public Building(Vector2I pos, string textureName, InternalBeltCreatedEventHandler outputCreated)
 	{
 		this.pos = pos;
 		Position = pos * Map.tilesize;
@@ -54,6 +79,13 @@ public abstract partial class Building : Node2D
 		input.Add(belt);
 		InternalBeltCreated(belt);
 		belt.Connect(beltType);
+	}
+
+	public void StopAnim()
+	{
+		grow = false;
+		weight = 2;
+		sprite.Scale = Vector2.One;
 	}
 
 	public abstract void Pause(bool isPaused);

@@ -86,6 +86,7 @@ public partial class Teleporter : Building
 
     public override void _Process(double delta)
     {
+        base._Process(delta);
         if (isConnected)
         {
             if (teleportOutput == null && output[0].output == BeltInput.None)

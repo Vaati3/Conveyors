@@ -50,11 +50,17 @@ public partial class Source : Building
 
     public override void _Process(double delta)
     {
-        if (!isPaused && output[0].output == BeltInput.None)
+        base._Process(delta);
+        if (output[0].output == BeltInput.None)
         {
             timer.Paused = true;
-        } else if (timer.Paused) {
+        } else if (!isPaused && timer.Paused) {
             timer.Paused = false;
         }
+    }
+
+    public void Upgrade(int level)
+    {
+        timer.WaitTime = itemTime / level;
     }
 }

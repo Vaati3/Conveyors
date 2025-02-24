@@ -92,32 +92,38 @@ public partial class MainMenu : Control
 
 		Node buildings = GetNode<Node>("Scene/Buildings");
 		Splitter splitter = new Splitter(new Vector2I(2, 1), LinkBelt);
+		splitter.StopAnim();
 		buildings.AddChild(splitter);
 		belt = new Belt(new Vector2I(1, 2), null, splitter.input[0], null);
 		belts.AddChild(belt);
 		belt = new Belt(new Vector2I(0, 2), null, belt, null);
 		belts.AddChild(belt);
+		Source source1 = new Source(new Vector2I(0, 3), LinkBelt, (ItemType)type, GetNode<Node>("Scene/Items"));
+		source1.StopAnim();
+		buildings.AddChild(source1);
 		belt = new Belt(new Vector2I(0, 1), null, belt, null);
 		belts.AddChild(belt);
 		Source source = new Source(new Vector2I(0, 0), LinkBelt, (ItemType)type, GetNode<Node>("Scene/Items"));
+		source.StopAnim();
 		buildings.AddChild(source);
 
 		belt = null;
 		int dif = type == 1 ? 2 : 1;
-		Shop shop = new Shop(new Vector2I(4, -2), LinkBelt, (ItemType)(type+dif));
-		shop.SetDemo();
+		Shop shop = new Shop(new Vector2I(4, -2), LinkBelt, (ItemType)(type+dif), true);
+		shop.StopAnim();
 		buildings.AddChild(shop);
 		belt = new Belt(new Vector2I(3, -2), null, shop.input[0], null);
 		belts.AddChild(belt);
 		Operator op = new Operator(new Vector2I(3, -1), LinkBelt);
+		op.StopAnim();
 		buildings.AddChild(op);
 		belt = new Belt(new Vector2I(3, 0), null, op.output[0], null);
 		belts.AddChild(belt);
 		belt.Connect(splitter.output[0]);
 		
 		belt = null;
-		Shop shop1 = new Shop(new Vector2I(5, 2), LinkBelt, (ItemType)type);
-		shop1.SetDemo();
+		Shop shop1 = new Shop(new Vector2I(5, 2), LinkBelt, (ItemType)type, true);
+		shop1.StopAnim();
 		buildings.AddChild(shop1);
 		belt = new Belt(new Vector2I(4, 2), null, shop1.input[0], null);
 		belts.AddChild(belt);
