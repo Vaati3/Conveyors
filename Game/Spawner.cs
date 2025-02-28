@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public partial class Spawner : Node
 {
+    const float shopTime = 80;
+    const float sourceTime = 30;
     RandomNumberGenerator rng;
     Dictionary<Vector2I, Node2D> nodes;
     Timer sourceTimer;
@@ -40,7 +42,7 @@ public partial class Spawner : Node
         sourceTimer = new Timer() {
             Autostart = true,
             OneShot = false,
-            WaitTime = 30
+            WaitTime = sourceTime
         };
         sourceTimer.Timeout += SourceTimeout;
         AddChild(sourceTimer);
@@ -71,9 +73,9 @@ public partial class Spawner : Node
 
     private void ShopTimeout()
     {
-        if (shopTimer.WaitTime < 80)
+        if (shopTimer.WaitTime < shopTime)
         {
-            shopTimer.WaitTime = 80;
+            shopTimer.WaitTime = shopTime;
             shopTimer.OneShot = false;
             shopTimer.Start();
         }
@@ -218,7 +220,8 @@ public partial class Spawner : Node
 
     private ItemType GetRandomType()
     {
-        int n = rng.RandiRange((int)lastType-1, (int)lastType+1);
+        int a = shops.Count > 2 ? 2 : 1;
+        int n = rng.RandiRange((int)lastType-a, (int)lastType+a);
         n = n == 2 ? 3 : n;
         n = n < 1 ? 1 : n;
         n = n > 6 ? 6 : n;

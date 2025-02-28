@@ -76,7 +76,7 @@ public partial class Shop : Building
     public void Upgrade()
     {
         level++;
-        timer.WaitTime = (Source.itemTime + 1) / level;
+        timer.WaitTime = (Source.itemTime + 2) / level;
         maxItem += 2;
         itemNeeded += 2;
         UpdateLabel();
