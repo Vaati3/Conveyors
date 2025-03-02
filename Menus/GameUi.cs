@@ -82,7 +82,7 @@ public partial class GameUi : CanvasLayer
 
 	public void UpdateMode()
 	{
-		if (mode != PlaceMode.Belt && selectionButtons[(int)mode].count < 1)
+		if (mode != PlaceMode.Belt && mode != PlaceMode.Remove && selectionButtons[(int)mode].count < 1)
 			selectionButtons[(int)PlaceMode.Belt].Pressed();
 	}
 

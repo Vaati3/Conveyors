@@ -160,9 +160,10 @@ public partial class Spawner : Node
         {
             for (int y = building.pos.Y; y < building.pos.Y + building.size.Y; y++)
             {
-                if (nodes[new Vector2I(x, y)] is Belt belt)
+                Vector2I pos = new Vector2I(x,y);
+                if (nodes[pos] is Belt belt)
                     belt.Remove();
-                nodes.Remove(new Vector2I(x,y));
+                nodes.Remove(pos);
             }
         }
         building.Remove();

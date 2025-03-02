@@ -85,9 +85,7 @@ public partial class Belt : Node2D
 
 	public void UpdateAnimation()
 	{
-		if (!IsInstanceValid(this))
-			return;
-		if (output == BeltInput.Center)
+		if (!IsInstanceValid(this) || output == BeltInput.Center)
 			return;
 		if (!inputs[0] && !inputs[1] && !inputs[2] && !inputs[3] && output == BeltInput.None)
 		{
@@ -109,7 +107,6 @@ public partial class Belt : Node2D
 
 		if (output != BeltInput.None)
 			anim += "To" + output.ToString();
-		
 		sprite.Animation = anim;
 		if (synchro != null)
 			sprite.SetFrameAndProgress(synchro.Frame, synchro.FrameProgress);
@@ -147,7 +144,18 @@ public partial class Belt : Node2D
 	
 	private void UpdateLine(Belt nextBelt)
 	{
-		output = GetOutput(nextBelt.pos);
+		BeltInput newOutput = GetOutput(nextBelt.pos);
+		if (output != BeltInput.None && nextBelt.output != BeltInput.None)
+		{
+			inputs[(int)newOutput] = false;
+			if (otherBelts[(int)newOutput] == null)
+				return;
+			otherBelts[(int)newOutput].Remove(this);
+			otherBelts[(int)newOutput] = null;
+			UpdateAnimation();
+			return;
+		}
+		output = newOutput;
 		UpdateAnimation();
 
 		for(int i = 0; i <= (int)BeltInput.Left; i++)
