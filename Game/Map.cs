@@ -153,7 +153,10 @@ public partial class Map : Node2D
 			if (belt.building != null)
 			{
 				if (!belt.building.isRemovable)
+				{
+					belt.Disconect();
 					return;
+				}
 				ui.ChangeCount(belt.building.mode, 1);
 				spawner.RemoveBuilding(belt.building);
 				return;
@@ -194,6 +197,11 @@ public partial class Map : Node2D
 		} 
 		else if (@event is InputEventMouseButton button)
 		{
+			if (!button.Pressed)
+			{
+				ui.UpdateMode();
+				return;
+			}
 			if (button.ButtonIndex == MouseButton.Left)
 			{
 				if (button.DoubleClick)

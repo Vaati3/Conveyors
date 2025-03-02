@@ -85,6 +85,8 @@ public partial class Belt : Node2D
 
 	public void UpdateAnimation()
 	{
+		if (!IsInstanceValid(this))
+			return;
 		if (output == BeltInput.Center)
 			return;
 		if (!inputs[0] && !inputs[1] && !inputs[2] && !inputs[3] && output == BeltInput.None)
@@ -107,7 +109,7 @@ public partial class Belt : Node2D
 
 		if (output != BeltInput.None)
 			anim += "To" + output.ToString();
-
+		
 		sprite.Animation = anim;
 		if (synchro != null)
 			sprite.SetFrameAndProgress(synchro.Frame, synchro.FrameProgress);
@@ -247,6 +249,27 @@ public partial class Belt : Node2D
 				inputs[(int)output] = !first;
 			output = BeltInput.None;
 		}
+		UpdateAnimation();
+	}
+
+	public void Disconect()
+	{
+		for(int i = items.Count-1; i >= 0; i--)
+			items[i].QueueFree();
+		for(int i = 0; i <= (int)BeltInput.Left; i++)
+		{
+			inputs[i] = false;
+			if (otherBelts[i] == null)
+				continue;
+			otherBelts[i].Remove(this);
+			otherBelts[i] = null;
+		}
+		
+		if (soundManager != null)
+			soundManager.PlaySFX("Remove");
+		if(!isBuildingInput)
+			output = BeltInput.None;
+
 		UpdateAnimation();
 	}
 

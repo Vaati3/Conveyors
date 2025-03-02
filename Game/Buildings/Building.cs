@@ -90,10 +90,7 @@ public abstract partial class Building : Node2D
 
 	public abstract void Pause(bool isPaused);
 
-	public virtual void Remove()
-	{
-		
-	}
+	public virtual void Remove(){}
 
 	public virtual void RotateBuilding(float angle)
 	{

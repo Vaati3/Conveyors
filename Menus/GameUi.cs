@@ -78,6 +78,10 @@ public partial class GameUi : CanvasLayer
 			return;
 
 		selectionButtons[(int)mode].UpdateCount(value);
+	}
+
+	public void UpdateMode()
+	{
 		if (mode != PlaceMode.Belt && selectionButtons[(int)mode].count < 1)
 			selectionButtons[(int)PlaceMode.Belt].Pressed();
 	}
