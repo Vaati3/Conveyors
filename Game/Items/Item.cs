@@ -16,6 +16,7 @@ public partial class Item : Node2D
     public Vector2 direction;
 
     public Belt belt;
+    private Vector2 dir = Vector2.Zero;
 	private Sprite2D sprite;
     private Area2D area;
 
@@ -41,21 +42,26 @@ public partial class Item : Node2D
         area.Owner = this;
 	}
 
-    private Vector2 GetDirection()
+    private void SetDirection()
     {
         switch(belt.output)
 		{
 			case BeltInput.Bottom:
-				return Vector2.Down;
+				dir = Vector2.Down;
+                return;
 			case BeltInput.Left:
-				return Vector2.Left;
+				dir = Vector2.Left;
+                return;
 			case BeltInput.Right:
-				return Vector2.Right;
+				dir = Vector2.Right;
+                return;
 			case BeltInput.Top:
-				return Vector2.Up;
+				dir = Vector2.Up;
+                return;
 		}
-		return Vector2.Zero;
+		dir = Vector2.Zero;
     }
+
 
     public void SetType(ItemType type)
     {
@@ -64,10 +70,37 @@ public partial class Item : Node2D
         sprite.Texture = GD.Load<Texture2D>("res://Game/Items/" + type.ToString() + ".png");
     }
 
+    private bool CheckDirection()
+    {
+        if (dir.X != 0)
+        {
+            if (dir.X > 0)
+                return Position.X >= belt.Position.X;
+            return Position.X <= belt.Position.X;
+        }
+        if (dir.Y > 0)
+            return Position.Y >= belt.Position.Y;
+        return Position.Y <= belt.Position.Y;
+    }
+
     public override void _PhysicsProcess(double delta)
     {
-        if (isPaused || isStoped)
+        if (belt == null)
+        {
+            QueueFree();
             return;
-        Position = Position + (GetDirection() * belt.speed * (float)delta);
+        }
+        float dist = MathF.Sqrt(MathF.Pow(belt.Position.X - Position.X, 2) + MathF.Pow(belt.Position.Y - Position.Y, 2));
+        if (dist > Map.tilesize)
+        {
+            QueueFree();
+            return;
+        }
+        if (isPaused || isStoped || belt.output == BeltInput.None)
+            return;
+
+        if (CheckDirection())
+            SetDirection();
+        Position = Position + (dir * belt.speed * (float)delta);
     }
 }

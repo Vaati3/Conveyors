@@ -12,7 +12,6 @@ public partial class Belt : Node2D
     public Vector2I pos {get; private set;}
 	public AnimatedSprite2D sprite {get; private set;}
 	public AnimatedSprite2D synchro;
-	private Area2D area;
 	private Area2D colisionArea;
 	public List<Item> items {get; private set;}
 	public Belt[] otherBelts;
@@ -39,16 +38,6 @@ public partial class Belt : Node2D
         };
         AddChild(sprite);
 		sprite.Play();
-
-		area = new Area2D();
-		AddChild(area);
-		area.AddChild(new CollisionShape2D(){
-			Shape = new RectangleShape2D() {
-				Size = Vector2.One
-			}
-		});
-		area.Owner = this;
-		area.AreaEntered += AreaEntered;
 		
 		items = new List<Item>();
 		colisionArea = new Area2D();
@@ -334,19 +323,12 @@ public partial class Belt : Node2D
 		UpdateAnimation();
 	}
 
-	public void AreaEntered(Area2D other)
-	{
-		if (other.Owner is Item item)
-		{
-			item.belt = this;
-		}
-	}
-
 	public void ColisionAreaEntered(Area2D other)
 	{
 		if (other.Owner is Item item)
 		{
 			items.Add(item);
+			item.belt = this;
 		}
 	}
 	public void ColisionAreaExited(Area2D other)
