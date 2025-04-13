@@ -11,6 +11,8 @@ public partial class SelectionButton : Control
     [Export] public int count = 0; 
     Label countLabel;
 
+    [Export(PropertyHint.MultilineText)]string desc;
+
     Panel blocker;
 
     public override void _Ready()
@@ -77,6 +79,19 @@ public partial class SelectionButton : Control
         selected = true;
         weight = 0; 
         EmitSignal(nameof(ModeSelected), (int)mode);
+    }
+
+    [Signal] public delegate void ShowDescEventHandler(bool show, string desc);
+
+    public void mouse_entered()
+    {
+        if (count <= 0)
+            return;
+        EmitSignal(nameof(ShowDesc), true, desc);
+    }
+    public void mouse_exited()
+    {
+        EmitSignal(nameof(ShowDesc), false, "");
     }
 
     float weight = 5;

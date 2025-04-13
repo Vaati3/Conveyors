@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bi0wjqbff4inl"]
+[gd_scene load_steps=19 format=3 uid="uid://bi0wjqbff4inl"]
 
 [ext_resource type="Texture2D" uid="uid://4tnmw7mbun4t" path="res://Menus/Textures/arrow.png" id="1_4ngkf"]
 [ext_resource type="Script" path="res://Menus/GameUi.cs" id="1_8qi4p"]
@@ -7,6 +7,7 @@
 [ext_resource type="Theme" uid="uid://c5amex4kn3q35" path="res://Menus/Themes/Button.tres" id="7_ox0l1"]
 [ext_resource type="Texture2D" uid="uid://dxpg7knqf1s1e" path="res://Menus/Textures/Pause.png" id="8_ifqhr"]
 [ext_resource type="PackedScene" uid="uid://7foojhxs0pd" path="res://Menus/RewardButton.tscn" id="9_ndwp7"]
+[ext_resource type="Theme" uid="uid://dxkh1hgxmbi5s" path="res://Menus/Themes/Panel.tres" id="9_xxqp7"]
 [ext_resource type="PackedScene" uid="uid://c5h84301mt8yx" path="res://Menus/SelectionButton.tscn" id="10_hy0ko"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gstht"]
@@ -31,6 +32,13 @@ bg_color = Color(0.6, 0.6, 0.6, 0)
 bg_color = Color(0.211765, 0.211765, 0.211765, 0.529412)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b515y"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aggek"]
+bg_color = Color(0.113725, 0.113725, 0.113725, 0.694118)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
 
 [node name="GameUi" type="CanvasLayer"]
 script = ExtResource("1_8qi4p")
@@ -92,6 +100,7 @@ alignment = 1
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+desc = "Remove"
 
 [node name="Belt" parent="Buttons" instance=ExtResource("10_hy0ko")]
 layout_mode = 2
@@ -99,6 +108,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 mode = 1
 count = 25
+desc = "Belt"
 
 [node name="Operator" parent="Buttons" instance=ExtResource("10_hy0ko")]
 layout_mode = 2
@@ -106,24 +116,44 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 mode = 2
 count = 2
+desc = "Operator
+Items that passes in this building get his 
+value incremented or substracte by one.
+ Change mode by clicking it"
 
 [node name="Splitter" parent="Buttons" instance=ExtResource("10_hy0ko")]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mode = 3
+count = 1
+desc = "Splitter
+Split from one belt to two belts.
+Click the buttons to apply filters
+If an item can't exit it is destroyed"
 
 [node name="Merger" parent="Buttons" instance=ExtResource("10_hy0ko")]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mode = 4
+count = 1
+desc = "Merger
+Take two items then do selecte operation on them
+Output two items of the result
+Click to change operator"
 
 [node name="Teleporter" parent="Buttons" instance=ExtResource("10_hy0ko")]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mode = 5
+count = 1
+desc = "Teleporter
+Teleport items between teleporter
+Connect to moving belt to define output teleporter
+Can only have one output per frequency
+Change frequency by clicking"
 
 [node name="Rewards" type="Panel" parent="."]
 visible = false
@@ -291,14 +321,45 @@ size_flags_horizontal = 0
 theme = ExtResource("7_ox0l1")
 text = "Back to Menu"
 
+[node name="BuildingDesc" type="Panel" parent="."]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -316.0
+offset_top = -284.0
+offset_right = 319.0
+offset_bottom = -136.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("9_xxqp7")
+theme_override_styles/panel = SubResource("StyleBoxFlat_aggek")
+
+[node name="Label" type="Label" parent="BuildingDesc"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_i3rbk")
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [connection signal="pressed" from="MenuButton" to="." method="_on_menu_button_pressed"]
 [connection signal="pressed" from="PauseButton" to="." method="TogglePause"]
 [connection signal="ModeSelected" from="Buttons/Remove" to="." method="SelectMode"]
 [connection signal="ModeSelected" from="Buttons/Belt" to="." method="SelectMode"]
 [connection signal="ModeSelected" from="Buttons/Operator" to="." method="SelectMode"]
+[connection signal="ShowDesc" from="Buttons/Operator" to="." method="UpdateBuidingDesc"]
 [connection signal="ModeSelected" from="Buttons/Splitter" to="." method="SelectMode"]
+[connection signal="ShowDesc" from="Buttons/Splitter" to="." method="UpdateBuidingDesc"]
 [connection signal="ModeSelected" from="Buttons/Merger" to="." method="SelectMode"]
+[connection signal="ShowDesc" from="Buttons/Merger" to="." method="UpdateBuidingDesc"]
 [connection signal="ModeSelected" from="Buttons/Teleporter" to="." method="SelectMode"]
+[connection signal="ShowDesc" from="Buttons/Teleporter" to="." method="UpdateBuidingDesc"]
 [connection signal="pressed" from="Confirm/Panel/Yes" to="." method="_on_yes_pressed"]
 [connection signal="pressed" from="Confirm/Panel/No" to="." method="_on_no_pressed"]
 [connection signal="pressed" from="GameLost/Panel/Yes" to="." method="_on_yes_pressed"]

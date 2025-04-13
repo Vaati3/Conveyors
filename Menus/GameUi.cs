@@ -39,6 +39,9 @@ public partial class GameUi : CanvasLayer
 	public int highScore;
 	Label scoreLabel;
 
+	Panel descPanel;
+	Label descLabel;
+
 	public override void _Ready()
 	{
 		soundManager = GetNode<SoundManager>("/root/SoundManager");
@@ -48,6 +51,8 @@ public partial class GameUi : CanvasLayer
 		rewardButtonLeft = GetNode<RewardButton>("Rewards/Choices/RewardButtonLeft");
 		rewardButtonRight = GetNode<RewardButton>("Rewards/Choices/RewardButtonRight");
 		scoreLabel = GetNode<Label>("Score");
+		descPanel = GetNode<Panel>("BuildingDesc");
+		descLabel = GetNode<Label>("BuildingDesc/Label");
 
 		pauseIcon = GD.Load<Texture2D>("res://Menus/Textures/Play.png");
 
@@ -162,6 +167,13 @@ public partial class GameUi : CanvasLayer
 		rewardTimer.Paused = isPaused;
 
 		Pause(isPaused);
+	}
+
+	public void UpdateBuidingDesc(bool show, string desc)
+	{
+		descPanel.Visible = show;
+		if (show)
+			descLabel.Text = desc;
 	}
 
 	public void _on_yes_pressed()
