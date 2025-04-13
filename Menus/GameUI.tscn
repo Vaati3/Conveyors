@@ -126,7 +126,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mode = 3
-count = 1
 desc = "Splitter
 Split from one belt to two belts.
 Click the buttons to apply filters
@@ -137,7 +136,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mode = 4
-count = 1
 desc = "Merger
 Take two items then do selecte operation on them
 Output two items of the result
@@ -148,7 +146,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mode = 5
-count = 1
 desc = "Teleporter
 Teleport items between teleporter
 Connect to moving belt to define output teleporter

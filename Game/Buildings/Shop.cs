@@ -7,6 +7,8 @@ public partial class Shop : Building
     Timer timer;
     ItemType type;
 
+    const int freeTimeMax = 3;
+    int freeTime;
     int itemNeeded = 8;
     int maxItem = 8;
     Label itemNeededLabel;
@@ -40,6 +42,7 @@ public partial class Shop : Building
         size = new Vector2I(2, 2);
         AddInput(new Vector2I(0, 0), BeltInput.Right);
         UpdateLabel();
+        freeTime = freeTimeMax;
     }
 
     public void AreaEntered(Area2D other)
@@ -67,6 +70,11 @@ public partial class Shop : Building
 
     public void Timeout()
     {
+        if (freeTime > 0)
+        {
+            freeTime--;
+            return;
+        }
         itemNeeded--;
         UpdateLabel();
         if (itemNeeded <= 0)
@@ -75,6 +83,7 @@ public partial class Shop : Building
 
     public void Upgrade()
     {
+        freeTime = freeTimeMax;
         level++;
         timer.WaitTime = (Source.itemTime + 2) / level;
         maxItem += 2;
